@@ -8,7 +8,7 @@ public class Carrinho {
     private double valorTotal = 0.0;
     private Map<Produto,Integer> conteudo;
 
-    public Carrinho(int id, Map<Produto,Integer>){
+    public Carrinho(int id, Map<Produto,Integer> conteudo){
         this.id = id;
         this.conteudo = new HashMap<Produto,Integer>();
 
