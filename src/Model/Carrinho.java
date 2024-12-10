@@ -45,6 +45,8 @@ public class Carrinho {
         }else{
             // Tratamento de erro
             System.out.println("O produto selecionado não está no carrinho");
+
+            //oib
             return 0;
         }
     }
