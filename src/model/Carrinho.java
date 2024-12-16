@@ -1,7 +1,7 @@
-package Model;
+package model;
 import java.util.Map;
 import java.util.HashMap;
-import Model.Produto;
+
 public class Carrinho {
     private int id;
     private int quantidade = 0;
