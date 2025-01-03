@@ -5,7 +5,7 @@ public class Administrador extends Pessoa {
 
     private float salario;
     private ArrayList<Cliente> clientes;
-    private ArrayList<Vendedor> vendedores;
+    //private ArrayList<Vendedor> vendedores;
 
     public Administrador(float salario, String nome,String CPF, int id,int idade){
         super(nome,CPF,id,idade);
