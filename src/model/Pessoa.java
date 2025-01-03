@@ -12,5 +12,6 @@ public abstract class Pessoa {
         this.id = id;
         this.idade = idade;
     }
+    public String getCPF(){return CPF;}
 
 }

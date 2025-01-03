@@ -19,6 +19,7 @@ public class Cliente extends Pessoa{
         return login;
     }
 
+
     public Boolean getPossuiCartao() {
         return possuiCartao;
     }
