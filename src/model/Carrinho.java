@@ -14,18 +14,18 @@ public class Carrinho {
 
     }
 
-    public int adicionarProduto(Produto produto,int quantidade){
-        if(this.conteudo.containsKey(produto.getId())){
-            this.conteudo.put(produto, this.conteudo.get(produto) + quantidade);
-            this.quantidade += quantidade;
-            return 2;
-        }
-        else{
-            this.conteudo.put(produto, quantidade);
-            this.quantidade += quantidade;
-            return 1;
-        }
-    }
+//    public int adicionarProduto(Produto produto,int quantidade){
+//        if(this.conteudo.containsKey(produto.getId())){
+//            this.conteudo.put(produto, this.conteudo.get(produto) + quantidade);
+//            this.quantidade += quantidade;
+//            return 2;
+//        }
+//        else{
+//            this.conteudo.put(produto, quantidade);
+//            this.quantidade += quantidade;
+//            return 1;
+//        }
+//    }
     public int removerProduto(Produto produto,int quantidade){
         if(this.conteudo.containsKey(produto)){
             if(this.conteudo.get(produto) > quantidade){
@@ -49,12 +49,12 @@ public class Carrinho {
         }
     }
 
-    public double calcularValorTotal(){
-        for(Produto produto : this.conteudo.keySet()){
-            this.valorTotal += produto.getPreco() * this.conteudo.get(produto);
-        }
-        return this.valorTotal;
-    }
+//    public double calcularValorTotal(){
+//        for(Produto produto : this.conteudo.keySet()){
+//            this.valorTotal += produto.getPreco() * this.conteudo.get(produto);
+//        }
+//        return this.valorTotal;
+//    }
 
     public int getId(){
         return this.id;
