@@ -20,7 +20,7 @@ public class Cliente extends Pessoa{
     }
 
 
-    public Boolean getPossuiCartao() {
+    public boolean getPossuiCartao() {
         return possuiCartao;
     }
 

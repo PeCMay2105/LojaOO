@@ -4,6 +4,8 @@
  */
 package model;
 
+import view.TelaInicialView;
+
 /**
  *
  * @author Pedro Maia
@@ -14,7 +16,8 @@ public class LojaOO {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        TelaInicialView telaInicialView = new TelaInicialView("S.I.S.T.E.M.O");
+        telaInicialView.show();
     }
     
 }

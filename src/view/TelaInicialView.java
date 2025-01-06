@@ -1,5 +1,7 @@
 package view;
 
+import model.Carrinho;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -50,6 +52,22 @@ public class TelaInicialView extends TemplateView {
             public void actionPerformed(ActionEvent e) {
                 TemplateView telaCadastroCliente = new cadastroClienteView("Cadastro de Cliente");
                 telaCadastroCliente.setVisible(true);
+                dispose();
+            }
+        });
+        verProdutos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TemplateView listaProdutos = new ListaProdutosView("Lista de Produtos");
+                listaProdutos.setVisible(true);
+                dispose();
+            }
+        });
+        verCarrinho.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TemplateView carrinhoView = new CarrinhoView("Carrinho");
+                carrinhoView.setVisible(true);
                 dispose();
             }
         });
