@@ -16,7 +16,7 @@ public class LojaOO {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        TelaInicialView telaInicialView = new TelaInicialView("S.I.S.T.E.M.O");
+        TelaInicialView telaInicialView = new TelaInicialView("S.I.S.T.E.M.O",false);
         telaInicialView.show();
     }
     

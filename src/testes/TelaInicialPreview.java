@@ -7,7 +7,7 @@ public class TelaInicialPreview {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             // Cria uma instância da TelaInicialView
-            TelaInicialView tela = new TelaInicialView("Tela Inicial");
+            TelaInicialView tela = new TelaInicialView("Tela Inicial",false);
 
             // Configura a visualização
             tela.setLocationRelativeTo(null);  // Centraliza na tela

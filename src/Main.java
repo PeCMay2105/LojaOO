@@ -12,7 +12,7 @@ public class Main {
     }
 
     private static void inicializarMVC(){
-        TemplateView telaInicial = new TelaInicialView("Tela Inicial");
+        TemplateView telaInicial = new TelaInicialView("Tela Inicial",false);
         telaInicial.setVisible(true);
 
         //TemplateView telaCadastroCliente = new cadastroClienteView("Cadastro de Cliente");

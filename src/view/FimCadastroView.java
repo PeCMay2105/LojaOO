@@ -31,7 +31,7 @@ public class FimCadastroView extends JPanel {
         botaoMenu.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TemplateView telaInicial = new TelaInicialView("Tela Inicial");
+                TemplateView telaInicial = new TelaInicialView("Tela Inicial",false);
                 telaInicial.setVisible(true);
                 JFrame janela = (JFrame) SwingUtilities.getWindowAncestor(FimCadastroView.this);
                 janela.dispose();

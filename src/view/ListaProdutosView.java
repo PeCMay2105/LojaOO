@@ -75,7 +75,7 @@ public class ListaProdutosView extends TemplateView {
         botaoVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TemplateView telaInicial = new TelaInicialView("Tela Inicial");
+                TemplateView telaInicial = new TelaInicialView("Tela Inicial",true);
                 telaInicial.setVisible(true);
                 dispose();
             }
