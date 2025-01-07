@@ -29,7 +29,6 @@ public class CarteiraView extends TemplateView {
         comboTipoCartao.setPreferredSize(new Dimension(250, 40));
 
         comboTipoCartao.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent e) {
                 mostrarListaCartoes();
             }

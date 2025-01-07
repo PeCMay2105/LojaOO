@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class Vendedor extends Pessoa {
 
@@ -27,9 +28,12 @@ public class Vendedor extends Pessoa {
     }
 
     public Venda vende(Produto produto, Cliente cliente, int quantidade) {
+        HashMap<String, Float> produtos = new HashMap<>();
+        produtos.put(produto.getNome(), produto.getPreco());
+
         float valorTotal = produto.getPreco() * quantidade;
         Date now = new Date();
-        Venda venda = new Venda(produto, this, quantidade, cliente, valorTotal, now);
+        Venda venda = new Venda(produtos, this, quantidade, cliente, valorTotal, now);
 
         vendas.add(venda);
 
