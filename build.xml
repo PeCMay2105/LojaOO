@@ -10,6 +10,8 @@
 <project name="lojaOO" default="default" basedir=".">
     <description>Builds, tests, and runs the project lojaOO.</description>
     <import file="nbproject/build-impl.xml"/>
+    <property name="java.version" value ="23" />
+
     <!--
 
     There exist several targets which are by default empty and which can be 

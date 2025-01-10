@@ -14,6 +14,9 @@ public class Cliente extends Pessoa{
         this.possuiCartao = possuiCartao;
         this.carteira = carteira;
     }
+    public Cliente(){
+
+    }
 
     public String getLogin() {
         return login;

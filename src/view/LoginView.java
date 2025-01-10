@@ -1,9 +1,16 @@
 package view;
+import controller.LoginController;
+import controller.PessoaController;
+import model.Pessoa;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 public class LoginView extends TemplateView{
+
+    private String login;
+    private String senha;
     public LoginView(String titulo) {
         super(titulo);
         JPanel telaCadastroCliente = new JPanel(new GridBagLayout());
@@ -59,12 +66,36 @@ public class LoginView extends TemplateView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Cria e exibe a interface grafica da tela inicial logada
-                TemplateView telaInicial = new TelaInicialView("Tela Inicial", true);
-                telaInicial.setVisible(true);
-                dispose();
+                try{
+                   Pessoa usuario = iniciarSessao();
+                    TemplateView telaInicial = new TelaInicialView("Tela Inicial", true, usuario);
+                    // estou passando um novo parametro para tela inicial, o usuario. na classe tela inicial devemos implementar mudanças
+                    //para que a sessão dele continue ativa
+                    telaInicial.setVisible(true);
+                    dispose();
+                }catch(IllegalArgumentException error){
+                    JOptionPane.showMessageDialog(null, error);
+                }
+
             }
         });
 
 
+    }
+
+    public Pessoa iniciarSessao(){
+        String login = this.login;
+        String senha = this.senha;
+        LoginController controladorLogin = new LoginController(login,senha);
+        if(controladorLogin.autenticar(login,senha)){
+            PessoaController controladorPessoa = new PessoaController();
+            Pessoa usuario = controladorPessoa.buscaPessoa(login);
+            return usuario;
+
+        }
+        else{
+            throw new IllegalArgumentException("Login ou senha inválidos");
+
+        }
     }
 }
