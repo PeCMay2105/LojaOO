@@ -4,10 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 public class ListaProdutosView extends TemplateView {
-
+    HashMap<String, String> userData;
     public ListaProdutosView(String titulo) {
+        // Adicionar as alterações necessárias para receber o usuário logado
         super(titulo);
 
         JPanel telaInicial = new JPanel(new GridBagLayout());
@@ -66,7 +68,7 @@ public class ListaProdutosView extends TemplateView {
         verCarrinho.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TemplateView carrinhoView = new CarrinhoView("Carrinho");
+                TemplateView carrinhoView = new CarrinhoView("Carrinho",userData);
                 carrinhoView.setVisible(true);
                 dispose();
             }

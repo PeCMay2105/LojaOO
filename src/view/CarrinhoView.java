@@ -2,7 +2,10 @@ package view;
 
 import model.Carrinho;
 import model.Produto;
+
+import java.util.HashMap;
 import java.util.Map;
+import controller.CarrinhoController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +14,7 @@ import java.awt.event.ActionListener;
 
 public class CarrinhoView extends TemplateView {
 
-    public CarrinhoView(String titulo) {
+    public CarrinhoView(String titulo, HashMap<String,String> userData) {
         super(titulo);
 
         JPanel telaInicial = new JPanel(new GridBagLayout());
@@ -26,12 +29,12 @@ public class CarrinhoView extends TemplateView {
 
         JPanel produtosPanel = new JPanel();
         produtosPanel.setLayout(new BoxLayout(produtosPanel, BoxLayout.Y_AXIS));
-
-        Carrinho carrinho = new Carrinho(1,null);
-        carrinho.adicionarProduto(new Produto("me",2,"3","marca"), 4);
-        carrinho.adicionarProduto(new Produto("no",2,"2","marca"), 1);
-        carrinho.adicionarProduto(new Produto("nome",2,"1","marca"), 14);
-        Map<Produto,Integer> conteudo = carrinho.getConteudo();
+        CarrinhoController carrinhoController = new CarrinhoController(userData);
+//        Carrinho carrinho = new Carrinho(1,null);
+//        carrinho.adicionarProduto(new Produto("me",2,"3","marca"), 4);
+//        carrinho.adicionarProduto(new Produto("no",2,"2","marca"), 1);
+//        carrinho.adicionarProduto(new Produto("nome",2,"1","marca"), 14); as linhas foram comentadas pois agora há carrinhoControler que é onde essas funções devem se concentrar
+        Map<Produto,Integer> conteudo = carrinhoController.retornaProdutos();
 
         for (Map.Entry<Produto,Integer> produto: conteudo.entrySet()) {
             JPanel produtoLinha = new JPanel(new BorderLayout());
@@ -53,15 +56,15 @@ public class CarrinhoView extends TemplateView {
             adicionarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    carrinho.adicionarProduto(produto.getKey(),1+produto.getValue());
-                    atualizarCarrinho(produto.getKey(), produtoLinha,carrinho);
+                    carrinhoController.adicionarProduto(produto.getKey(),1+produto.getValue());
+                    atualizarCarrinho(produto.getKey(), produtoLinha,carrinhoController);
                 }
             });
             removerButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    carrinho.adicionarProduto(produto.getKey(),produto.getValue()-1);
-                    atualizarCarrinho(produto.getKey(), produtoLinha,carrinho);
+                    carrinhoController.adicionarProduto(produto.getKey(),produto.getValue()-1);
+                    atualizarCarrinho(produto.getKey(), produtoLinha,carrinhoController);
                 }
             });
             produtoLinha.add(adicionarButton, BorderLayout.EAST);
@@ -114,8 +117,8 @@ public class CarrinhoView extends TemplateView {
         painel.add(botao, gbc);
     }
 
-    private void atualizarCarrinho(Produto produto, JPanel quantidadePanel,Carrinho carrinho) {
-        int quantidade = carrinho.getConteudo().get(produto);
+    private void atualizarCarrinho(Produto produto, JPanel quantidadePanel,CarrinhoController carrinho) {
+        int quantidade = carrinho.retornaProdutos().get(produto);
         JButton quantidadeLabel = (JButton) quantidadePanel.getComponent(1);
         quantidadeLabel.setText(String.valueOf(quantidade));
     }

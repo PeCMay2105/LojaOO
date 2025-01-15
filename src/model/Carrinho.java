@@ -6,7 +6,7 @@ public class Carrinho {
     private int id;
     private int quantidade = 0;
     private double valorTotal = 0.0;
-    private Map<Produto,Integer> conteudo;
+    private Map<Produto,Integer> conteudo; //
 
     public Carrinho(int id, Map<Produto,Integer> conteudo){
         this.id = id;
