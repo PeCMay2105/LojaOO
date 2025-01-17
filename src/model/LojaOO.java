@@ -4,7 +4,11 @@
  */
 package model;
 
+import controller.DatabaseController;
 import view.TelaInicialView;
+
+import java.sql.SQLException;
+
 
 /**
  *
@@ -18,6 +22,12 @@ public class LojaOO {
     public static void main(String[] args) {
         TelaInicialView telaInicialView = new TelaInicialView("S.I.S.T.E.M.O",false);
         telaInicialView.show();
+        DatabaseController trol = new DatabaseController();
+
+        try {
+            trol.inserirEPrintar();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-    
 }

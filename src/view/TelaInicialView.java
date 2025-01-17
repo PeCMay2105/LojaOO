@@ -7,6 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 public class TelaInicialView extends TemplateView {
     private JButton fazerLogin;
@@ -53,7 +54,7 @@ public class TelaInicialView extends TemplateView {
             verCarrinho.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    TemplateView carrinhoView = new CarrinhoView("Carrinho");
+                    TemplateView carrinhoView = new CarrinhoView("Carrinho", new HashMap<>());//adicionei o new hashmap so pra compilar (inacio)
                     carrinhoView.setVisible(true);
                     dispose();
                 }
@@ -140,7 +141,7 @@ public class TelaInicialView extends TemplateView {
             verCarrinho.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    TemplateView carrinhoView = new CarrinhoView("Carrinho");
+                    TemplateView carrinhoView = new CarrinhoView("Carrinho", new HashMap<>());//adicionei o new hashmap so pra compilar (inacio)
                     carrinhoView.setVisible(true);
                     dispose();
                 }
