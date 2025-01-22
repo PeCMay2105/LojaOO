@@ -1,6 +1,7 @@
 package view;
 
 import model.Carrinho;
+import model.Cliente;
 import model.Pessoa;
 
 import javax.swing.*;
@@ -86,7 +87,7 @@ public class TelaInicialView extends TemplateView {
             fazerLogin.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    TemplateView telaLogin = new LoginView("Login");
+                    LoginView telaLogin = new LoginView("Login");
                     telaLogin.setVisible(true);
                     dispose();
                 }
@@ -129,6 +130,9 @@ public class TelaInicialView extends TemplateView {
             JButton verCarrinho = new JButton("Ver carrinho");
             ajustarBotao(verCarrinho, gbc, telaInicial);
 
+            JButton verPerfil = new JButton("Ver Perfil");
+            ajustarBotao(verPerfil, gbc, telaInicial);
+
             verProdutos.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -143,6 +147,14 @@ public class TelaInicialView extends TemplateView {
                 public void actionPerformed(ActionEvent e) {
                     TemplateView carrinhoView = new CarrinhoView("Carrinho", new HashMap<>());//adicionei o new hashmap so pra compilar (inacio)
                     carrinhoView.setVisible(true);
+                    dispose();
+                }
+            });
+            verPerfil.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    TemplateView perfilView = new PerfilView("Perfil", (Cliente) usuarioAtual);
+                    perfilView.setVisible(true);
                     dispose();
                 }
             });

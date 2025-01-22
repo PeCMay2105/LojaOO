@@ -1,6 +1,7 @@
 package view;
 import controller.LoginController;
 import controller.PessoaController;
+import model.Global;
 import model.Pessoa;
 
 import javax.swing.*;
@@ -90,6 +91,7 @@ public class LoginView extends TemplateView{
         if(controladorLogin.autenticar(login,senha)){
             PessoaController controladorPessoa = new PessoaController();
             Pessoa usuario = controladorPessoa.buscaPessoa(login);
+            Global.setPessoa(usuario); // este trecho só funciona quando a consulta ao banco de dados está funcionando
             return usuario;
 
         }

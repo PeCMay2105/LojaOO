@@ -14,12 +14,23 @@ public class Cliente extends Pessoa{
         this.possuiCartao = possuiCartao;
         this.carteira = carteira;
     }
+    public Cliente(String nome,String CPF,String login,String senha, int idade){
+        super(nome,CPF,1,idade); // O atributo id vai ser removido.
+        this.login = login;
+        this.possuiCartao = false;
+        this.senha = senha;
+        this.carteira = new ArrayList<String>();
+    }
     public Cliente(){
 
     }
 
     public String getLogin() {
         return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
     }
 
 

@@ -1,5 +1,7 @@
 package view;
 
+import controller.ClienteController;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -46,6 +48,24 @@ public class cadastroClienteView extends TemplateView {
         gbc.gridx = 1;
         telaCadastroCliente.add(campoEmail, gbc);
 
+        JLabel senha = new JLabel("Senha:");
+        JTextField campoSenha = new JTextField(25);
+        gbc.gridy++;
+        gbc.gridx = 0;
+        telaCadastroCliente.add(senha, gbc);
+        gbc.gridx = 1;
+        telaCadastroCliente.add(campoSenha, gbc);
+
+        JLabel idade = new JLabel("Idade:");
+        JTextField campoIdade = new JTextField(25);
+        gbc.gridy++;
+        gbc.gridx = 0;
+        telaCadastroCliente.add(idade, gbc);
+        gbc.gridx = 1;
+        telaCadastroCliente.add(campoIdade, gbc);
+
+
+
         JLabel telefone = new JLabel("Telefone:");
         JTextField campoTelefone = new JTextField(25);
         gbc.gridy++;
@@ -80,6 +100,10 @@ public class cadastroClienteView extends TemplateView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Cria e exibe a nova interface gráfica de sucesso
+
+                ClienteController clienteController = new ClienteController();
+                clienteController.criaCliente(campoNome.getText(), campoCpf.getText(), campoEmail.getText(), campoSenha.getText(), Integer.parseInt(campoIdade.getText()));
+
                 JFrame sucessoFrame = new JFrame("Sucesso");
                 sucessoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 sucessoFrame.setSize(500, 300);

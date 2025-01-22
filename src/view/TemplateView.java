@@ -52,7 +52,7 @@ public abstract class TemplateView extends JFrame {
         add(setorPrincipal);
     }
 
-    private void setupEvents(){
+    protected void setupEvents(){
         botaoVoltar.addActionListener(e -> aoVoltar() );
 
         addWindowListener(new WindowAdapter() {
