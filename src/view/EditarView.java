@@ -16,6 +16,7 @@ public class EditarView extends TemplateView {
     private JTextField emailField;
     private JPasswordField senhaField;
     private JButton salvarButton;
+    private JPasswordField confirmarSenhaField;
 
     public EditarView(String titulo, Cliente cliente) {
         super(titulo);
@@ -30,26 +31,42 @@ public class EditarView extends TemplateView {
         emailField = new JTextField(cliente.getLogin(), 20);
         senhaField = new JPasswordField(20);
         salvarButton = new JButton("Salvar");
+        confirmarSenhaField = new JPasswordField(20);
     }
 
     private void setupLayout() {
-        JPanel editPanel = new JPanel(new GridLayout(4, 2, 10, 10));
+        JPanel editPanel = new JPanel(null);
+        editPanel.setPreferredSize(new Dimension(400, 300));
 
-        editPanel.add(new JLabel("Nome:"));
+        JLabel nomeLabel = new JLabel("Nome:");
+        nomeLabel.setBounds(240, 100, 50, 25);
+        editPanel.add(nomeLabel);
+
+        JLabel emailLabel = new JLabel("Email:");
+        emailLabel.setBounds(240, 150, 50, 25);
+        editPanel.add(emailLabel);
+
+        JLabel senhaLabel = new JLabel("Senha:");
+        senhaLabel.setBounds(240, 200, 50, 25);
+        editPanel.add(senhaLabel);
+
+        JLabel confirmarSenhaLabel = new JLabel("Confirmar Senha:");
+        confirmarSenhaLabel.setBounds(240, 250, 120, 25);
+        editPanel.add(confirmarSenhaLabel);
+
+        nomeField.setBounds(370, 100, 200, 25);
         editPanel.add(nomeField);
 
-        editPanel.add(new JLabel("Email:"));
+        emailField.setBounds(370, 150, 200, 25);
         editPanel.add(emailField);
 
-        editPanel.add(new JLabel("Senha:"));
+        senhaField.setBounds(370, 200, 200, 25);
         editPanel.add(senhaField);
 
-        editPanel.add(new JLabel("Confirmar Senha:"));
-        editPanel.add(senhaField);
-        // adicionar metodo para lançar erro caso as senhas não sejam iguais
+        confirmarSenhaField.setBounds(370, 250, 200, 25);
+        editPanel.add(confirmarSenhaField);
 
-        editPanel.add(new JLabel());
-
+        salvarButton.setBounds(550, 422, 100, 25);
         editPanel.add(salvarButton);
 
         adicionarConteudo(editPanel);
@@ -71,5 +88,13 @@ public class EditarView extends TemplateView {
         } else {
             System.err.println("salvarButton is null");
         }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            Cliente cli= new Cliente("aranldo","25","penis12","oi",9);
+            PerfilView tela = new PerfilView("Piroca",cli);
+            tela.setVisible(true);
+        });
     }
 }

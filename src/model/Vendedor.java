@@ -9,7 +9,7 @@ public class Vendedor extends Pessoa {
     private String login;
     private String senha;
     ArrayList<Venda> vendas;
-    Float salario;
+    float salario;
     double comissao;
 
     public Vendedor(String nome, String CPF, String login, String senha, int id, int idade, Float salario, double comissao) {
