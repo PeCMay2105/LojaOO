@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package model;
-
+import controller.Tabela;
+import model.Global;
 import controller.DatabaseController;
 import view.TelaInicialView;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
@@ -19,15 +21,15 @@ public class LojaOO {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         TelaInicialView telaInicialView = new TelaInicialView("S.I.S.T.E.M.O",false);
         telaInicialView.show();
-        DatabaseController trol = new DatabaseController();
+        DatabaseController dbCtrol = Global.getDatabase();
+        dbCtrol.inserirEPrintar();
+        ResultSet rs = dbCtrol.consulta(Tabela.pessoa,1);
 
-        try {
-            trol.inserirEPrintar();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        while (rs.next()) {
+            System.out.println(rs.getInt("ID"));
         }
-    }
-}
+
+}}

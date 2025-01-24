@@ -4,20 +4,18 @@ import java.io.File;
 
 
 public class DatabaseController {
+    Connection conn;
+    public DatabaseController() throws SQLException {
+        String relativePath = "Database/BDLoja.db";
+        String dbPath = new File(relativePath).getAbsolutePath();
+        String url = "jdbc:sqlite:" + dbPath;
+        conn = DriverManager.getConnection(url);
 
-    public DatabaseController() {
     }
 
 
     public void inserirEPrintar() throws SQLException {
-        String relativePath = "Database/BDLoja.db";
-        String dbPath = new File(relativePath).getAbsolutePath();
-        String url = "jdbc:sqlite:" + dbPath;
-        //System.out.println(url);
-        //url = "jdbc:sqlite:/home/inacio/Github/projetoTP1/Database/BDLoja.db";
-        //System.out.println(url);
 
-        Connection conn = DriverManager.getConnection(url);
 
         String sql = "INSERT INTO Pessoa (Nome, Email, Telefone, Endereco) VALUES (?,?,?,?)";
         PreparedStatement stmt = conn.prepareStatement(sql);
@@ -42,23 +40,60 @@ public class DatabaseController {
         }
         rs.close();
         stmtSelect.close();
-        conn.close();
     }
 
 
-    public Object consulta(Tabela opcao, int id) {
-
+    public ResultSet consulta(Tabela opcao, int id) throws SQLException {
+        String table;
+        String idString = "ID";
 
         switch (opcao) {
             case carrinho:
+                table =  "Carrinho";
+
+                break;
+            case categoria:
+                table =  "Categoria";
+                break;
+            case cliente:
+                table =  "Cliente";
+                idString = "CPF";
+                break;
+            case item_carrinho:
+                table =  "Item_Carrinho";
+                break;
+            case item_pedido:
+                table =  "Item_Pedido";
+                break;
+            case pagamento:
+                table =  "Pagamento";
+                break;
+            case pedido:
+                table =  "Pedido";
+                break;
+            case pessoa:
+                table =  "Pessoa";
+                idString = "CPF";
+                break;
+            case produto:
+                table =  "Produto";
+
+                break;
+            case vendedor:
+                table =  "Vendedor";
+                idString = "CPF";
                 break;
             default:
-                break;
-
+                return null;
 
         }
 
-        return null;
+        String sqlSelect = "SELECT * FROM "+table+" WHERE "+ idString + " = " +id;
+        System.out.println(sqlSelect);
+        PreparedStatement stmt = conn.prepareStatement(sqlSelect);
+        
+
+        return stmt.executeQuery();
     }
 }
 
