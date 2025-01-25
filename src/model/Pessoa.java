@@ -1,16 +1,16 @@
 package model;
 
+import java.sql.Date;
+
 public abstract class Pessoa {
     private String nome;
     private String CPF;
-    private int id;
-    private int idade;
+    private Date nascimento;
     private String imagePath;
-    public Pessoa(String nome, String CPF, int id, int idade) {
+    public Pessoa(String nome, String CPF, Date nascimento) {
         this.nome = nome;
         this.CPF = CPF;
-        this.id = id;
-        this.idade = idade;
+        this.nascimento = nascimento;
     }
     public Pessoa(){
 
@@ -28,17 +28,11 @@ public abstract class Pessoa {
     public void setCPF(String CPF){
         this.CPF = CPF;
     }
-    public int getId(){
-        return id;
-    }
-    public void setId(int id){
-        this.id = id;
-    }
-    public int getIdade(){
-        return idade;
+    public Date getNascimento(){
+        return nascimento;
     }
     public void setIdade(int idade){
-        this.idade = idade;
+        this.nascimento = nascimento;
     }
 
     public void setNome(String nome){

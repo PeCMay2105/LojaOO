@@ -1,22 +1,24 @@
 package model;
 import java.util.ArrayList;
+import java.sql.Date;
+
 public class Cliente extends Pessoa{
 
     private String login;
     private String senha;
     private boolean possuiCartao;
     private ArrayList<String> carteira;
+    private Carrinho carrinho = new Carrinho(this);
 
-
-    public Cliente(String nome, String CPF, int id, int idade, String login, String senha, boolean possuiCartao, ArrayList<String> carteira) {
-        super(nome, CPF, id, idade);
+    public Cliente(String nome, String CPF, Date nascimento, String login, String senha, boolean possuiCartao, ArrayList<String> carteira) {
+        super(nome, CPF,nascimento);
         this.login = login;
         this.senha = senha;
         this.possuiCartao = possuiCartao;
         this.carteira = carteira;
     }
-    public Cliente(String nome,String CPF,String login,String senha, int idade){
-        super(nome,CPF,1,idade); // O atributo id vai ser removido.
+    public Cliente(String nome,String CPF,String login,String senha, Date nascimento){
+        super(nome,CPF,nascimento);
         this.login = login;
         this.possuiCartao = false;
         this.senha = senha;
@@ -24,6 +26,9 @@ public class Cliente extends Pessoa{
     }
     public Cliente(){
 
+    }
+    public Carrinho getCarrinho() {
+        return carrinho;
     }
 
     public String getLogin() {

@@ -1,10 +1,17 @@
 package view;
 
+import controller.Tabela;
+import model.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
+import model.Helper;
 
 public class ListaProdutosView extends TemplateView {
     HashMap<String, String> userData;
@@ -25,13 +32,19 @@ public class ListaProdutosView extends TemplateView {
         JPanel produtosPanel = new JPanel();
         produtosPanel.setLayout(new BoxLayout(produtosPanel, BoxLayout.Y_AXIS));
 
-        String[] produtos = {"Produto 1", "Produto 2", "Produto 3", "Produto 4", "Produto 5", "Produto 6", "Produto 7", "Produto 8", "Produto 9", "Produto 10"};
+        List<Produto> produtos;
+        try {
+            produtos = Helper.converterProdutos(Global.getDatabase().consulta(Tabela.produto));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
-        for (String produto : produtos) {
+
+        for (Produto produto : produtos) {
             JPanel produtoLinha = new JPanel(new BorderLayout());
             produtoLinha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-            JLabel nomeProduto = new JLabel(produto);
+            JLabel nomeProduto = new JLabel(produto.getNome());
             nomeProduto.setFont(new Font("Arial", Font.PLAIN, 14));
             produtoLinha.add(nomeProduto, BorderLayout.CENTER);
 
@@ -41,6 +54,7 @@ public class ListaProdutosView extends TemplateView {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     JOptionPane.showMessageDialog(null, produto + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
+                    ((Cliente)Global.getPessoa()).getCarrinho().adicionarProduto(produto,1);
                 }
             });
             produtoLinha.add(adicionarButton, BorderLayout.EAST);

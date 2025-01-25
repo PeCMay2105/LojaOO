@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 
 public class PerfilView extends TemplateView {
 
@@ -71,7 +72,7 @@ public class PerfilView extends TemplateView {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Cliente cli= new Cliente("aranldo","25","penis12","oi",9);
+            Cliente cli= new Cliente("aranldo","25","penis12","oi", new Date(21,05,2004));
             PerfilView tela = new PerfilView("Piroca",cli);
             tela.setVisible(true);
         });

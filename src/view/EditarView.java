@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 
 public class EditarView extends TemplateView {
 
@@ -79,7 +80,7 @@ public class EditarView extends TemplateView {
                 public void actionPerformed(ActionEvent e) {
                     // salvar no BD
                     Pessoa dadosAtuais = Global.getPessoa();
-                    Global.setPessoa(new Cliente(nomeField.getText(), dadosAtuais.getCPF(), emailField.getText(), senhaField.getText(), dadosAtuais.getIdade()));
+                    Global.setPessoa(new Cliente(nomeField.getText(), dadosAtuais.getCPF(), emailField.getText(), senhaField.getText(), dadosAtuais.getNascimento()));
                     PerfilView perfil = new PerfilView("Perfil", (Cliente) Global.getPessoa());
                     perfil.setVisible(true);
                     dispose();
@@ -92,7 +93,7 @@ public class EditarView extends TemplateView {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            Cliente cli= new Cliente("aranldo","25","penis12","oi",9);
+            Cliente cli= new Cliente("aranldo","25","penis12","oi",new Date(2004,11,24));
             PerfilView tela = new PerfilView("Piroca",cli);
             tela.setVisible(true);
         });

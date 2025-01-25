@@ -1,7 +1,8 @@
 package model;
 
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.HashMap;
 
 public class Vendedor extends Pessoa {
@@ -12,8 +13,8 @@ public class Vendedor extends Pessoa {
     float salario;
     double comissao;
 
-    public Vendedor(String nome, String CPF, String login, String senha, int id, int idade, Float salario, double comissao) {
-        super(nome, CPF, id, idade);
+    public Vendedor(String nome, String CPF, String login, String senha, Date nascimento, Float salario, double comissao) {
+        super(nome, CPF, nascimento);
         this.login = login;
         this.senha = senha;
         this.salario = salario;
@@ -32,7 +33,7 @@ public class Vendedor extends Pessoa {
         produtos.put(produto.getNome(), produto.getPreco());
 
         float valorTotal = produto.getPreco() * quantidade;
-        Date now = new Date();
+        Date now = new Date(new java.util.Date().getTime());
         Venda venda = new Venda(produtos, this, quantidade, cliente, valorTotal, now);
 
         vendas.add(venda);

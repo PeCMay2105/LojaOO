@@ -6,6 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class cadastroClienteView extends TemplateView {
     public cadastroClienteView(String titulo) {
@@ -56,13 +60,15 @@ public class cadastroClienteView extends TemplateView {
         gbc.gridx = 1;
         telaCadastroCliente.add(campoSenha, gbc);
 
-        JLabel idade = new JLabel("Idade:");
-        JTextField campoIdade = new JTextField(25);
+        JLabel nascimento = new JLabel("Data de Nascimento (dd/mm/yyyy):");
+        JTextField campoNascimento = new JTextField(8);
+
         gbc.gridy++;
         gbc.gridx = 0;
-        telaCadastroCliente.add(idade, gbc);
+        telaCadastroCliente.add(nascimento, gbc);
+
         gbc.gridx = 1;
-        telaCadastroCliente.add(campoIdade, gbc);
+        telaCadastroCliente.add(campoNascimento, gbc);
 
 
 
@@ -102,7 +108,9 @@ public class cadastroClienteView extends TemplateView {
                 // Cria e exibe a nova interface gráfica de sucesso
 
                 ClienteController clienteController = new ClienteController();
-                clienteController.criaCliente(campoNome.getText(), campoCpf.getText(), campoEmail.getText(), campoSenha.getText(), Integer.parseInt(campoIdade.getText()));
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+                clienteController.criaCliente(campoNome.getText(), campoCpf.getText(), campoEmail.getText(), campoSenha.getText(), Date.valueOf(LocalDate.parse(campoNascimento.getText(),formatter)));
 
                 JFrame sucessoFrame = new JFrame("Sucesso");
                 sucessoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

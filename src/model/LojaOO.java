@@ -25,9 +25,7 @@ public class LojaOO {
         TelaInicialView telaInicialView = new TelaInicialView("S.I.S.T.E.M.O",false);
         telaInicialView.show();
         DatabaseController dbCtrol = Global.getDatabase();
-        dbCtrol.inserirEPrintar();
         ResultSet rs = dbCtrol.consulta(Tabela.pessoa,1);
-
         while (rs.next()) {
             System.out.println(rs.getInt("ID"));
         }

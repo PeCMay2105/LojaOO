@@ -3,24 +3,30 @@ package model;
 public class Produto {
     private String nome;
     private float preco;
-    private String id;
-    private String marca;
+    private int id;
+    private int estoque;
+    private String descricao;
+    private String categoria;
+
+
     
-    
-public Produto(String nome,float preco,String id,String marca)
+public Produto(int id,String nome,float preco,int estoque,String descricao,String categoria)
 {
     this.nome = nome;
     this.preco=preco;
     this.id = id;
-    this.marca = marca;
- 
+    this.estoque=estoque;
+    this.descricao=descricao;
+    this.categoria=categoria;
+
+
 }
 public float getPreco()
 {
     return preco;
 }
 
-public String getId()
+public int getId()
 {
     return id;
 }

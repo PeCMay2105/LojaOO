@@ -1,4 +1,5 @@
 package model;
+import java.sql.Date;
 import java.util.ArrayList;
 
 public class Administrador extends Pessoa {
@@ -7,8 +8,8 @@ public class Administrador extends Pessoa {
     private ArrayList<Cliente> clientes;
     private ArrayList<Vendedor> vendedores;
 
-    public Administrador(float salario, String nome, String CPF, int id, int idade) {
-        super(nome, CPF, id, idade);
+    public Administrador(float salario, String nome, String CPF, Date nascimento) {
+        super(nome, CPF, nascimento);
         this.salario = salario;
         this.clientes = new ArrayList<>();
         this.vendedores = new ArrayList<>();
@@ -18,27 +19,27 @@ public class Administrador extends Pessoa {
         return salario;
     }
 
-    public int cadastraCliente(String nome, String CPF, int id, int idade, String login, String senha, boolean possuiCartao) {
+    public int cadastraCliente(String nome, String CPF, Date nascimento, String login, String senha, boolean possuiCartao) {
         for (Cliente cliente : clientes) {
             if (cliente.getCPF().equals(CPF)) {
                 System.out.println("Cliente já cadastrado.");
                 return 0;
             }
         }
-        Cliente novoCliente = new Cliente(nome, CPF, id, idade, login, senha, possuiCartao, new ArrayList<>());
+        Cliente novoCliente = new Cliente(nome, CPF, nascimento, login, senha, possuiCartao, new ArrayList<>());
         clientes.add(novoCliente);
         System.out.println("Cliente cadastrado.");
         return 1;
     }
 
-    public int cadastraVendedor(String nome, String CPF, String login, String senha, int id, int idade, Float salario, double comissao) {
+    public int cadastraVendedor(String nome, String CPF, String login, String senha, Date nascimento, Float salario, double comissao) {
         for (Vendedor vendedor : vendedores) {
             if (vendedor.getCPF().equals(CPF)) {
                 System.out.println("Vendedor já cadastrado.");
                 return 0;
             }
         }
-        Vendedor novoVendedor = new Vendedor(nome, CPF, login, senha, id, idade, salario, comissao);
+        Vendedor novoVendedor = new Vendedor(nome, CPF, login, senha, nascimento, salario, comissao);
         vendedores.add(novoVendedor);
         System.out.println("Vendedor cadastrado.");
         return 1;

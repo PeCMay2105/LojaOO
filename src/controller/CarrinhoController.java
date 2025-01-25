@@ -12,7 +12,7 @@ public class CarrinhoController {
     public CarrinhoController(HashMap<String,String> userData){ ///userData deve ser um objeto recebido da classe que que chama o controller contento usuario e senha
         ///// Código provisório
         this.sessionUsuario = userData;
-        this.carrinho = new Carrinho(1,contentUser());
+        //this.carrinho = new Carrinho(); pra instanciar um carrinho agora é necessário um cliente
 
     }
 
