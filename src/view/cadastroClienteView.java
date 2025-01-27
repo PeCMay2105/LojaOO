@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -110,7 +111,25 @@ public class cadastroClienteView extends TemplateView {
                 ClienteController clienteController = new ClienteController();
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-                clienteController.criaCliente(campoNome.getText(), campoCpf.getText(), campoEmail.getText(), campoSenha.getText(), Date.valueOf(LocalDate.parse(campoNascimento.getText(),formatter)));
+                try{
+                    clienteController.criaCliente(campoNome.getText(), campoCpf.getText(), campoEmail.getText(), campoSenha.getText(), Date.valueOf(LocalDate.parse(campoNascimento.getText(),formatter)));
+                }catch(SQLException erroDatabase){
+                    JFrame erroFrame = new JFrame("Erro");
+                    erroFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    erroFrame.setSize(500, 300);
+                    erroFrame.setLocationRelativeTo(null);
+                    erroFrame.add(new FimCadastroView("Erro"));
+                    erroFrame.setVisible(true);
+                    dispose();
+                }catch(DateTimeParseException erroData){
+                    JFrame erroFrame = new JFrame("Erro");
+                    erroFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    erroFrame.setSize(500, 300);
+                    erroFrame.setLocationRelativeTo(null);
+                    erroFrame.add(new FimCadastroView("Data"));
+                    erroFrame.setVisible(true);
+                    dispose();
+                }
 
                 JFrame sucessoFrame = new JFrame("Sucesso");
                 sucessoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

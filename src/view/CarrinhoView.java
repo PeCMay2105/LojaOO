@@ -1,6 +1,7 @@
 package view;
 
 import model.Carrinho;
+import model.Global;
 import model.Produto;
 
 import java.util.HashMap;
@@ -16,7 +17,9 @@ public class CarrinhoView extends TemplateView {
 
     public CarrinhoView(String titulo, HashMap<String,String> userData) {
         super(titulo);
+        CarrinhoController controller = new CarrinhoController(Global.getPessoa());
 
+        Carrinho carrinhoAtual = controller.getCarrinho();
         JPanel telaInicial = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
@@ -29,48 +32,54 @@ public class CarrinhoView extends TemplateView {
 
         JPanel produtosPanel = new JPanel();
         produtosPanel.setLayout(new BoxLayout(produtosPanel, BoxLayout.Y_AXIS));
-        CarrinhoController carrinhoController = new CarrinhoController(userData);
+        CarrinhoController carrinhoController = new CarrinhoController(Global.getPessoa());
 //        Carrinho carrinho = new Carrinho(1,null);
 //        carrinho.adicionarProduto(new Produto("me",2,"3","marca"), 4);
 //        carrinho.adicionarProduto(new Produto("no",2,"2","marca"), 1);
 //        carrinho.adicionarProduto(new Produto("nome",2,"1","marca"), 14); as linhas foram comentadas pois agora há carrinhoControler que é onde essas funções devem se concentrar
         Map<Produto,Integer> conteudo = carrinhoController.retornaProdutos();
+        if(carrinhoAtual.getConteudo() != null) {
+            System.out.println("Carrinho não está vazio");
+            for (Map.Entry<Produto, Integer> produto : conteudo.entrySet()) {
+                JPanel produtoLinha = new JPanel(new BorderLayout());
+                produtoLinha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-        for (Map.Entry<Produto,Integer> produto: conteudo.entrySet()) {
-            JPanel produtoLinha = new JPanel(new BorderLayout());
-            produtoLinha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+                JButton nomeProduto = new JButton(produto.getKey().getNome());
+                nomeProduto.setFont(new Font("Arial", Font.PLAIN, 14));
+                produtoLinha.add(nomeProduto, BorderLayout.BEFORE_FIRST_LINE);
 
-            JButton nomeProduto = new JButton(produto.getKey().getNome());
-            nomeProduto.setFont(new Font("Arial", Font.PLAIN, 14));
-            produtoLinha.add(nomeProduto, BorderLayout.BEFORE_FIRST_LINE);
-
-            JButton labelQuantidade = new JButton(produto.getValue()+"");
-            labelQuantidade.setFont(new Font("Arial", Font.PLAIN, 14));
-            produtoLinha.add(labelQuantidade, BorderLayout.CENTER);
+                JButton labelQuantidade = new JButton(produto.getValue() + "");
+                labelQuantidade.setFont(new Font("Arial", Font.PLAIN, 14));
+                produtoLinha.add(labelQuantidade, BorderLayout.CENTER);
 
 
-            JButton adicionarButton = new JButton("+");
-            adicionarButton.setFont(new Font("Arial", Font.PLAIN, 12));
-            JButton removerButton = new JButton("-");
-            removerButton.setFont(new Font("Arial", Font.PLAIN, 12));
-            adicionarButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    carrinhoController.adicionarProduto(produto.getKey(),1+produto.getValue());
-                    atualizarCarrinho(produto.getKey(), produtoLinha,carrinhoController);
-                }
-            });
-            removerButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    carrinhoController.adicionarProduto(produto.getKey(),produto.getValue()-1);
-                    atualizarCarrinho(produto.getKey(), produtoLinha,carrinhoController);
-                }
-            });
-            produtoLinha.add(adicionarButton, BorderLayout.EAST);
-            produtoLinha.add(removerButton, BorderLayout.WEST);
+                JButton adicionarButton = new JButton("+");
+                adicionarButton.setFont(new Font("Arial", Font.PLAIN, 12));
+                JButton removerButton = new JButton("-");
+                removerButton.setFont(new Font("Arial", Font.PLAIN, 12));
 
-            produtosPanel.add(produtoLinha);
+                adicionarButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        carrinhoController.adicionarProduto(produto.getKey(), 1 + produto.getValue());
+                        atualizarCarrinho(produto.getKey(), produtoLinha, carrinhoController);
+                    }
+                });
+                removerButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        carrinhoController.adicionarProduto(produto.getKey(), produto.getValue() - 1);
+                        atualizarCarrinho(produto.getKey(), produtoLinha, carrinhoController);
+                    }
+                });
+                produtoLinha.add(adicionarButton, BorderLayout.EAST);
+                produtoLinha.add(removerButton, BorderLayout.WEST);
+
+                produtosPanel.add(produtoLinha);
+            }
+        }else{
+            JLabel semProdutos = new JLabel("Nenhum produto no carrinho");
+            produtosPanel.add(semProdutos);
         }
 
         JScrollPane scrollPane = new JScrollPane(produtosPanel);

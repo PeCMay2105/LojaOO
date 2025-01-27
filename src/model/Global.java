@@ -22,4 +22,6 @@ public class Global {
     }
 
     public static DatabaseController getDatabase() {return database;}
+
+
 }

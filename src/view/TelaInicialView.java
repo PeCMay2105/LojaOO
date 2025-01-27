@@ -2,6 +2,7 @@ package view;
 
 import model.Carrinho;
 import model.Cliente;
+import model.Global;
 import model.Pessoa;
 
 import javax.swing.*;

@@ -68,14 +68,14 @@ public class LoginView extends TemplateView{
             public void actionPerformed(ActionEvent e) {
                 // Cria e exibe a interface grafica da tela inicial logada
                 try{
-                   Pessoa usuario = iniciarSessao();
+                    Pessoa usuario = iniciarSessao();
                     TemplateView telaInicial = new TelaInicialView("Tela Inicial", true, usuario);
                     // estou passando um novo parametro para tela inicial, o usuario. na classe tela inicial devemos implementar mudanças
                     //para que a sessão dele continue ativa
                     telaInicial.setVisible(true);
                     dispose();
                 }catch(IllegalArgumentException error){
-                    JOptionPane.showMessageDialog(null, error);
+                    JOptionPane.showMessageDialog(null, "Login ou senha inválidos");
                 }
 
             }
@@ -88,6 +88,7 @@ public class LoginView extends TemplateView{
         String login = this.login;
         String senha = this.senha;
         LoginController controladorLogin = new LoginController(login,senha);
+        System.out.println("Login: "+login+" Senha: "+senha);
         if(controladorLogin.autenticar(login,senha)){
             PessoaController controladorPessoa = new PessoaController();
             Pessoa usuario = controladorPessoa.buscaPessoa(login);

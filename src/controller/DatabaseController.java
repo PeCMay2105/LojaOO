@@ -177,5 +177,17 @@ public class DatabaseController {
 
         return stmt.executeQuery();
     }
+    public ResultSet autenticar(String login, String senha) throws SQLException {
+        String sqlSelect = "SELECT * FROM Pessoa WHERE login = ? AND senha = ?";
+        PreparedStatement stmt = conn.prepareStatement(sqlSelect);
+        stmt.setString(1, login);
+        stmt.setString(2, senha);
+        ResultSet rs = stmt.executeQuery();
+        if (!rs.isBeforeFirst()) {
+            // No data found
+            return null;
+        }
+        return rs;
+    }
 }
 

@@ -2,6 +2,10 @@ package controller;
 
 import model.Pessoa;
 
+import java.sql.ResultSet;
+
+import static model.Global.database;
+
 public class LoginController {
     String senha;
     String login;
@@ -24,19 +28,17 @@ public class LoginController {
     }
 
     public boolean requisitaDB(String login, String senha){
-        // requisicao ao banco de dados com os parametros login e senha
-        // Metodo provisorio
-        boolean requisicao = true;
-
-      if(requisicao == true)
-      {
-          return true;
-      }
-      else
-      {
-          return false;
-      }
-
+            // Agora o metodo requisita uma linha ao banco de dados e se houver uma resposta diferente de null retorna true
+         try{
+             ResultSet resultado =  database.autenticar(login, senha);
+             if(resultado != null){
+                 return true;
+             }
+             else{
+                 return false;
+             }
+         }catch (Exception e){
+             return false;
+         }
     }
-
 }
