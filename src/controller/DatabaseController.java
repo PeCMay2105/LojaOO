@@ -1,5 +1,6 @@
 package controller;
 import model.Carrinho;
+import model.Cliente;
 
 import java.sql.*;
 import java.io.File;
@@ -188,6 +189,23 @@ public class DatabaseController {
             return null;
         }
         return rs;
+    }
+    public int cadastrar(Cliente cliente) throws SQLException {
+        String sqlInsert = "INSERT INTO Pessoa (CPF,Nome,nascimento,login,senha) VALUES (?,?,?,?,?)"; // método está com problema
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sqlInsert);
+            stmt.setString(1, cliente.getCPF());
+            stmt.setString(2, cliente.getNome());
+            stmt.setDate(3, cliente.getNascimento());
+            stmt.setString(4, cliente.getLogin());
+            stmt.setString(5, cliente.getSenha());
+            stmt.executeUpdate();
+            stmt.close();
+            return 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }
 

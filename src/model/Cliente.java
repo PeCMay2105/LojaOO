@@ -35,6 +35,9 @@ public class Cliente extends Pessoa{
         return login;
     }
 
+    public String getSenha() {
+        return senha;
+    }
     public void setLogin(String login) {
         this.login = login;
     }

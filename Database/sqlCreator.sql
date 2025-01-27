@@ -1,6 +1,7 @@
 CREATE TABLE Pessoa (
     CPF CHAR(11) PRIMARY KEY,
     Nome VARCHAR(255),
+    Data_Nascimento DATE,
     Email VARCHAR(255),
     Telefone VARCHAR(20),
     Endereco VARCHAR(255)

@@ -13,7 +13,7 @@ public class ClienteController {
         Global.setPessoa(clienteDTO);
         System.out.println("Global.pessoa: "+Global.getPessoa().getNome());
         try{
-            Global.database.inserir(Tabela.cliente,clienteDTO);
+            Global.database.cadastrar(clienteDTO);
         }catch (SQLException e){
             System.out.println("Erro ao inserir cliente no banco de dados");
         }
