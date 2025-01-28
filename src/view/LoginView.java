@@ -27,22 +27,22 @@ public class LoginView extends TemplateView{
         gbc.gridwidth = 2;
         telaCadastroCliente.add(header, gbc);
 
-        JLabel nome = new JLabel("Email");
-        JTextField campoNome = new JTextField(25);
+        JLabel Email = new JLabel("Email");
+        JTextField campoEmail = new JTextField(25);
         gbc.gridwidth = 1;
         gbc.gridy++;
         gbc.gridx = 0;
-        telaCadastroCliente.add(nome, gbc);
+        telaCadastroCliente.add(Email, gbc);
         gbc.gridx = 1;
-        telaCadastroCliente.add(campoNome, gbc);
+        telaCadastroCliente.add(campoEmail, gbc);
 
-        JLabel cpf = new JLabel("CPF:");
-        JTextField campoCpf = new JTextField(25);
+        JLabel Senha = new JLabel("Senha:");
+        JTextField campoSenha = new JTextField(25);
         gbc.gridy++;
         gbc.gridx = 0;
-        telaCadastroCliente.add(cpf, gbc);
+        telaCadastroCliente.add(Senha, gbc);
         gbc.gridx = 1;
-        telaCadastroCliente.add(campoCpf, gbc);
+        telaCadastroCliente.add(campoSenha, gbc);
 
         JButton entrar = new JButton("Entrar");
 
@@ -67,6 +67,8 @@ public class LoginView extends TemplateView{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Cria e exibe a interface grafica da tela inicial logada
+                login = campoEmail.getText();
+                senha = campoSenha.getText();
                 try{
                     Pessoa usuario = iniciarSessao();
                     TemplateView telaInicial = new TelaInicialView("Tela Inicial", true, usuario);
@@ -85,14 +87,15 @@ public class LoginView extends TemplateView{
     }
 
     public Pessoa iniciarSessao(){
-        String login = this.login;
         String senha = this.senha;
+        String login = this.login;
         LoginController controladorLogin = new LoginController(login,senha);
         System.out.println("Login: "+login+" Senha: "+senha);
         if(controladorLogin.autenticar(login,senha)){
             PessoaController controladorPessoa = new PessoaController();
             Pessoa usuario = controladorPessoa.buscaPessoa(login);
-            Global.setPessoa(usuario); // este trecho só funciona quando a consulta ao banco de dados está funcionando
+            Global.setPessoa(usuario);
+            System.out.println(Global.getPessoa().getNome());
             return usuario;
 
         }

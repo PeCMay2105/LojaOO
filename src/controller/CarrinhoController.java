@@ -2,6 +2,8 @@ package controller;
 
 import model.*;
 
+import javax.swing.*;
+import java.awt.*;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,11 +48,26 @@ public class CarrinhoController {
         Tabela opcao = Tabela.carrinho;
         Carrinho carrinhoAtual = new Carrinho(pessoa);
         Helper parser = new Helper();
+        System.out.println("Login:" + pessoa.getLogin());
+        System.out.println("Senha:" + pessoa.getSenha());
         try {
-            String cpf = pessoa.getCPF();
-            if(cpf != null && !cpf.isEmpty()) {
-                ResultSet rs = database.consulta(opcao, parseInt(pessoa.getCPF()));
+            String login = pessoa.getLogin();
+            if(login != null && !login.isEmpty()) {
+                ResultSet rs = database.consulta(opcao, parseInt(pessoa.getLogin()));
                 List<Produto> listaCarrinho = parser.converterProdutos(rs);
+                if (listaCarrinho == null) {
+                    SwingUtilities.invokeLater(() -> {
+                        JFrame frame = new JFrame("Carrinho Vazio");
+                        frame.setSize(300, 150);
+                        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                        frame.setLocationRelativeTo(null);
+                        JLabel label = new JLabel("O carrinho está vazio.", SwingConstants.CENTER);
+                        label.setFont(new Font("Arial", Font.BOLD, 16));
+                        frame.add(label);
+                        frame.setVisible(true);
+                    });
+                    return carrinhoAtual;
+                }
                 for(Produto produto: listaCarrinho){
                     carrinhoAtual.adicionarProduto(produto,1);
                 }

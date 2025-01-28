@@ -129,6 +129,56 @@ public class DatabaseController {
 
         return stmt.executeQuery();
     }
+    public ResultSet consulta(Tabela opcao, String id) throws SQLException {
+        String table;
+        String idString = "ID";
+
+        switch (opcao) {
+            case carrinho:
+                table = "Carrinho";
+                break;
+            case categoria:
+                table = "Categoria";
+                break;
+            case cliente:
+                table = "Cliente";
+                idString = "Email";
+                break;
+            case item_carrinho:
+                table = "Item_Carrinho";
+                break;
+            case item_pedido:
+                table = "Item_Pedido";
+                break;
+            case pagamento:
+                table = "Pagamento";
+                break;
+            case pedido:
+                table = "Pedido";
+                break;
+            case pessoa:
+                table = "Pessoa";
+                idString = "CPF";
+                break;
+            case produto:
+                table = "Produto";
+                break;
+            case vendedor:
+                table = "Vendedor";
+                idString = "CPF";
+                break;
+            default:
+                return null;
+        }
+
+        String sqlSelect = "SELECT * FROM " + table + " WHERE " + idString + " = ?";
+        PreparedStatement stmt = conn.prepareStatement(sqlSelect);
+        stmt.setString(1, id);
+        System.out.println(sqlSelect);
+
+        return stmt.executeQuery();
+    }
+    
 
     public ResultSet consulta(Tabela opcao) throws SQLException {
         String table;
@@ -179,7 +229,7 @@ public class DatabaseController {
         return stmt.executeQuery();
     }
     public ResultSet autenticar(String login, String senha) throws SQLException {
-        String sqlSelect = "SELECT * FROM Pessoa WHERE login = ? AND senha = ?";
+        String sqlSelect = "SELECT * FROM Cliente WHERE Email = ? AND Senha = ?";
         PreparedStatement stmt = conn.prepareStatement(sqlSelect);
         stmt.setString(1, login);
         stmt.setString(2, senha);
@@ -191,14 +241,14 @@ public class DatabaseController {
         return rs;
     }
     public int cadastrar(Cliente cliente) throws SQLException {
-        String sqlInsert = "INSERT INTO Pessoa (CPF,Nome,nascimento,login,senha) VALUES (?,?,?,?,?)"; // método está com problema
+        String sqlInsert = "INSERT INTO Cliente (CPF,Data_Nascimento,Nome,Senha,Email) VALUES (?,?,?,?,?)"; // método está com problema
         try {
             PreparedStatement stmt = conn.prepareStatement(sqlInsert);
             stmt.setString(1, cliente.getCPF());
-            stmt.setString(2, cliente.getNome());
-            stmt.setDate(3, cliente.getNascimento());
-            stmt.setString(4, cliente.getLogin());
-            stmt.setString(5, cliente.getSenha());
+            stmt.setDate(2, cliente.getNascimento());
+            stmt.setString(3, cliente.getNome());
+            stmt.setString(5, cliente.getLogin());
+            stmt.setString(4, cliente.getSenha());
             stmt.executeUpdate();
             stmt.close();
             return 1;

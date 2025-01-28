@@ -9,7 +9,10 @@ CREATE TABLE Pessoa (
 
 CREATE TABLE Cliente (
     CPF CHAR(11),
+    Nome VARCHAR(255),
     Data_Nascimento DATE,
+    Email VARCHAR(255),
+    Senha VARCHAR(255),
     PRIMARY KEY (CPF),
     FOREIGN KEY (CPF) REFERENCES Pessoa(CPF)
 );
