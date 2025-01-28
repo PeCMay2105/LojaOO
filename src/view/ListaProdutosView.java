@@ -53,8 +53,10 @@ public class ListaProdutosView extends TemplateView {
             adicionarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    System.out.println("Botão funcionando");
                     JOptionPane.showMessageDialog(null, produto + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
                     ((Cliente)Global.getPessoa()).getCarrinho().adicionarProduto(produto,1);
+                    System.out.println(((Cliente)Global.getPessoa()).getCarrinho().getConteudo());
                 }
             });
             produtoLinha.add(adicionarButton, BorderLayout.EAST);

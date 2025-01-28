@@ -52,9 +52,11 @@ public class CarrinhoController {
         System.out.println("Senha:" + pessoa.getSenha());
         try {
             String login = pessoa.getLogin();
+            System.out.println("Login: " + login);
             if(login != null && !login.isEmpty()) {
                 ResultSet rs = database.consulta(opcao, parseInt(pessoa.getLogin()));
                 List<Produto> listaCarrinho = parser.converterProdutos(rs);
+                System.out.println("Lista de produtos: " + listaCarrinho);
                 if (listaCarrinho == null) {
                     SwingUtilities.invokeLater(() -> {
                         JFrame frame = new JFrame("Carrinho Vazio");
@@ -66,13 +68,15 @@ public class CarrinhoController {
                         frame.add(label);
                         frame.setVisible(true);
                     });
-                    return carrinhoAtual;
+
                 }
                 for(Produto produto: listaCarrinho){
+                    System.out.println("Produto: " + produto.getNome());
                     carrinhoAtual.adicionarProduto(produto,1);
                 }
                 return carrinhoAtual;
             }else{
+                System.out.println("Login vazio");
                 throw new IllegalArgumentException("Invalid CPF");
             }
         } catch (Exception e) {

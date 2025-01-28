@@ -38,8 +38,12 @@ public class CarrinhoView extends TemplateView {
 //        carrinho.adicionarProduto(new Produto("no",2,"2","marca"), 1);
 //        carrinho.adicionarProduto(new Produto("nome",2,"1","marca"), 14); as linhas foram comentadas pois agora há carrinhoControler que é onde essas funções devem se concentrar
         Map<Produto,Integer> conteudo = carrinhoController.retornaProdutos();
+        // carrinho.getConteudo() está retornando um map vazio
         if(carrinhoAtual.getConteudo() != null) {
+            System.out.println("Carrinho não está vazio");
+            System.out.println(carrinhoAtual.getConteudo());
             for (Map.Entry<Produto, Integer> produto : conteudo.entrySet()) {
+                System.out.println("Produto: " + produto.getKey().getNome() + " Quantidade: " + produto.getValue());
                 JPanel produtoLinha = new JPanel(new BorderLayout());
                 produtoLinha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
