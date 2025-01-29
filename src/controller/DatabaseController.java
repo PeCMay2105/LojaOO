@@ -1,8 +1,5 @@
 package controller;
-import model.Carrinho;
-import model.Cliente;
-import model.Helper;
-import model.Produto;
+import model.*;
 
 import java.sql.*;
 import java.io.File;
@@ -177,16 +174,30 @@ public class DatabaseController {
         return stmt.executeQuery();
     }
     public ResultSet autenticar(String login, String senha) throws SQLException {
-        String sqlSelect = "SELECT * FROM Cliente WHERE Email = ? AND Senha = ?";
-        PreparedStatement stmt = conn.prepareStatement(sqlSelect);
-        stmt.setString(1, login);
-        stmt.setString(2, senha);
-        ResultSet rs = stmt.executeQuery();
-        if (!rs.isBeforeFirst()) {
-            // No data found
-            return null;
+        // Primeiro tenta autenticar como cliente
+        String sqlSelectCliente = "SELECT *, 'cliente' as tipo_usuario FROM Cliente WHERE Email = ? AND Senha = ?";
+        PreparedStatement stmtCliente = conn.prepareStatement(sqlSelectCliente);
+        stmtCliente.setString(1, login);
+        stmtCliente.setString(2, senha);
+        ResultSet rsCliente = stmtCliente.executeQuery();
+
+        if (rsCliente.isBeforeFirst()) {
+            return rsCliente; // Retorna os dados do cliente se encontrado
         }
-        return rs;
+
+        // Se não encontrou como cliente, tenta como vendedor
+        String sqlSelectVendedor = "SELECT *, 'vendedor' as tipo_usuario FROM Vendedor WHERE LOGIN = ? AND SENHA = ?";
+        PreparedStatement stmtVendedor = conn.prepareStatement(sqlSelectVendedor);
+        stmtVendedor.setString(1, login);
+        stmtVendedor.setString(2, senha);
+        ResultSet rsVendedor = stmtVendedor.executeQuery();
+
+        if (rsVendedor.isBeforeFirst()) {
+            return rsVendedor; // Retorna os dados do vendedor se encontrado
+        }
+
+        // Se não encontrou em nenhuma tabela
+        return null;
     }
     public int cadastrar(Cliente cliente) throws SQLException {
         String insertCliente = "INSERT INTO Cliente (CPF,Email,Senha,Endereco) VALUES (?,?,?,?)";
@@ -221,39 +232,62 @@ public class DatabaseController {
         }
     }
 
-    public List GetPessoaByLogin(String login) throws SQLException {
-        String sqlSelect =
-        "SELECT" +
-            " Cliente.CPF," +
-            " Pessoa.Nome," +
-            " Pessoa.Data_Nascimento," +
-            " Pessoa.Telefone," +
-            " Cliente.Email," +
-            " Cliente.Senha" +
-        " FROM " +
-                "Cliente" +
-        " INNER JOIN" +
-            " Pessoa" +
-        " ON" +
-            " Cliente.CPF = Pessoa.CPF" +
-        " WHERE" +
-            " Cliente.Email = '"+login+ "' ;";
-        System.out.println(sqlSelect);
+
+    // método não está funcionando para vendedor
+    public List<Object> GetPessoaByLogin(String login) throws SQLException {
+        String sqlCliente = "SELECT c.CPF, p.Nome, p.Data_Nascimento, p.Telefone, c.Email, c.Senha " +
+                "FROM Cliente c INNER JOIN Pessoa p ON c.CPF = p.CPF WHERE c.Email = ?";
+
+        String sqlFuncionario = "SELECT f.CPF, f.Login, p.Nome, f.Senha, f.Comissao, f.Salario, p.Data_Nascimento " +
+                "FROM Vendedor f INNER JOIN Pessoa p ON f.CPF = p.CPF WHERE f.Login = ?";
+
         PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Object> list = new ArrayList<>();
+
         try {
-            stmt =conn.prepareStatement(sqlSelect);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        ResultSet rs = stmt.executeQuery();
-        List list = new ArrayList();
-        while (rs.next()) {
-            Cliente cliente = new Cliente(rs.getString("Nome"),rs.getString("CPF"),rs.getString("Email"),rs.getString("Senha"),rs.getDate("Data_Nascimento"));
-            list.add(cliente);
+            // Verifica se é Cliente
+            stmt = conn.prepareStatement(sqlCliente);
+            stmt.setString(1, login);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                list.add(new Cliente(
+                        rs.getString("Nome"),
+                        rs.getString("CPF"),
+                        rs.getString("Email"),
+                        rs.getString("Senha"),
+                        rs.getDate("Data_Nascimento")
+                ));
+                return list; // Retorna imediatamente se encontrar um cliente
+            }
+            rs.close();
+            stmt.close();
+
+            // Verifica se é Funcionário
+            stmt = conn.prepareStatement(sqlFuncionario);
+            stmt.setString(1, login);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                list.add(new Vendedor(
+                        rs.getString("Nome"),
+                        rs.getString("CPF"),
+                        rs.getString("Login"),
+                        rs.getString("Senha"),
+                        rs.getDate("Data_Nascimento"),
+                        rs.getDouble("Salario"),
+                        rs.getDouble("Comissao")
+                ));
+                return list; // Retorna imediatamente se encontrar um funcionário
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
         }
 
-            return list;
+        return list; // Retorna uma lista vazia caso o login não exista
     }
+
+
     void inserirProdutoCarrinho(Produto produto,Cliente cliente,int quantidade) throws SQLException {
 
         String sqlInsert =

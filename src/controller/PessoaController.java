@@ -16,10 +16,16 @@ public class PessoaController {
 
     }
     public Pessoa buscaPessoa(String login){
+
         try {
 
             List listUsuario = database.GetPessoaByLogin(login);
+
             if (listUsuario.size() > 0) {
+                // Esta linha não está funcionando. Não reconhece o objeto como vendedor
+                if(listUsuario.get(0) instanceof Vendedor) {
+                    return (Vendedor) listUsuario.get(0);
+                }
                 return (Cliente) listUsuario.get(0);
             }
 

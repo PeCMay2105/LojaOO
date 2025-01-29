@@ -21,6 +21,14 @@ public Produto(int id,String nome,float preco,int estoque,String descricao,Strin
 
 
 }
+public Produto(String nome,float preco,int estoque,String descricao,String categoria)
+{
+    this.nome = nome;
+    this.preco=preco;
+    this.estoque=estoque;
+    this.descricao=descricao;
+    this.categoria=categoria;}
+
 public float getPreco()
 {
     return preco;

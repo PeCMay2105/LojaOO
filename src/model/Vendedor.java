@@ -10,10 +10,10 @@ public class Vendedor extends Pessoa {
     private String login;
     private String senha;
     ArrayList<Venda> vendas;
-    float salario;
+    double salario;
     double comissao;
 
-    public Vendedor(String nome, String CPF, String login, String senha, Date nascimento, Float salario, double comissao) {
+    public Vendedor(String nome, String CPF, String login, String senha, Date nascimento, Double salario, double comissao) {
         super(nome, CPF, nascimento);
         this.login = login;
         this.senha = senha;
@@ -23,6 +23,7 @@ public class Vendedor extends Pessoa {
 
 
     }
+
 
     public String getLogin() {
         return login;
@@ -39,6 +40,10 @@ public class Vendedor extends Pessoa {
         vendas.add(venda);
 
         return venda;
+    }
+
+    public int getId(){
+        return super.getId();
     }
 
 }

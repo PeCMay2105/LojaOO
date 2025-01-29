@@ -3,6 +3,7 @@ package view;
 import model.Cliente;
 import model.Global;
 import model.Pessoa;
+import model.Vendedor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ import java.sql.Date;
 public class PerfilView extends TemplateView {
 
     private Cliente cliente;
+    private Vendedor vendedor;
     Pessoa usuario = Global.getPessoa();
     private JLabel nomeField;
     private JLabel emailField;
@@ -21,6 +23,13 @@ public class PerfilView extends TemplateView {
     public PerfilView(String titulo, Cliente cliente) {
         super(titulo);
         this.cliente = cliente;
+        initializeProfileComponents();
+        setupProfileLayout();
+        setupProfileEvents();
+    }
+    public PerfilView(String titulo, Vendedor vendedor){
+        super(titulo);
+        this.vendedor = vendedor;
         initializeProfileComponents();
         setupProfileLayout();
         setupProfileEvents();

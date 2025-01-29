@@ -1,9 +1,6 @@
 package view;
 
-import model.Carrinho;
-import model.Cliente;
-import model.Global;
-import model.Pessoa;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -125,6 +122,12 @@ public class TelaInicialView extends TemplateView {
 
         if (usuarioLogado) {
             // Opções disponíveis apenas para usuários logados
+            if(usuarioAtual instanceof Cliente){
+                JLabel imagem = new JLabel();
+                imagem.setIcon(new ImageIcon(((Cliente) usuarioAtual).getImagem()));
+                gbc.gridy++;
+                telaInicial.add(imagem, gbc);
+
             JButton verProdutos = new JButton("Ver produtos");
             ajustarBotao(verProdutos, gbc, telaInicial);
 
@@ -159,6 +162,54 @@ public class TelaInicialView extends TemplateView {
                     dispose();
                 }
             });
+            }else{
+                JButton verProdutos = new JButton("Ver produtos");
+                ajustarBotao(verProdutos, gbc, telaInicial);
+
+                JButton adicionarProdutos = new JButton("Adicionar produtos");
+                ajustarBotao(adicionarProdutos, gbc, telaInicial);
+
+                JButton verCarrinho = new JButton("Ver carrinho");
+                ajustarBotao(verCarrinho, gbc, telaInicial);
+
+                JButton verPerfil = new JButton("Ver Perfil");
+                ajustarBotao(verPerfil, gbc, telaInicial);
+
+                adicionarProdutos.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        TemplateView adicionarProdutosView = new AdicionarProdutosView("Adicionar Produtos",(Vendedor)usuarioAtual);
+                        adicionarProdutosView.setVisible(true);
+                        dispose();
+                    }
+                });
+
+                verProdutos.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        TemplateView listaProdutos = new ListaProdutosView("Lista de Produtos");
+                        listaProdutos.setVisible(true);
+                        dispose();
+                    }
+                });
+
+                verCarrinho.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        TemplateView carrinhoView = new CarrinhoView("Carrinho", new HashMap<>());//adicionei o new hashmap so pra compilar (inacio)
+                        carrinhoView.setVisible(true);
+                        dispose();
+                    }
+                });
+                verPerfil.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        TemplateView perfilView = new PerfilView("Perfil", (Vendedor)usuarioAtual);
+                        perfilView.setVisible(true);
+                        dispose();
+                    }
+                });
+            }
 
         } else {
             // Opções disponíveis apenas para usuários não logados

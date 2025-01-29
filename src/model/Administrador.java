@@ -32,7 +32,7 @@ public class Administrador extends Pessoa {
         return 1;
     }
 
-    public int cadastraVendedor(String nome, String CPF, String login, String senha, Date nascimento, Float salario, double comissao) {
+    public int cadastraVendedor(String nome, String CPF, String login, String senha, Date nascimento, Double salario, double comissao) {
         for (Vendedor vendedor : vendedores) {
             if (vendedor.getCPF().equals(CPF)) {
                 System.out.println("Vendedor já cadastrado.");

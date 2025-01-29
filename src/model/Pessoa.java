@@ -41,5 +41,9 @@ public abstract class Pessoa {
     public String getNome(){
         return nome;
     }
+
+    protected int getId() {
+        return Integer.parseInt(CPF);
+    }
 }
 
