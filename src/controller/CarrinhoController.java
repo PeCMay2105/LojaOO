@@ -53,7 +53,6 @@ public class CarrinhoController {
     }
 
     public Carrinho buscaCarrinho(Cliente pessoa){
-        Tabela opcao = Tabela.item_carrinho;
         Carrinho carrinhoAtual = new Carrinho(pessoa);
         System.out.println("Login:" + pessoa.getLogin());
         System.out.println("Senha:" + pessoa.getSenha());
@@ -63,7 +62,7 @@ public class CarrinhoController {
             if(login != null && !login.isEmpty()) {
                 //ResultSet rs = database.consulta(opcao, pessoa.getCPF());
                 //List<Produto> listaCarrinho = Helper.converterProdutos(rs);
-                List<Produto> listaCarrinho = database.GetProdutosByCPF(pessoa.getCPF());
+                HashMap<Produto, Integer> listaCarrinho = database.GetProdutosByCPF(pessoa.getCPF());
 
                 System.out.println("Lista de produtos: " + listaCarrinho);
                 if (listaCarrinho == null) {
@@ -79,9 +78,11 @@ public class CarrinhoController {
                     });
 
                 }
-                for(Produto produto: listaCarrinho){
-                    System.out.println("Produto: " + produto.getNome());
-                    carrinhoAtual.adicionarProduto(produto,1);
+                for(Map.Entry<Produto,Integer> produto: listaCarrinho.entrySet()){
+                    //PARA ACESSAR O PRODUTO: produto.getKey
+                    //PARA ACESSAR A QUANTIDADE:produto.getValue
+                    System.out.println("Produto: " + produto.getKey().getNome());
+                    carrinhoAtual.adicionarProduto(produto.getKey(),produto.getValue());
                 }
                 return carrinhoAtual;
             }else{

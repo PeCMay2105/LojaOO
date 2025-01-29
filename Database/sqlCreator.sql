@@ -60,13 +60,13 @@ CREATE TABLE Item_Pedido (
 );
 
 CREATE TABLE Carrinho (
-    ID VARCHAR[45] PRIMARY KEY,
+    ID VARCHAR(45) PRIMARY KEY,
     Data_Criacao DATE,
     FOREIGN KEY (ID) REFERENCES Cliente(CPF)
 );
 
 CREATE TABLE Item_Carrinho (
-    ID_Carrinho VARCHAR[11],
+    ID_Carrinho VARCHAR(11),
     ID_Produto INT,
     Quantidade INT,
     PRIMARY KEY (ID_Carrinho, ID_Produto),

@@ -7,6 +7,7 @@ import model.Produto;
 import java.sql.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -254,23 +255,32 @@ public class DatabaseController {
             return list;
     }
     void inserirProdutoCarrinho(Produto produto,Cliente cliente,int quantidade) throws SQLException {
-        String sqlInsert = "INSERT INTO item_carrinho (ID_Carrinho,ID_Produto,Quantidade) VALUES (?,?,?)";
-        PreparedStatement stmt = conn.prepareStatement(sqlInsert);
 
+        String sqlInsert =
+            "INSERT INTO" +
+                    " item_carrinho (ID_Carrinho,ID_Produto,Quantidade)" +
+                    " VALUES (?,?,?)" +
+            " ON CONFLICT " +
+                    "(ID_Produto,ID_Carrinho)" +
+            " DO UPDATE SET" +
+                    " Quantidade = excluded.Quantidade;";
+
+        PreparedStatement stmt = conn.prepareStatement(sqlInsert);
         stmt.setString(1, cliente.getCPF());
         stmt.setInt(2, produto.getId());
         stmt.setInt(3, quantidade);
 
         stmt.executeUpdate();
-    }
+        stmt.close();
+        }
 
-    List<Produto> GetProdutosByCPF(String CPF) throws SQLException {
+        HashMap<Produto,Integer> GetProdutosByCPF(String CPF) throws SQLException {
         String sqlSelect = "SELECT * FROM item_carrinho INNER JOIN Produto ON ID_Produto = ID WHERE ID_Carrinho = ?";
         PreparedStatement stmt = conn.prepareStatement(sqlSelect);
         stmt.setString(1, CPF);
         ResultSet rs = stmt.executeQuery();
 
-        return Helper.converterProdutos(rs);
+        return Helper.converterProdutosCarrinho(rs);
 
     }
 }
