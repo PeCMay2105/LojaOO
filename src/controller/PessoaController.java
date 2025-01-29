@@ -16,10 +16,9 @@ public class PessoaController {
 
     }
     public Pessoa buscaPessoa(String login){
-        Tabela opcao = Tabela.cliente;
         try {
-            ResultSet rs = database.consulta(opcao, login);
-            List listUsuario = Helper.converterClientes(rs);
+
+            List listUsuario = database.GetPessoaByLogin(login);
             if (listUsuario.size() > 0) {
                 return (Cliente) listUsuario.get(0);
             }

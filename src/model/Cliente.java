@@ -8,6 +8,7 @@ public class Cliente extends Pessoa{
     private String senha;
     private boolean possuiCartao;
     private ArrayList<String> carteira;
+    private String telefone;
     private Carrinho carrinho = new Carrinho(this);
 
     public Cliente(String nome, String CPF, Date nascimento, String login, String senha, boolean possuiCartao, ArrayList<String> carteira) {
@@ -19,6 +20,7 @@ public class Cliente extends Pessoa{
     }
     public Cliente(String nome,String CPF,String login,String senha, Date nascimento){
         super(nome,CPF,nascimento);
+        System.out.println("Nome: "+nome + "\nCPF: "+CPF);
         this.login = login;
         this.possuiCartao = false;
         this.senha = senha;

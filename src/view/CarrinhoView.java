@@ -20,6 +20,8 @@ public class CarrinhoView extends TemplateView {
         CarrinhoController controller = new CarrinhoController(Global.getPessoa());
 
         Carrinho carrinhoAtual = controller.getCarrinho();
+
+
         JPanel telaInicial = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);

@@ -5,6 +5,7 @@ import model.*;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,24 +39,32 @@ public class CarrinhoController {
     }
 
     public void adicionarProduto(Produto produto, int quantidade){
-        carrinho.adicionarProduto(produto, quantidade);
+        try {
+            database.inserirProdutoCarrinho(produto, Global.getCliente(), quantidade);
+            carrinho.adicionarProduto(produto, quantidade);
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
+
     public void removerProduto(Produto produto, int quantidade){
         carrinho.removerProduto(produto, quantidade);
     }
 
     public Carrinho buscaCarrinho(Cliente pessoa){
-        Tabela opcao = Tabela.carrinho;
+        Tabela opcao = Tabela.item_carrinho;
         Carrinho carrinhoAtual = new Carrinho(pessoa);
-        Helper parser = new Helper();
         System.out.println("Login:" + pessoa.getLogin());
         System.out.println("Senha:" + pessoa.getSenha());
         try {
             String login = pessoa.getLogin();
             System.out.println("Login: " + login);
             if(login != null && !login.isEmpty()) {
-                ResultSet rs = database.consulta(opcao, parseInt(pessoa.getLogin()));
-                List<Produto> listaCarrinho = parser.converterProdutos(rs);
+                //ResultSet rs = database.consulta(opcao, pessoa.getCPF());
+                //List<Produto> listaCarrinho = Helper.converterProdutos(rs);
+                List<Produto> listaCarrinho = database.GetProdutosByCPF(pessoa.getCPF());
+
                 System.out.println("Lista de produtos: " + listaCarrinho);
                 if (listaCarrinho == null) {
                     SwingUtilities.invokeLater(() -> {

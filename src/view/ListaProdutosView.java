@@ -1,5 +1,6 @@
 package view;
 
+import controller.CarrinhoController;
 import controller.Tabela;
 import model.*;
 
@@ -18,6 +19,7 @@ public class ListaProdutosView extends TemplateView {
     public ListaProdutosView(String titulo) {
         // Adicionar as alterações necessárias para receber o usuário logado
         super(titulo);
+        CarrinhoController carrinhoController = new CarrinhoController(Global.getPessoa());
 
         JPanel telaInicial = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -55,8 +57,9 @@ public class ListaProdutosView extends TemplateView {
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("Botão funcionando");
                     JOptionPane.showMessageDialog(null, produto + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
-                    ((Cliente)Global.getPessoa()).getCarrinho().adicionarProduto(produto,1);
-                    System.out.println(((Cliente)Global.getPessoa()).getCarrinho().getConteudo());
+                    carrinhoController.adicionarProduto(produto,1);
+                    //((Cliente)Global.getPessoa()).getCarrinho().adicionarProduto(produto,1);
+                    //System.out.println(((Cliente)Global.getPessoa()).getCarrinho().getConteudo());
                 }
             });
             produtoLinha.add(adicionarButton, BorderLayout.EAST);

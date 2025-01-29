@@ -9,6 +9,7 @@ public class Global {
     public static Pessoa getPessoa() {return pessoa;}
     public static void setPessoa(Pessoa _pessoa)
     {
+        System.out.println("Pessoa Global setada\nNome:"+ _pessoa.getNome());
         pessoa = _pessoa;
     }
     public static DatabaseController database;
@@ -20,7 +21,7 @@ public class Global {
             throw new RuntimeException(e);
         }
     }
-
+    public static Cliente getCliente() {return (Cliente) pessoa;}
     public static DatabaseController getDatabase() {return database;}
 
 

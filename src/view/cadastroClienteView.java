@@ -113,6 +113,7 @@ public class cadastroClienteView extends TemplateView {
 
                 try{
                     clienteController.criaCliente(campoNome.getText(), campoCpf.getText(), campoEmail.getText(), campoSenha.getText(), Date.valueOf(LocalDate.parse(campoNascimento.getText(),formatter)));
+                    System.out.println("CadastroCLienteView: Nome = " + campoNome.getText() + " Cpf = " + campoCpf.getText());
                 }catch(SQLException erroDatabase){
                     JFrame erroFrame = new JFrame("Erro");
                     erroFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

@@ -36,6 +36,7 @@ public class Helper {
         while (rs.next()) {
             Cliente cliente;
             try {
+
                 String cpf = rs.getString("CPF");
                 java.sql.Date nascimento;
                 try {
@@ -47,7 +48,7 @@ public class Helper {
                 String senha = rs.getString("Senha");
                 String email = rs.getString("Email");
 
-                cliente = new Cliente(cpf, nome, senha, email, nascimento);
+                cliente = new Cliente(nome,cpf, senha, email, nascimento);
                 clientes.add(cliente);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -55,4 +56,5 @@ public class Helper {
         }
         return clientes;
     }
+
 }

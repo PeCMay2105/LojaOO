@@ -2,17 +2,14 @@ CREATE TABLE Pessoa (
     CPF CHAR(11) PRIMARY KEY,
     Nome VARCHAR(255),
     Data_Nascimento DATE,
-    Email VARCHAR(255),
-    Telefone VARCHAR(20),
-    Endereco VARCHAR(255)
+    Telefone VARCHAR(20)
 );
 
 CREATE TABLE Cliente (
     CPF CHAR(11),
-    Nome VARCHAR(255),
-    Data_Nascimento DATE,
     Email VARCHAR(255),
     Senha VARCHAR(255),
+    Endereco VARCHAR(255),
     PRIMARY KEY (CPF),
     FOREIGN KEY (CPF) REFERENCES Pessoa(CPF)
 );
@@ -31,7 +28,7 @@ CREATE TABLE Categoria (
 );
 
 CREATE TABLE Produto (
-    ID INT PRIMARY KEY,
+    ID INTEGER PRIMARY KEY AUTOINCREMENT ,
     Nome VARCHAR(255),
     Preco DECIMAL(10, 2),
     Estoque INT,
@@ -39,7 +36,7 @@ CREATE TABLE Produto (
     Imagem VARCHAR(255),
     ID_Vendedor INT,
     ID_Categoria INT,
-    FOREIGN KEY (ID_Vendedor) REFERENCES Vendedor(ID),
+    FOREIGN KEY (ID_Vendedor) REFERENCES Vendedor(CPF),
     FOREIGN KEY (ID_Categoria) REFERENCES Categoria(ID)
 );
 
@@ -49,7 +46,7 @@ CREATE TABLE Pedido (
     Status VARCHAR(50),
     Total DECIMAL(10, 2),
     ID_Cliente INT,
-    FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID)
+    FOREIGN KEY (ID_Cliente) REFERENCES Cliente(CPF)
 );
 
 CREATE TABLE Item_Pedido (
@@ -63,14 +60,13 @@ CREATE TABLE Item_Pedido (
 );
 
 CREATE TABLE Carrinho (
-    ID INT PRIMARY KEY,
+    ID VARCHAR[45] PRIMARY KEY,
     Data_Criacao DATE,
-    ID_Cliente INT,
-    FOREIGN KEY (ID_Cliente) REFERENCES Cliente(ID)
+    FOREIGN KEY (ID) REFERENCES Cliente(CPF)
 );
 
 CREATE TABLE Item_Carrinho (
-    ID_Carrinho INT,
+    ID_Carrinho VARCHAR[11],
     ID_Produto INT,
     Quantidade INT,
     PRIMARY KEY (ID_Carrinho, ID_Produto),
