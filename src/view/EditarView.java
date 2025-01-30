@@ -71,6 +71,15 @@ public class EditarView extends TemplateView {
         editPanel.add(salvarButton);
 
         adicionarConteudo(editPanel);
+
+        botaoVoltar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TemplateView perfilview = new PerfilView("Perfil",cliente);
+                perfilview.setVisible(true);
+                dispose();
+            }
+        });
     }
 
     protected void setupEvents() {

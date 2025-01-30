@@ -162,7 +162,7 @@ public class TelaInicialView extends TemplateView {
                     dispose();
                 }
             });
-            }else{
+            }else if (usuarioAtual instanceof Vendedor){
                 JButton verProdutos = new JButton("Ver produtos");
                 ajustarBotao(verProdutos, gbc, telaInicial);
 
@@ -209,6 +209,67 @@ public class TelaInicialView extends TemplateView {
                         dispose();
                     }
                 });
+            }else if( usuarioAtual instanceof Administrador){
+                JButton verProdutos = new JButton("Ver produtos");
+                ajustarBotao(verProdutos, gbc, telaInicial);
+
+                JButton adicionarProdutos = new JButton("Adicionar produtos");
+                ajustarBotao(adicionarProdutos, gbc, telaInicial);
+
+                JButton verCarrinho = new JButton("Ver carrinho");
+                ajustarBotao(verCarrinho, gbc, telaInicial);
+
+                JButton verPerfil = new JButton("Ver Perfil");
+                ajustarBotao(verPerfil, gbc, telaInicial);
+
+                JButton cadastroFuncionario = new JButton("Cadastrar Funcionário");
+                ajustarBotao(verProdutos, gbc, telaInicial);
+
+                cadastroFuncionario.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        TemplateView adicionarProdutosView = new AdicionarProdutosView("Adicionar Produtos",(Vendedor)usuarioAtual);
+                        adicionarProdutosView.setVisible(true);
+                        dispose();
+                    }
+                });
+
+                adicionarProdutos.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        TemplateView adicionarProdutosView = new AdicionarProdutosView("Adicionar Produtos",(Vendedor)usuarioAtual);
+                        adicionarProdutosView.setVisible(true);
+                        dispose();
+                    }
+                });
+
+                verProdutos.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        TemplateView listaProdutos = new ListaProdutosView("Lista de Produtos");
+                        listaProdutos.setVisible(true);
+                        dispose();
+                    }
+                });
+
+                verCarrinho.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        TemplateView carrinhoView = new CarrinhoView("Carrinho", new HashMap<>());//adicionei o new hashmap so pra compilar (inacio)
+                        carrinhoView.setVisible(true);
+                        dispose();
+                    }
+                });
+                verPerfil.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        TemplateView perfilView = new PerfilView("Perfil", (Vendedor)usuarioAtual);
+                        perfilView.setVisible(true);
+                        dispose();
+                    }
+                });
+
+
             }
 
         } else {
