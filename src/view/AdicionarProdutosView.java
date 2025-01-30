@@ -1,4 +1,5 @@
 package view;
+import controller.VendedorController;
 import model.*;
 
 import javax.swing.*;
@@ -20,11 +21,14 @@ public class AdicionarProdutosView extends TemplateView {
     private JComboBox<String> campoCategoria;
     private JButton botaoPublicar;
     private JLabel caracteresRestantes;
+    private VendedorController vendedorController;
     private final int MAX_DESCRICAO = 280; // Similar ao limite do Twitter
 
     public AdicionarProdutosView(String titulo, Vendedor vendedor) {
         super(titulo);
         this.vendedor = vendedor;
+        this.vendedorController = new VendedorController();
+
 
 
 
@@ -185,8 +189,8 @@ public class AdicionarProdutosView extends TemplateView {
                     campoCategoria.getSelectedItem().toString()
             );
 
-            // Aqui você deve adicionar o código para salvar o produto no banco de dados
-            // ProdutoDAO.salvar(novoProduto);
+
+            vendedorController.inserirProduto(novoProduto);
 
             JOptionPane.showMessageDialog(this,
                     "Produto publicado com sucesso!",

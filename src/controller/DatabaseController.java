@@ -356,7 +356,8 @@ public class DatabaseController {
                         " VALUES (?,?,?,?,?,?,?)" +
                         " ON CONFLICT " +
                         " DO UPDATE SET" +
-                        " Estoque = Estoque + excluded.Estoque;";
+                        " Estoque = Estoque + ?;";
+
 
         PreparedStatement stmt = conn.prepareStatement(sqlInsert);
         stmt.setString(1, produto.getNome());
@@ -366,11 +367,32 @@ public class DatabaseController {
         //stmt.setBlob();
         stmt.setString(6,vendedor.getCPF());
         stmt.setString(7, produto.getCategoria());
+        stmt.setInt(8, produto.getEstoque());
         stmt.executeUpdate();
         stmt.close();
     }
 
+    public List<Produto> pesquisaProdutos(String query) throws SQLException {
+        String sqlSelect = "SELECT * FROM Produto WHERE produto.nome LIKE ?";
+        List<Produto> produtos = new ArrayList<>();
+
+        try (PreparedStatement stmt = conn.prepareStatement(sqlSelect)) {
+            stmt.setString(1, "%" + query + "%"); // Adiciona os curingas à query
+            try (ResultSet rs = stmt.executeQuery()) {
+                produtos = Helper.converterProdutos(rs); // Converte o ResultSet em uma lista de produtos
+            }
+        } catch (SQLException e) {
+            // Trate a exceção conforme necessário
+            throw new SQLException("Erro ao buscar produtos: " + e.getMessage(), e);
+        }
+
+        return produtos;
+    }
 
 
 }
+
+
+
+
 
