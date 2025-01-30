@@ -94,6 +94,15 @@ public class CarteiraView extends TemplateView {
         setorPrincipal.add(setorFooter, BorderLayout.SOUTH);
 
         add(setorPrincipal);
+        botaoVoltar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TemplateView telaInicial = new TelaInicialView("Tela Inicial",true);
+                telaInicial.setVisible(true);
+                dispose();
+            }
+        });
+
     }
 
     public static void main(String[] args) {
@@ -102,4 +111,5 @@ public class CarteiraView extends TemplateView {
             carteiraView.setVisible(true);
         });
     }
+
 }

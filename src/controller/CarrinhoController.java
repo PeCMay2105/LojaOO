@@ -18,6 +18,7 @@ import static model.Helper.converterProdutos;
 public class CarrinhoController {
     Carrinho carrinho;
     HashMap<String,String> sessionUsuario;
+
     public CarrinhoController(Pessoa pessoa){ ///userData deve ser um objeto recebido da classe que que chama o controller contento usuario e senha
         ///// Código provisório
         this.carrinho = buscaCarrinho((Cliente) pessoa);

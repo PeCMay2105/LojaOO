@@ -15,8 +15,10 @@ CREATE TABLE Cliente (
 );
 
 CREATE TABLE Vendedor (
-    Avaliacao DECIMAL(3, 2),
     CPF CHAR(11),
+    Salario FLoat,
+    Comissao Float,
+    Avaliacao Float,
     PRIMARY KEY (CPF),
     FOREIGN KEY (CPF) REFERENCES Pessoa(CPF)
 );

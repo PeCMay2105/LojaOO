@@ -4,6 +4,7 @@ import model.*;
 import java.sql.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -175,7 +176,10 @@ public class DatabaseController {
     }
     public ResultSet autenticar(String login, String senha) throws SQLException {
         // Primeiro tenta autenticar como cliente
-        String sqlSelectCliente = "SELECT *, 'cliente' as tipo_usuario FROM Cliente WHERE Email = ? AND Senha = ?";
+        String sqlSelectCliente = "SELECT p.* FROM Pessoa p " +
+                "JOIN Cliente c ON p.CPF = c.CPF " +
+                "WHERE p.Email = ? AND p.Senha = ?";
+
         PreparedStatement stmtCliente = conn.prepareStatement(sqlSelectCliente);
         stmtCliente.setString(1, login);
         stmtCliente.setString(2, senha);
@@ -186,7 +190,9 @@ public class DatabaseController {
         }
 
         // Se não encontrou como cliente, tenta como vendedor
-        String sqlSelectVendedor = "SELECT *, 'vendedor' as tipo_usuario FROM Vendedor WHERE LOGIN = ? AND SENHA = ?";
+        String sqlSelectVendedor = "SELECT * FROM Pessoa p " +
+                "JOIN vendedor v On p.Cpf = v.Cpf" +
+                " WHERE p.Email = ? AND p.Senha = ?";
         PreparedStatement stmtVendedor = conn.prepareStatement(sqlSelectVendedor);
         stmtVendedor.setString(1, login);
         stmtVendedor.setString(2, senha);
@@ -200,8 +206,8 @@ public class DatabaseController {
         return null;
     }
     public int cadastrar(Cliente cliente) throws SQLException {
-        String insertCliente = "INSERT INTO Cliente (CPF,Email,Senha,Endereco) VALUES (?,?,?,?)";
-        String insertPessoa = "INSERT INTO Pessoa (CPF,Nome,Data_Nascimento) VALUES (?,?,?)";
+        String insertCliente = "INSERT INTO Cliente (CPF,Endereco) VALUES (?,?)";
+        String insertPessoa = "INSERT INTO Pessoa (CPF,Nome,Email,Senha,Data_Nascimento) VALUES (?,?,?,?,?)";
         String insertCarrinho = "INSERT INTO Carrinho (ID,Data_Criacao) VALUES (?,?)";
         try {
             PreparedStatement stmtPessoa = conn.prepareStatement(insertPessoa);
@@ -210,11 +216,11 @@ public class DatabaseController {
 
             stmtPessoa.setString(1, cliente.getCPF());
             stmtPessoa.setString(2, cliente.getNome());
-            stmtPessoa.setDate(3, cliente.getNascimento());
+            stmtPessoa.setDate(5, cliente.getNascimento());
+            stmtPessoa.setString(3, cliente.getLogin());
+            stmtPessoa.setString(4, cliente.getSenha());
 
             stmtCliente.setString(1, cliente.getCPF());
-            stmtCliente.setString(2, cliente.getLogin());
-            stmtCliente.setString(3, cliente.getSenha());
 
             stmtCarrinho.setString(1,cliente.getCPF());
             stmtCarrinho.setDate(2, new Date(1));
@@ -232,14 +238,38 @@ public class DatabaseController {
         }
     }
 
+    public void cadastrarVendedor(Vendedor vendedor) throws SQLException {
+        String insertCliente = "INSERT INTO Vendedor (CPF, Salario, Comissao, Avaliacao) VALUES (?,?,?,?)";
+        String insertPessoa = "INSERT INTO Pessoa (CPF,Nome,Email,Senha,Data_Nascimento) VALUES (?,?,?,?,?)";
+        try {
+            PreparedStatement stmtPessoa = conn.prepareStatement(insertPessoa);
+            PreparedStatement stmtCliente = conn.prepareStatement(insertCliente);
+
+            stmtPessoa.setString(1, vendedor.getCPF());
+            stmtPessoa.setString(2, vendedor.getNome());
+            stmtPessoa.setDate(5, vendedor.getNascimento());
+
+            stmtPessoa.setString(3, vendedor.getLogin());
+            stmtPessoa.setString(4, vendedor.getSenha());
+            stmtCliente.setString(1, vendedor.getCPF());
+
+            stmtCliente.executeUpdate();
+            stmtCliente.close();
+            stmtPessoa.executeUpdate();
+            stmtPessoa.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     // método não está funcionando para vendedor
     public List<Object> GetPessoaByLogin(String login) throws SQLException {
-        String sqlCliente = "SELECT c.CPF, p.Nome, p.Data_Nascimento, p.Telefone, c.Email, c.Senha " +
-                "FROM Cliente c INNER JOIN Pessoa p ON c.CPF = p.CPF WHERE c.Email = ?";
+        String sqlCliente = "SELECT c.CPF, p.Nome, p.Data_Nascimento, p.Telefone, p.Email, p.Senha " +
+                "FROM Cliente c INNER JOIN Pessoa p ON c.CPF = p.CPF WHERE p.Email = ?";
 
-        String sqlFuncionario = "SELECT f.CPF, f.Login, p.Nome, f.Senha, f.Comissao, f.Salario, p.Data_Nascimento " +
-                "FROM Vendedor f INNER JOIN Pessoa p ON f.CPF = p.CPF WHERE f.Login = ?";
+        String sqlFuncionario = "SELECT f.CPF, p.Email, p.Nome, p.Senha, f.Comissao, f.Salario, p.Data_Nascimento " +
+                "FROM Vendedor f INNER JOIN Pessoa p ON f.CPF = p.CPF WHERE p.Email = ?";
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -271,7 +301,7 @@ public class DatabaseController {
                 list.add(new Vendedor(
                         rs.getString("Nome"),
                         rs.getString("CPF"),
-                        rs.getString("Login"),
+                        rs.getString("Email"),
                         rs.getString("Senha"),
                         rs.getDate("Data_Nascimento"),
                         rs.getDouble("Salario"),
@@ -317,5 +347,30 @@ public class DatabaseController {
         return Helper.converterProdutosCarrinho(rs);
 
     }
+
+    public void inserirProduto(Produto produto,Vendedor vendedor) throws SQLException {
+
+        String sqlInsert =
+                "INSERT INTO" +
+                        " Produto (Nome,Preco,Estoque,Descricao,Imagem,ID_Vendedor,ID_Categoria)" +
+                        " VALUES (?,?,?,?,?,?,?)" +
+                        " ON CONFLICT " +
+                        " DO UPDATE SET" +
+                        " Estoque = Estoque + excluded.Estoque;";
+
+        PreparedStatement stmt = conn.prepareStatement(sqlInsert);
+        stmt.setString(1, produto.getNome());
+        stmt.setDouble(2, produto.getPreco());
+        stmt.setInt(3, produto.getEstoque());
+        stmt.setString(4,produto.getDescricao());
+        //stmt.setBlob();
+        stmt.setString(6,vendedor.getCPF());
+        stmt.setString(7, produto.getCategoria());
+        stmt.executeUpdate();
+        stmt.close();
+    }
+
+
+
 }
 

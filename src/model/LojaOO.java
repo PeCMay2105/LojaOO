@@ -8,6 +8,7 @@ import model.Global;
 import controller.DatabaseController;
 import view.TelaInicialView;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -29,5 +30,7 @@ public class LojaOO {
         while (rs.next()) {
             System.out.println(rs.getInt("ID"));
         }
+        Produto produto = new Produto("Gato",30,30,"pinto","Acessorios");
+        Global.database.inserirProduto(produto,new Vendedor("geilson","ae","41242","412442", new Date(2431),1d,2d));
 
 }}

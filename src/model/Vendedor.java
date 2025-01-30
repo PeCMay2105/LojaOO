@@ -28,6 +28,7 @@ public class Vendedor extends Pessoa {
     public String getLogin() {
         return login;
     }
+    public String getSenha() {return  senha;}
 
     public Venda vende(Produto produto, Cliente cliente, int quantidade) {
         HashMap<String, Float> produtos = new HashMap<>();

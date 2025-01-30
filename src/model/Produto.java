@@ -38,8 +38,10 @@ public int getId()
 {
     return id;
 }
-
+public int getEstoque(){return estoque;}
+public String getDescricao(){return descricao;}
 public String getNome() {
     return nome;
 }
+public String getCategoria() {return categoria;}
 }
