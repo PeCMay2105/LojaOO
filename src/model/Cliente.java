@@ -48,6 +48,19 @@ public class Cliente extends Pessoa{
     public boolean getPossuiCartao() {
         return possuiCartao;
     }
+    public void setPossuiCartao(boolean possuiCartao) {
+        this.possuiCartao = possuiCartao;
+    }
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+    public String getTelefone() {
+        return telefone;
+    }
+
 
     public ArrayList<String> getCarteira() {
         return carteira;

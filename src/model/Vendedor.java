@@ -28,7 +28,28 @@ public class Vendedor extends Pessoa {
     public String getLogin() {
         return login;
     }
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public double getSalario() {
+        return salario;
+    }
+    public void setSalario(double salario) {
+        this.salario = salario;
+    }
+    public double getComissao() {
+        return comissao;
+    }
+    public void setComissao(double comissao) {
+        this.comissao = comissao;
+    }
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
     public String getSenha() {return  senha;}
+
 
     public Venda vende(Produto produto, Cliente cliente, int quantidade) {
         HashMap<String, Float> produtos = new HashMap<>();

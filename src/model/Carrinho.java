@@ -14,6 +14,17 @@ public class Carrinho {
 
     }
 
+    public int getQuantidade() {
+        return quantidade;
+    }
+    public String toString(){
+        String carrinho = "";
+        for(Produto produto : this.conteudo.keySet()){
+            carrinho += produto.getNome() + " - " + this.conteudo.get(produto) + " unidades\n";
+        }
+        return carrinho;
+    }
+
     public int adicionarProduto(Produto produto,int quantidade){
         if(this.conteudo.containsKey(produto.getId())){
             this.conteudo.put(produto, Integer.valueOf(this.conteudo.get(produto) + quantidade));

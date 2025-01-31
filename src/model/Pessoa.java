@@ -31,6 +31,10 @@ public abstract class Pessoa {
     public Date getNascimento(){
         return nascimento;
     }
+    public Date setNascimento(Date nascimento){
+        this.nascimento = nascimento;
+        return nascimento;
+    }
     public void setIdade(int idade){
         this.nascimento = nascimento;
     }

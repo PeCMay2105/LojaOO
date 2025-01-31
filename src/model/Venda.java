@@ -33,4 +33,67 @@ public class Venda {
             valorTotal += preco * quantidade;
         }
     }
+    public Produto getProduto() {
+        return produto;
+    }
+
+    public void setProduto(Produto produto) {
+        this.produto = produto;
+    }
+
+    public HashMap<String, Float> getProdutos() {
+        return produtos;
+    }
+
+    public void setProdutos(HashMap<String, Float> produtos) {
+        this.produtos = produtos;
+    }
+
+    public Vendedor getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(Vendedor vendedor) {
+        this.vendedor = vendedor;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public float getValor() {
+        return valor;
+    }
+
+    public void setValor(float valor) {
+        this.valor = valor;
+    }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public int getValorTotal() {
+        return valorTotal;
+    }
+
+    public void setValorTotal(int valorTotal) {
+        this.valorTotal = valorTotal;
+    }
 }

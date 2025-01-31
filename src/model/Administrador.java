@@ -18,6 +18,17 @@ public class Administrador extends Pessoa {
     public float getSalario() {
         return salario;
     }
+    public void setSalario(float salario) {
+        this.salario = salario;
+    }
+    public String toString() {
+        return "Administrador{" +
+                "salario=" + salario +
+                ", clientes=" + clientes +
+                ", vendedores=" + vendedores +
+                '}';
+    }
+
 
     public int cadastraCliente(String nome, String CPF, Date nascimento, String login, String senha, boolean possuiCartao) {
         for (Cliente cliente : clientes) {
