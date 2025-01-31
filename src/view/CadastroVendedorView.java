@@ -87,6 +87,7 @@ public class CadastroVendedorView extends TemplateView {
         adicionarAoRodape(sair);
     }
 
+
     private void cadastrarVendedor() {
         String nome = txtNome.getText();
         String cpf = txtCPF.getText();
@@ -95,7 +96,38 @@ public class CadastroVendedorView extends TemplateView {
         double salario = Double.parseDouble(txtSalario.getText());
         Date nascimento = Date.valueOf(txtNascimento.getText());
         double comissao = Double.parseDouble(txtComissao.getText());
-
+        if(nome.length() > 50){
+            JOptionPane.showMessageDialog(this, "Nome do produto deve ter no máximo 50 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(login.length() > 50){
+            JOptionPane.showMessageDialog(this, "Login do vendedor deve ter no máximo 50 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(senha.length() > 50){
+            JOptionPane.showMessageDialog(this, "Senha do vendedor deve ter no máximo 50 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(cpf.length() > 11){
+            JOptionPane.showMessageDialog(this, "CPF do vendedor deve ter no máximo 11 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(salario < 0){
+            JOptionPane.showMessageDialog(this, "Salário do vendedor deve ser maior que 0.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(comissao < 0){
+            JOptionPane.showMessageDialog(this, "Comissão do vendedor deve ser maior que 0.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(nascimento.after(new Date(System.currentTimeMillis()))){
+            JOptionPane.showMessageDialog(this, "Data de nascimento inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        else if(nascimento.before(new Date(System.currentTimeMillis() - 31556952000L))){
+            JOptionPane.showMessageDialog(this, "Data de nascimento inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         Vendedor vendedor = new Vendedor(nome, cpf, login, senha, nascimento, salario,comissao);
         JOptionPane.showMessageDialog(this, "Vendedor cadastrado com sucesso!");

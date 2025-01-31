@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -112,6 +113,14 @@ public class cadastroClienteView extends TemplateView {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
                 try{
+                    if(campoNome.getText().equals("") || campoCpf.getText().equals("") || campoEmail.getText().equals("") || campoSenha.getText().equals("") || campoNascimento.getText().equals("")){
+                        throw new IOException("Campo vazio");
+
+                    }
+                    else if(campoCpf.getText().length() != 11) {
+                        throw new IOException("CPF invalido");
+                    }
+
                     clienteController.criaCliente(campoNome.getText(), campoCpf.getText(), campoEmail.getText(), campoSenha.getText(), Date.valueOf(LocalDate.parse(campoNascimento.getText(),formatter)));
                     System.out.println("CadastroCLienteView: Nome = " + campoNome.getText() + " Cpf = " + campoCpf.getText());
                 }catch(SQLException erroDatabase){
@@ -130,6 +139,30 @@ public class cadastroClienteView extends TemplateView {
                     erroFrame.add(new FimCadastroView("Data"));
                     erroFrame.setVisible(true);
                     dispose();
+                }catch(IOException erroIOE){
+                    switch(erroIOE.getMessage()){
+                        case "Campo vazio":
+                            JFrame erroFrame = new JFrame("Erro");
+                            JLabel erroLabel = new JLabel("Campo vazio");
+                            erroFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            erroFrame.setSize(500, 300);
+                            erroFrame.setLocationRelativeTo(null);
+                            erroFrame.add(new FimCadastroView("Campo"));
+                            erroFrame.setVisible(true);
+                            dispose();
+                            break;
+                        case "CPF invalido":
+                            JFrame erroFrame2 = new JFrame("Erro");
+                            JLabel erroLabel2 = new JLabel("CPF invalido");
+                            erroFrame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            erroFrame2.setSize(500, 300);
+                            erroFrame2.setLocationRelativeTo(null);
+                            erroFrame2.add(new FimCadastroView("CPF"));
+                            erroFrame2.setVisible(true);
+                            dispose();
+                            break;
+                    }
+
                 }
 
                 JFrame sucessoFrame = new JFrame("Sucesso");

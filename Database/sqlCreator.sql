@@ -14,6 +14,13 @@ CREATE TABLE Cliente (
     FOREIGN KEY (CPF) REFERENCES Pessoa(CPF)
 );
 
+CREATE TABLE Administrador (
+    CPF CHAR(11),
+    Salario FLoat,
+    PRIMARY KEY (CPF),
+    FOREIGN KEY (CPF) REFERENCES Pessoa(CPF)
+);
+
 CREATE TABLE Vendedor (
     CPF CHAR(11),
     Salario FLoat,

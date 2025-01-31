@@ -180,6 +180,7 @@ public class DatabaseController {
                 "JOIN Cliente c ON p.CPF = c.CPF " +
                 "WHERE p.Email = ? AND p.Senha = ?";
 
+
         PreparedStatement stmtCliente = conn.prepareStatement(sqlSelectCliente);
         stmtCliente.setString(1, login);
         stmtCliente.setString(2, senha);
@@ -202,9 +203,20 @@ public class DatabaseController {
             return rsVendedor; // Retorna os dados do vendedor se encontrado
         }
 
+        String sqlSelectAdmin = "SELECT * FROM Pessoa p " +
+                "JOIN Administrador a On p.Cpf = a.Cpf" +
+                " WHERE p.Email = ? AND p.Senha = ?";
+        PreparedStatement stmtAdmin = conn.prepareStatement(sqlSelectAdmin);
+        stmtAdmin.setString(1, login);
+        stmtAdmin.setString(2, senha);
+        ResultSet rsAdmin = stmtAdmin.executeQuery();
+        if(rsAdmin.isBeforeFirst()){
+            return rsAdmin;
+        }
         // Se não encontrou em nenhuma tabela
         return null;
     }
+
     public int cadastrar(Cliente cliente) throws SQLException {
         String insertCliente = "INSERT INTO Cliente (CPF,Endereco) VALUES (?,?)";
         String insertPessoa = "INSERT INTO Pessoa (CPF,Nome,Email,Senha,Data_Nascimento) VALUES (?,?,?,?,?)";
@@ -271,6 +283,10 @@ public class DatabaseController {
         String sqlFuncionario = "SELECT f.CPF, p.Email, p.Nome, p.Senha, f.Comissao, f.Salario, p.Data_Nascimento " +
                 "FROM Vendedor f INNER JOIN Pessoa p ON f.CPF = p.CPF WHERE p.Email = ?";
 
+        String sqlAdmin = "SELECT a.CPF, p.Email, p.Nome, p.Senha, p.Data_Nascimento " +
+                "FROM Administrador a INNER JOIN Pessoa p ON a.CPF = p.CPF WHERE p.Email = ?";
+
+
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Object> list = new ArrayList<>();
@@ -308,6 +324,24 @@ public class DatabaseController {
                         rs.getDouble("Comissao")
                 ));
                 return list; // Retorna imediatamente se encontrar um funcionário
+            }
+            rs.close();
+            stmt.close();
+
+
+            stmt= conn.prepareStatement(sqlAdmin);
+            stmt.setString(1, login);
+            rs = stmt.executeQuery();
+            if(rs.next()){
+                list.add(new Administrador(
+                        rs.getFloat("Salario"),
+                        rs.getString("Nome"),
+                        rs.getString("CPF"),
+                        rs.getDate("Data_Nascimento"),
+                        rs.getString("Email"),
+                        rs.getString("Senha")
+                ));
+                return list;
             }
         } finally {
             if (rs != null) rs.close();

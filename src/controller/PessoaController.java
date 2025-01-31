@@ -1,9 +1,6 @@
 package controller;
 
-import model.Cliente;
-import model.Helper;
-import model.Pessoa;
-import model.Vendedor;
+import model.*;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -22,9 +19,12 @@ public class PessoaController {
             List listUsuario = database.GetPessoaByLogin(login);
 
             if (listUsuario.size() > 0) {
-                // Esta linha não está funcionando. Não reconhece o objeto como vendedor
+
                 if(listUsuario.get(0) instanceof Vendedor) {
                     return (Vendedor) listUsuario.get(0);
+                }
+                else if(listUsuario.get(0) instanceof Administrador){
+                    return (Administrador) listUsuario.get(0);
                 }
                 return (Cliente) listUsuario.get(0);
             }

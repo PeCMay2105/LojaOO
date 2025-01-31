@@ -210,6 +210,7 @@ public class TelaInicialView extends TemplateView {
                     }
                 });
             }else if( usuarioAtual instanceof Administrador){
+                System.out.println("Administrador");
                 JButton verProdutos = new JButton("Ver produtos");
                 ajustarBotao(verProdutos, gbc, telaInicial);
 

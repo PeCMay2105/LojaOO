@@ -5,11 +5,15 @@ import java.util.ArrayList;
 public class Administrador extends Pessoa {
 
     private float salario;
+    private String login;
+    private String senha;
     private ArrayList<Cliente> clientes;
     private ArrayList<Vendedor> vendedores;
 
-    public Administrador(float salario, String nome, String CPF, Date nascimento) {
+    public Administrador(float salario, String nome, String CPF, Date nascimento,String login,String senha) {
         super(nome, CPF, nascimento);
+        this.login = login;
+        this.senha = senha;
         this.salario = salario;
         this.clientes = new ArrayList<>();
         this.vendedores = new ArrayList<>();
