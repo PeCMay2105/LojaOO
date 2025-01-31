@@ -46,6 +46,14 @@ public class CarrinhoView extends TemplateView {
             System.out.println(carrinhoAtual.getConteudo());
             for (Map.Entry<Produto, Integer> produto : conteudo.entrySet()) {
                 System.out.println("Produto: " + produto.getKey().getNome() + " Quantidade: " + produto.getValue());
+
+
+
+
+
+
+
+
                 JPanel produtoLinha = new JPanel(new BorderLayout());
                 produtoLinha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 

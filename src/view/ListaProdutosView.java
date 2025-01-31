@@ -64,6 +64,8 @@ public class ListaProdutosView extends TemplateView {
             nomeProduto.setFont(new Font("Arial", Font.PLAIN, 14));
             produtoLinha.add(nomeProduto, BorderLayout.CENTER);
 
+
+
             JButton adicionarButton = new JButton("Adicionar");
             adicionarButton.setFont(new Font("Arial", Font.PLAIN, 12));
             adicionarButton.addActionListener(new ActionListener() {
@@ -91,8 +93,19 @@ public class ListaProdutosView extends TemplateView {
         telaInicial.add(scrollPane, gbc);
 
         // Botão Ver Carrinho
-        JButton verCarrinho = new JButton("Ver carrinho");
-        ajustarBotao(verCarrinho, gbc, telaInicial);
+        JButton verCarrinho = null;
+        if(Global.pessoa instanceof Cliente) {
+            try {
+
+
+                verCarrinho = new JButton("Ver carrinho(" + Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF()) + ")");
+
+                ajustarBotao(verCarrinho, gbc, telaInicial);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         adicionarConteudo(telaInicial);
 //        adicionarConteudo(botaoPesquisar);
@@ -104,15 +117,16 @@ public class ListaProdutosView extends TemplateView {
         adicionarAoRodape(sair);
 
         // Ação do botão Ver Carrinho
-        verCarrinho.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                TemplateView carrinhoView = new CarrinhoView("Carrinho", userData);
-                carrinhoView.setVisible(true);
-                dispose();
-            }
-        });
-
+        if(Global.pessoa instanceof Cliente) {
+            verCarrinho.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    TemplateView carrinhoView = new CarrinhoView("Carrinho", userData);
+                    carrinhoView.setVisible(true);
+                    dispose();
+                }
+            });
+        }
         // Ação do botão Pesquisar
         botaoPesquisar.addActionListener(new ActionListener() {
             @Override

@@ -93,3 +93,4 @@ CREATE TABLE Pagamento (
     FOREIGN KEY (ID_Pedido) REFERENCES Pedido(ID)
 );
 
+SELECT * FROM item_Carrinho WHERE ID_Carrinho = '06654505166'

@@ -422,6 +422,19 @@ public class DatabaseController {
 
         return produtos;
     }
+    public int getQuantidadeCarrinho(String cpf) throws SQLException {
+        String sqlSelect = "SELECT * FROM item_Carrinho WHERE ID_Carrinho = '"+cpf+"'";
+        PreparedStatement stmt = conn.prepareStatement(sqlSelect);
+        ResultSet rs = stmt.executeQuery();
+        int qtd = 0;
+        while (rs.next()) {
+            qtd++;
+        }
+        System.out.println(cpf);
+        System.out.println(qtd);
+        System.out.println(stmt.toString());
+        return qtd;
+    }
 
 
 }
