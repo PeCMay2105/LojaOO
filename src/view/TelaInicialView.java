@@ -211,11 +211,9 @@ public class TelaInicialView extends TemplateView {
                 });
             }else if( usuarioAtual instanceof Administrador){
                 System.out.println("Administrador");
+                System.out.println("AAAAAAAAAAA");
                 JButton verProdutos = new JButton("Ver produtos");
                 ajustarBotao(verProdutos, gbc, telaInicial);
-
-                JButton adicionarProdutos = new JButton("Adicionar produtos");
-                ajustarBotao(adicionarProdutos, gbc, telaInicial);
 
                 JButton verCarrinho = new JButton("Ver carrinho");
                 ajustarBotao(verCarrinho, gbc, telaInicial);
@@ -224,25 +222,25 @@ public class TelaInicialView extends TemplateView {
                 ajustarBotao(verPerfil, gbc, telaInicial);
 
                 JButton cadastroFuncionario = new JButton("Cadastrar Funcionário");
-                ajustarBotao(verProdutos, gbc, telaInicial);
+                ajustarBotao(cadastroFuncionario, gbc, telaInicial);
 
                 cadastroFuncionario.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        TemplateView adicionarProdutosView = new AdicionarProdutosView("Adicionar Produtos",(Vendedor)usuarioAtual);
+                        TemplateView adicionarProdutosView = new AdicionarFuncionarioView("Adicionar Produtos",(Administrador)usuarioAtual);
                         adicionarProdutosView.setVisible(true);
                         dispose();
                     }
                 });
 
-                adicionarProdutos.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        TemplateView adicionarProdutosView = new AdicionarProdutosView("Adicionar Produtos",(Vendedor)usuarioAtual);
-                        adicionarProdutosView.setVisible(true);
-                        dispose();
-                    }
-                });
+//                adicionarProdutos.addActionListener(new ActionListener() {
+//                    @Override
+//                    public void actionPerformed(ActionEvent e) {
+//                        TemplateView adicionarProdutosView = new AdicionarProdutosView("Adicionar Produtos",(Vendedor)usuarioAtual);
+//                        adicionarProdutosView.setVisible(true);
+//                        dispose();
+//                    }
+//                });
 
                 verProdutos.addActionListener(new ActionListener() {
                     @Override

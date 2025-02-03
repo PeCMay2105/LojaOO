@@ -211,6 +211,7 @@ public class DatabaseController {
         stmtAdmin.setString(2, senha);
         ResultSet rsAdmin = stmtAdmin.executeQuery();
         if(rsAdmin.isBeforeFirst()){
+            System.out.println(rsAdmin);
             return rsAdmin;
         }
         // Se não encontrou em nenhuma tabela
@@ -283,9 +284,8 @@ public class DatabaseController {
         String sqlFuncionario = "SELECT f.CPF, p.Email, p.Nome, p.Senha, f.Comissao, f.Salario, p.Data_Nascimento " +
                 "FROM Vendedor f INNER JOIN Pessoa p ON f.CPF = p.CPF WHERE p.Email = ?";
 
-        String sqlAdmin = "SELECT a.CPF, p.Email, p.Nome, p.Senha, p.Data_Nascimento " +
+        String sqlAdmin = "SELECT a.CPF, p.Email, p.Nome, p.Senha, a.Salario, p.Data_Nascimento " +
                 "FROM Administrador a INNER JOIN Pessoa p ON a.CPF = p.CPF WHERE p.Email = ?";
-
 
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -328,11 +328,11 @@ public class DatabaseController {
             rs.close();
             stmt.close();
 
-
-            stmt= conn.prepareStatement(sqlAdmin);
+            // Verifica se é Administrador
+            stmt = conn.prepareStatement(sqlAdmin);
             stmt.setString(1, login);
             rs = stmt.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 list.add(new Administrador(
                         rs.getFloat("Salario"),
                         rs.getString("Nome"),
