@@ -77,6 +77,14 @@ public class PerfilView extends TemplateView {
                 new EditarView("Editar Dados", cliente).setVisible(true);
             }
         });
+        botaoVoltar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                TemplateView telaInicial = new TelaInicialView("Tela Inicial", true, usuario);
+                telaInicial.setVisible(true);
+                dispose();
+            }
+        });
     }
 
     public static void main(String[] args) {
