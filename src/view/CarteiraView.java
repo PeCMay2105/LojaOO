@@ -4,12 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+
 
 public class CarteiraView extends TemplateView {
-
-    private JComboBox<String> comboTipoCartao;
-    private JList<String> listaCartoes;
-    private DefaultListModel<String> modeloListaCartoes;
+    private HashMap<String,String> info;
 
     public CarteiraView() {
         super("Carteira de Pagamentos");
@@ -17,99 +16,54 @@ public class CarteiraView extends TemplateView {
     }
 
     private void criarInterface() {
-        setLayoutDiferente(new BorderLayout(10, 10));
+        setorConteudo.setLayout(null);
 
-        JButton botaoPix = new JButton("Pagamento com PIX");
-        botaoPix.setFont(new Font("Arial", Font.BOLD, 16));
-        botaoPix.setPreferredSize(new Dimension(250, 40));
+        //setorTitulo.setHorizontalAlignment(SwingConstants.CENTER);
+        //setorTitulo.setBounds(250, 20, 300, 30);
+        //setorConteudo.add(setorTitulo);
 
-        comboTipoCartao = new JComboBox<>(new String[]{"Selecione um tipo de pagamento", "Cartão de Crédito", "Cartão de Débito"});
-        comboTipoCartao.setSelectedIndex(0);
-        comboTipoCartao.setFont(new Font("Arial", Font.PLAIN, 16));
-        comboTipoCartao.setPreferredSize(new Dimension(250, 40));
+        JButton botaoCredito = new JButton("Cartão de Crédito");
+        botaoCredito.setFont(new Font("Arial", Font.PLAIN, 16));
+        botaoCredito.setBounds(300, 150, 200, 40);
+        setorConteudo.add(botaoCredito);
 
-        comboTipoCartao.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mostrarListaCartoes();
-            }
-        });
+        JButton botaoDebito = new JButton("Cartão de Débito");
+        botaoDebito.setFont(new Font("Arial", Font.PLAIN, 16));
+        botaoDebito.setBounds(300, 210, 200, 40);
+        setorConteudo.add(botaoDebito);
 
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        painelBotoes.add(botaoPix);
-        painelBotoes.add(comboTipoCartao);
+        JButton botaoPix = new JButton("PIX");
+        botaoPix.setFont(new Font("Arial", Font.PLAIN, 16));
+        botaoPix.setBounds(300, 270, 200, 40);
+        setorConteudo.add(botaoPix);
 
-        adicionarConteudo(painelBotoes);
-
-        modeloListaCartoes = new DefaultListModel<>();
-        listaCartoes = new JList<>(modeloListaCartoes);
-        listaCartoes.setVisible(false);
-        JScrollPane scrollPane = new JScrollPane(listaCartoes);
-
-        botaoPix.addActionListener(new PagamentoListener("PIX"));
+        JButton botaoPagar = new JButton("Pagar");
+        botaoPagar.setFont(new Font("Arial", Font.BOLD, 15));
+        adicionarAoRodape(botaoPagar);
 
         JButton botaoSair = new JButton("Sair");
-        botaoSair.setFont(new Font("Arial", Font.BOLD, 14));
+        botaoSair.setFont(new Font("Arial", Font.BOLD, 15));
         adicionarAoRodape(botaoSair);
+
         botaoSair.addActionListener(e -> dispose());
-    }
 
-    private void mostrarListaCartoes() {
-        if (comboTipoCartao.getSelectedIndex() == 1 || comboTipoCartao.getSelectedIndex() == 2) {
-            if (!listaCartoes.isVisible()) {
-                JOptionPane.showMessageDialog(this, "Cartões", "Cartões Cadastrados", JOptionPane.INFORMATION_MESSAGE);
-                listaCartoes.setVisible(true);
-            }
-        } else {
-            listaCartoes.setVisible(false);
-        }
-    }
-
-    private class PagamentoListener implements ActionListener {
-        private final String tipoPagamento;
-
-        public PagamentoListener(String tipoPagamento) {
-            this.tipoPagamento = tipoPagamento;
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(
-                    CarteiraView.this,
-                    "Pagamento selecionado: " + tipoPagamento,
-                    "Confirmação de Pagamento",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-        }
-    }
-
-    protected void setupLayout() {
-        setorHeader.add(setorTitulo, BorderLayout.CENTER);
-        setorHeader.add(botaoVoltar, BorderLayout.WEST);
-
-        setorHeader.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 10));
-
-        setorHeader.setBackground(new Color(240, 240, 240, 240));
-
-        setorPrincipal.add(setorHeader, BorderLayout.NORTH);
-        setorPrincipal.add(setorConteudo, BorderLayout.CENTER);
-        setorPrincipal.add(setorFooter, BorderLayout.SOUTH);
-
-        add(setorPrincipal);
         botaoVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TemplateView telaInicial = new TelaInicialView("Tela Inicial",true);
-                telaInicial.setVisible(true);
+                TemplateView telaCarrinho = new CarrinhoView("Carrinho", info);
+                telaCarrinho.setVisible(true);
                 dispose();
             }
         });
-
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             CarteiraView carteiraView = new CarteiraView();
+            carteiraView.setSize(800, 600);
+            carteiraView.setLocationRelativeTo(null);
+            carteiraView.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             carteiraView.setVisible(true);
         });
     }
-
 }
