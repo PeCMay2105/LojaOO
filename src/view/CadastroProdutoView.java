@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * Classe que representa a interface gráfica para cadastro de produtos.
+ */
 public class CadastroProdutoView extends TemplateView {
 
     private JTextField campoNome;
@@ -14,11 +17,17 @@ public class CadastroProdutoView extends TemplateView {
     private JTextField campoMarca;
     private JButton botaoSalvar;
 
+    /**
+     * Construtor da classe CadastroProdutoView.
+     */
     public CadastroProdutoView() {
         super("Cadastro de Produto");
         cadastroProduto();
     }
 
+    /**
+     * Configura a interface gráfica para cadastro de produtos.
+     */
     private void cadastroProduto() {
         setLayoutDiferente(new GridLayout(5, 2, 10, 10));
 
@@ -49,6 +58,11 @@ public class CadastroProdutoView extends TemplateView {
         botaoSalvar.addActionListener(this::salvarProduto);
     }
 
+    /**
+     * Salva o produto após validar os campos.
+     *
+     * @param e O evento de ação.
+     */
     private void salvarProduto(ActionEvent e) {
         String nome = campoNome.getText().trim();
         String precoTexto = campoPreco.getText().trim();
@@ -105,6 +119,11 @@ public class CadastroProdutoView extends TemplateView {
         }
     }
 
+    /**
+     * Método principal para iniciar a interface gráfica.
+     *
+     * @param args Argumentos da linha de comando.
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             CadastroProdutoView tela = new CadastroProdutoView();

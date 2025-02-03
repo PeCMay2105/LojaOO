@@ -20,28 +20,18 @@ public class ListaProdutosView extends TemplateView {
 
     public ListaProdutosView(String titulo) {
         super(titulo);
-
-        JPanel telaInicial = new JPanel(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        setLayout(null);
+        setSize(900, 700); // Aumentando o tamanho do painel principal
 
         // Campo de pesquisa
         JTextArea campoPesquisa = new JTextArea();
-        campoPesquisa.setPreferredSize(new Dimension(200, 30));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        telaInicial.add(campoPesquisa, gbc);
+        campoPesquisa.setBounds(500, 130, 200, 30);
+        add(campoPesquisa);
 
         // Botão Pesquisar
         JButton botaoPesquisar = new JButton("Pesquisar");
-        botaoPesquisar.setPreferredSize(new Dimension(100, 30)); // Tamanho ajustado
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridwidth = 1;
-        gbc.fill = GridBagConstraints.NONE; // Botão não preenche o espaço horizontal
-        telaInicial.add(botaoPesquisar, gbc);
+        botaoPesquisar.setBounds(730, 130, 100, 30);
+        add(botaoPesquisar);
 
         // Painel de produtos
         produtosPanel = new JPanel();
@@ -60,10 +50,9 @@ public class ListaProdutosView extends TemplateView {
             JPanel produtoLinha = new JPanel(new BorderLayout());
             produtoLinha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-            JLabel nomeProduto = new JLabel(produto.getNome());
+            JLabel nomeProduto = new JLabel(produto.getNome() + " - R$ " + String.format("%.2f", produto.getPreco()));
             nomeProduto.setFont(new Font("Arial", Font.PLAIN, 14));
             produtoLinha.add(nomeProduto, BorderLayout.CENTER);
-
 
 
             JButton adicionarButton = new JButton("Adicionar");
@@ -86,38 +75,34 @@ public class ListaProdutosView extends TemplateView {
 
         // ScrollPane para a lista de produtos
         scrollPane = new JScrollPane(produtosPanel);
-        scrollPane.setPreferredSize(new Dimension(400, 200));
-
-        gbc.gridy = 1;
-        gbc.gridwidth = 2;
-        telaInicial.add(scrollPane, gbc);
+        scrollPane.setBounds(50, 70, 370, 400); // Aumentando tamanho da lista de produtos
+        add(scrollPane);
 
         // Botão Ver Carrinho
         JButton verCarrinho = null;
-        if(Global.pessoa instanceof Cliente) {
+        if (Global.pessoa instanceof Cliente) {
             try {
-
-
                 verCarrinho = new JButton("Ver carrinho(" + Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF()) + ")");
-
-                ajustarBotao(verCarrinho, gbc, telaInicial);
-            }
-            catch (Exception e) {
+                verCarrinho.setBounds(50, 570, 200, 50);
+                add(verCarrinho);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        adicionarConteudo(telaInicial);
-//        adicionarConteudo(botaoPesquisar);
-
         // Botões de ajuda e sair
         JButton ajuda = new JButton("Ajuda");
+        ajuda.setBounds(650, 600, 100, 30);
+        add(ajuda);
+
         JButton sair = new JButton("Sair");
-        adicionarAoRodape(ajuda);
-        adicionarAoRodape(sair);
+        sair.setBounds(770, 600, 100, 30);
+        add(sair);
+
+        sair.addActionListener(e -> dispose());
 
         // Ação do botão Ver Carrinho
-        if(Global.pessoa instanceof Cliente) {
+        if (Global.pessoa instanceof Cliente) {
             verCarrinho.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -127,6 +112,7 @@ public class ListaProdutosView extends TemplateView {
                 }
             });
         }
+
         // Ação do botão Pesquisar
         botaoPesquisar.addActionListener(new ActionListener() {
             @Override
@@ -134,25 +120,24 @@ public class ListaProdutosView extends TemplateView {
                 atualizarListaProdutos(campoPesquisa.getText());
             }
         });
+        // Definir posição do título
+        setorTitulo.setBounds(300, 10, 400, 30);
+        setorTitulo.setFont(new Font("Arial", Font.BOLD, 18));
+        add(setorTitulo);
+
+// Definir posição do botão de voltar
+        botaoVoltar.setBounds(10, 10, 50, 30);
+        add(botaoVoltar);
 
         // Ação do botão Voltar
         botaoVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TemplateView telaInicial = new TelaInicialView("Tela Inicial", true, Global.getPessoa());
-                telaInicial.setVisible(true);
+                TemplateView telaCarrinho = new CarrinhoView("Carrinho",userData);
+                telaCarrinho.setVisible(true);
                 dispose();
             }
         });
-    }
-
-    // Método para ajustar botões
-    private void ajustarBotao(JButton botao, GridBagConstraints gbc, JPanel painel) {
-        botao.setPreferredSize(new Dimension(200, 50));
-        botao.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridy++;
-        gbc.gridwidth = 2;
-        painel.add(botao, gbc);
     }
 
     // Método para atualizar a lista de produtos com base na pesquisa
@@ -191,10 +176,14 @@ public class ListaProdutosView extends TemplateView {
             produtoLinha.add(adicionarButton, BorderLayout.EAST);
 
             produtosPanel.add(produtoLinha);
-
         }
 
         produtosPanel.revalidate();
         produtosPanel.repaint();
+    }
+
+    public static void main(String[] args) {
+        TemplateView tela = new ListaProdutosView("Lista de Produtos");
+        tela.setVisible(true);
     }
 }

@@ -1,4 +1,8 @@
 package controller;
+
+/**
+ * Enumeração de tabelas do banco de dados.
+ */
 public enum Tabela {
     carrinho,
     categoria,

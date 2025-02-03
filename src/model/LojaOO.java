@@ -12,15 +12,19 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-
 /**
+ * Classe principal da aplicação LojaOO.
+ * Responsável por iniciar a aplicação e exibir a tela inicial.
  *
- * @author Pedro Maia
+ * @autor Pedro Maia
  */
 public class LojaOO {
 
     /**
-     * @param args the command line arguments
+     * Método principal da aplicação.
+     *
+     * @param args os argumentos da linha de comando
+     * @throws SQLException se ocorrer um erro ao acessar o banco de dados
      */
     public static void main(String[] args) throws SQLException {
         TelaInicialView telaInicialView = new TelaInicialView("S.I.S.T.E.M.O",false);
@@ -30,5 +34,5 @@ public class LojaOO {
         while (rs.next()) {
             System.out.println(rs.getInt("ID"));
         }
-
-}}
+    }
+}

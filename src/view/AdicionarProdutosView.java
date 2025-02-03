@@ -11,6 +11,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.HashMap;
+
+/**
+ * Classe que representa a interface gráfica para adicionar produtos.
+ */
 public class AdicionarProdutosView extends TemplateView {
 
     private Vendedor vendedor;
@@ -24,13 +28,16 @@ public class AdicionarProdutosView extends TemplateView {
     private VendedorController vendedorController;
     private final int MAX_DESCRICAO = 280; // Similar ao limite do Twitter
 
+    /**
+     * Construtor da classe AdicionarProdutosView.
+     *
+     * @param titulo O título da janela.
+     * @param vendedor O vendedor atual.
+     */
     public AdicionarProdutosView(String titulo, Vendedor vendedor) {
         super(titulo);
         this.vendedor = vendedor;
         this.vendedorController = new VendedorController();
-
-
-
 
         JPanel painelPrincipal = new JPanel();
         painelPrincipal.setLayout(new BoxLayout(painelPrincipal, BoxLayout.Y_AXIS));
@@ -137,6 +144,12 @@ public class AdicionarProdutosView extends TemplateView {
         adicionarAoRodape(botaoVoltar);
     }
 
+    /**
+     * Cria um painel para um campo de entrada.
+     *
+     * @param labelText O texto do rótulo do campo.
+     * @return O painel criado.
+     */
     private JPanel criarPainelCampo(String labelText) {
         JPanel painel = new JPanel();
         painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
@@ -153,6 +166,9 @@ public class AdicionarProdutosView extends TemplateView {
         return painel;
     }
 
+    /**
+     * Atualiza o contador de caracteres restantes na descrição.
+     */
     private void atualizarContador() {
         int restantes = MAX_DESCRICAO - campoDescricao.getText().length();
         caracteresRestantes.setText(restantes + " caracteres restantes");
@@ -160,6 +176,9 @@ public class AdicionarProdutosView extends TemplateView {
         botaoPublicar.setEnabled(restantes >= 0);
     }
 
+    /**
+     * Publica o produto após validar os campos.
+     */
     private void publicarProduto() {
         // Validação dos campos
         if (campoNome.getText().trim().isEmpty() ||
@@ -188,7 +207,6 @@ public class AdicionarProdutosView extends TemplateView {
                     campoDescricao.getText(),
                     campoCategoria.getSelectedItem().toString()
             );
-
 
             vendedorController.inserirProduto(novoProduto);
 

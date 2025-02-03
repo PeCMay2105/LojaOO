@@ -2,6 +2,10 @@ package model;
 import java.sql.Date;
 import java.util.ArrayList;
 
+/**
+ * Classe que representa um Administrador, que é uma Pessoa com salário, login, senha,
+ * e listas de clientes e vendedores.
+ */
 public class Administrador extends Pessoa {
 
     private float salario;
@@ -10,7 +14,17 @@ public class Administrador extends Pessoa {
     private ArrayList<Cliente> clientes;
     private ArrayList<Vendedor> vendedores;
 
-    public Administrador(float salario, String nome, String CPF, Date nascimento,String login,String senha) {
+    /**
+     * Construtor da classe Administrador.
+     *
+     * @param salario O salário do administrador.
+     * @param nome O nome do administrador.
+     * @param CPF O CPF do administrador.
+     * @param nascimento A data de nascimento do administrador.
+     * @param login O login do administrador.
+     * @param senha A senha do administrador.
+     */
+    public Administrador(float salario, String nome, String CPF, Date nascimento, String login, String senha) {
         super(nome, CPF, nascimento);
         this.login = login;
         this.senha = senha;
@@ -19,12 +33,29 @@ public class Administrador extends Pessoa {
         this.vendedores = new ArrayList<>();
     }
 
+    /**
+     * Retorna o salário do administrador.
+     *
+     * @return O salário do administrador.
+     */
     public float getSalario() {
         return salario;
     }
+
+    /**
+     * Define o salário do administrador.
+     *
+     * @param salario O novo salário do administrador.
+     */
     public void setSalario(float salario) {
         this.salario = salario;
     }
+
+    /**
+     * Retorna uma representação em string do administrador.
+     *
+     * @return Uma string representando o administrador.
+     */
     public String toString() {
         return "Administrador{" +
                 "salario=" + salario +
@@ -33,7 +64,17 @@ public class Administrador extends Pessoa {
                 '}';
     }
 
-
+    /**
+     * Cadastra um novo cliente.
+     *
+     * @param nome O nome do cliente.
+     * @param CPF O CPF do cliente.
+     * @param nascimento A data de nascimento do cliente.
+     * @param login O login do cliente.
+     * @param senha A senha do cliente.
+     * @param possuiCartao Se o cliente possui cartão.
+     * @return 1 se o cliente foi cadastrado com sucesso, 0 caso contrário.
+     */
     public int cadastraCliente(String nome, String CPF, Date nascimento, String login, String senha, boolean possuiCartao) {
         for (Cliente cliente : clientes) {
             if (cliente.getCPF().equals(CPF)) {
@@ -47,6 +88,18 @@ public class Administrador extends Pessoa {
         return 1;
     }
 
+    /**
+     * Cadastra um novo vendedor.
+     *
+     * @param nome O nome do vendedor.
+     * @param CPF O CPF do vendedor.
+     * @param login O login do vendedor.
+     * @param senha A senha do vendedor.
+     * @param nascimento A data de nascimento do vendedor.
+     * @param salario O salário do vendedor.
+     * @param comissao A comissão do vendedor.
+     * @return 1 se o vendedor foi cadastrado com sucesso, 0 caso contrário.
+     */
     public int cadastraVendedor(String nome, String CPF, String login, String senha, Date nascimento, Double salario, double comissao) {
         for (Vendedor vendedor : vendedores) {
             if (vendedor.getCPF().equals(CPF)) {
@@ -60,6 +113,12 @@ public class Administrador extends Pessoa {
         return 1;
     }
 
+    /**
+     * Deleta um cliente pelo CPF.
+     *
+     * @param CPF O CPF do cliente a ser deletado.
+     * @return 1 se o cliente foi deletado com sucesso, 0 caso contrário.
+     */
     public int deletaCliente(String CPF) {
         for (Cliente cliente : clientes) {
             if (cliente.getCPF().equals(CPF)) {
@@ -72,6 +131,12 @@ public class Administrador extends Pessoa {
         return 0;
     }
 
+    /**
+     * Deleta um vendedor pelo CPF.
+     *
+     * @param CPF O CPF do vendedor a ser deletado.
+     * @return 1 se o vendedor foi deletado com sucesso, 0 caso contrário.
+     */
     public int deletaVendedor(String CPF) {
         for (Vendedor vendedor : vendedores) {
             if (vendedor.getCPF().equals(CPF)) {
@@ -84,5 +149,3 @@ public class Administrador extends Pessoa {
         return 0;
     }
 }
-
-

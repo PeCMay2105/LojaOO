@@ -9,8 +9,20 @@ import java.util.HashMap;
 import java.util.List;
 
 
+/**
+ * Essa classe é responsável por intermediar a interface gráfica com o modelo de Banco de Dados.
+ * Gerencia todas as interações com o Banco de dados e o Sistema
+ * O principal intermediario dessa classe é a classe Global
+ * @see Global
+ *
+ */
 public class DatabaseController {
     Connection conn;
+
+    /**
+     * Este método realiza a ação de criar um novo cliente.
+     * @throws SQLException
+     */
     public DatabaseController() throws SQLException {
         String relativePath = "Database/BDLoja.db";
         String dbPath = new File(relativePath).getAbsolutePath();
@@ -21,8 +33,14 @@ public class DatabaseController {
 
 
 
-
-
+    /**
+     * Este método realiza uma ação importante.
+     *
+     * @param opcao Enum que possui as tabelas do banco de dados
+     * @param id Descrição do segundo parâmetro
+     *
+     * @return Retora um resultSet com os dados da tabela escolhida
+     */
     public ResultSet consulta(Tabela opcao, int id) throws SQLException {
         String table;
         String idString = "ID";
@@ -75,6 +93,14 @@ public class DatabaseController {
 
         return stmt.executeQuery();
     }
+
+    /**
+     * Este método realiza uma ação importante.
+     *
+     * @param opcao Enum que possui as tabelas do banco de dados
+     *
+     * @return Retora um resultSet com os dados da tabela escolhida
+     */
     public ResultSet consulta(Tabela opcao, String id) throws SQLException {
         String table;
         String idString = "ID";
@@ -126,6 +152,13 @@ public class DatabaseController {
     }
     
 
+    /**
+     * Este método realiza uma ação importante.
+     *
+     * @param opcao Enum que possui as tabelas do banco de dados
+     *
+     * @return Retora um resultSet com os dados da tabela escolhida
+     */
     public ResultSet consulta(Tabela opcao) throws SQLException {
         String table;
 
@@ -174,6 +207,16 @@ public class DatabaseController {
 
         return stmt.executeQuery();
     }
+
+    /**
+     * Método responsável por autenticar um usuário no sistema
+     *
+     *
+     * @param login login do usuario
+     * @param senha senha do usuario
+     *
+     * @return Retora um resultSet com os dados da tabela escolhida
+     */
     public ResultSet autenticar(String login, String senha) throws SQLException {
         // Primeiro tenta autenticar como cliente
         String sqlSelectCliente = "SELECT p.* FROM Pessoa p " +
@@ -218,6 +261,11 @@ public class DatabaseController {
         return null;
     }
 
+    /**
+     * Este método realiza a ação de cadastrar um novo cliente.
+     * @param cliente Cliente a ser cadastrado
+     * @throws SQLException
+     */
     public int cadastrar(Cliente cliente) throws SQLException {
         String insertCliente = "INSERT INTO Cliente (CPF,Endereco) VALUES (?,?)";
         String insertPessoa = "INSERT INTO Pessoa (CPF,Nome,Email,Senha,Data_Nascimento) VALUES (?,?,?,?,?)";
@@ -251,6 +299,11 @@ public class DatabaseController {
         }
     }
 
+    /**
+     * Este método realiza a ação de cadastrar um novo vendedor.
+     * @param vendedor Vendedor a ser cadastrado
+     * @throws SQLException
+     */
     public void cadastrarVendedor(Vendedor vendedor) throws SQLException {
         String insertCliente = "INSERT INTO Vendedor (CPF, Salario, Comissao, Avaliacao) VALUES (?,?,?,?)";
         String insertPessoa = "INSERT INTO Pessoa (CPF,Nome,Email,Senha,Data_Nascimento) VALUES (?,?,?,?,?)";
@@ -276,7 +329,11 @@ public class DatabaseController {
     }
 
 
-    // método não está funcionando para vendedor
+    /**
+     * Retorna as informações de uma instancia Pessoa no Banco de Dados
+     * @param login Administrador a ser cadastrado
+     * @throws SQLException
+     */
     public List<Object> GetPessoaByLogin(String login) throws SQLException {
         String sqlCliente = "SELECT c.CPF, p.Nome, p.Data_Nascimento, p.Telefone, p.Email, p.Senha " +
                 "FROM Cliente c INNER JOIN Pessoa p ON c.CPF = p.CPF WHERE p.Email = ?";
@@ -352,6 +409,13 @@ public class DatabaseController {
     }
 
 
+    /**
+     * Este método realiza a ação de cadastrar um novo produto.
+     * @param produto Produto a ser cadastrado
+     * @param cliente Cliente que está cadastrando o produto
+     * @param quantidade Quantidade de produtos a serem cadastrados
+     * @throws SQLException
+     */
     void inserirProdutoCarrinho(Produto produto,Cliente cliente,int quantidade) throws SQLException {
 
         String sqlInsert =
@@ -382,6 +446,12 @@ public class DatabaseController {
 
     }
 
+    /**
+     * Este método realiza a ação de cadastrar um novo produto.
+     * @param produto Produto a ser cadastrado
+     * @param vendedor Vendedor que está cadastrando o produto
+     * @throws SQLException
+     */
     public void inserirProduto(Produto produto,Vendedor vendedor) throws SQLException {
 
         String sqlInsert =
@@ -406,6 +476,12 @@ public class DatabaseController {
         stmt.close();
     }
 
+    /**
+     * Pesquisa um produto no banco de dados
+     * @param query Produto a ser cadastrado
+     * @throws SQLException
+     * @return Lista de produtos encontrados
+     */
     public List<Produto> pesquisaProdutos(String query) throws SQLException {
         String sqlSelect = "SELECT * FROM Produto WHERE produto.nome LIKE ?";
         List<Produto> produtos = new ArrayList<>();
@@ -422,6 +498,15 @@ public class DatabaseController {
 
         return produtos;
     }
+
+
+    /**
+     * retorna a quantidade de produtos no carrinho
+     * @param cpf Produto a ser cadastrado
+     *
+     * @throws SQLException
+     * @return quantidade de produtos no carrinho
+     */
     public int getQuantidadeCarrinho(String cpf) throws SQLException {
         String sqlSelect = "SELECT * FROM item_Carrinho WHERE ID_Carrinho = '"+cpf+"'";
         PreparedStatement stmt = conn.prepareStatement(sqlSelect);

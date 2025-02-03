@@ -7,12 +7,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Classe que representa a interface gráfica para adicionar um funcionário.
+ */
 public class AdicionarFuncionarioView extends TemplateView {
     private JTextField cpfField;
     private JTextField nomeField;
     private JTextField dataNascimentoField;
     private JTextField telefoneField;
 
+    /**
+     * Construtor da classe AdicionarFuncionarioView.
+     *
+     * @param titulo O título da janela.
+     * @param usuarioAtual O usuário atual.
+     */
     public AdicionarFuncionarioView(String titulo, Pessoa usuarioAtual) {
         super(titulo);
         setSize(300, 250);
@@ -55,6 +64,4 @@ public class AdicionarFuncionarioView extends TemplateView {
 
         adicionarConteudo(panel);
     }
-
-
 }

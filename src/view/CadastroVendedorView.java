@@ -5,18 +5,27 @@ import java.awt.*;
 import java.sql.Date;
 import model.Vendedor;
 
+/**
+ * Classe que representa a interface gráfica para cadastro de vendedores.
+ */
 public class CadastroVendedorView extends TemplateView {
-    private JLabel lblNome, lblCPF, lblLogin, lblSenha,lblSalario,lblNascimento,lblComissao;
-    private JTextField txtNome, txtCPF, txtLogin,  txtSalario,txtNascimento,txtComissao;
+    private JLabel lblNome, lblCPF, lblLogin, lblSenha, lblSalario, lblNascimento, lblComissao;
+    private JTextField txtNome, txtCPF, txtLogin, txtSalario, txtNascimento, txtComissao;
     private JPasswordField txtSenha;
     private JButton btnCadastrar;
 
+    /**
+     * Construtor da classe CadastroVendedorView.
+     */
     public CadastroVendedorView() {
         super("Cadastro de Vendedor");
         initializeComponents();
         setupLayout();
     }
 
+    /**
+     * Inicializa os componentes da interface gráfica.
+     */
     private void initializeComponents() {
         lblNome = new JLabel("Nome:");
         lblCPF = new JLabel("CPF:");
@@ -31,7 +40,7 @@ public class CadastroVendedorView extends TemplateView {
         txtLogin = new JTextField();
         txtSenha = new JPasswordField();
         txtSalario = new JTextField();
-        txtComissao= new JTextField();
+        txtComissao = new JTextField();
         txtNascimento = new JTextField();
 
         btnCadastrar = new JButton("Cadastrar");
@@ -40,11 +49,14 @@ public class CadastroVendedorView extends TemplateView {
         setorConteudo.setLayout(null);
     }
 
+    /**
+     * Configura o layout da interface gráfica.
+     */
     private void setupLayout() {
         int x = 100, y = 70, largura = 400, altura = 30, espacamento = 20, x2 = 250;
 
         lblNome.setBounds(x, y, largura, altura);
-        txtNome.setBounds(x2, y , largura, altura);
+        txtNome.setBounds(x2, y, largura, altura);
 
         lblCPF.setBounds(x, y + espacamento * 2, largura, altura);
         txtCPF.setBounds(x2, y + espacamento * 2, largura, altura);
@@ -58,13 +70,13 @@ public class CadastroVendedorView extends TemplateView {
         lblSenha.setBounds(x, y + espacamento * 8, largura, altura);
         txtSenha.setBounds(x2, y + espacamento * 8, largura, altura);
 
-        lblSalario.setBounds(x,y + espacamento * 10, largura,altura);
-        txtSalario.setBounds(x2,y + espacamento *10,largura,altura);
+        lblSalario.setBounds(x, y + espacamento * 10, largura, altura);
+        txtSalario.setBounds(x2, y + espacamento * 10, largura, altura);
 
-        lblComissao.setBounds(x,y + espacamento * 12, largura,altura);
-        txtComissao.setBounds(x2,y + espacamento *12,largura,altura);
+        lblComissao.setBounds(x, y + espacamento * 12, largura, altura);
+        txtComissao.setBounds(x2, y + espacamento * 12, largura, altura);
 
-        btnCadastrar.setBounds(400, y + espacamento * 18, largura/3, altura);
+        btnCadastrar.setBounds(400, y + espacamento * 18, largura / 3, altura);
 
         setorConteudo.add(lblNome);
         setorConteudo.add(txtNome);
@@ -87,7 +99,9 @@ public class CadastroVendedorView extends TemplateView {
         adicionarAoRodape(sair);
     }
 
-
+    /**
+     * Realiza o cadastro do vendedor.
+     */
     private void cadastrarVendedor() {
         String nome = txtNome.getText();
         String cpf = txtCPF.getText();
@@ -96,47 +110,44 @@ public class CadastroVendedorView extends TemplateView {
         double salario = Double.parseDouble(txtSalario.getText());
         Date nascimento = Date.valueOf(txtNascimento.getText());
         double comissao = Double.parseDouble(txtComissao.getText());
-        if(nome.length() > 50){
+
+        if (nome.length() > 50) {
             JOptionPane.showMessageDialog(this, "Nome do produto deve ter no máximo 50 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
-        }
-        else if(login.length() > 50){
+        } else if (login.length() > 50) {
             JOptionPane.showMessageDialog(this, "Login do vendedor deve ter no máximo 50 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
-        }
-        else if(senha.length() > 50){
+        } else if (senha.length() > 50) {
             JOptionPane.showMessageDialog(this, "Senha do vendedor deve ter no máximo 50 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
-        }
-        else if(cpf.length() > 11){
+        } else if (cpf.length() > 11) {
             JOptionPane.showMessageDialog(this, "CPF do vendedor deve ter no máximo 11 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
-        }
-        else if(salario < 0){
+        } else if (salario < 0) {
             JOptionPane.showMessageDialog(this, "Salário do vendedor deve ser maior que 0.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
-        }
-        else if(comissao < 0){
+        } else if (comissao < 0) {
             JOptionPane.showMessageDialog(this, "Comissão do vendedor deve ser maior que 0.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
-        }
-        else if(nascimento.after(new Date(System.currentTimeMillis()))){
+        } else if (nascimento.after(new Date(System.currentTimeMillis()))) {
             JOptionPane.showMessageDialog(this, "Data de nascimento inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
-        }
-        else if(nascimento.before(new Date(System.currentTimeMillis() - 31556952000L))){
+        } else if (nascimento.before(new Date(System.currentTimeMillis() - 31556952000L))) {
             JOptionPane.showMessageDialog(this, "Data de nascimento inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Vendedor vendedor = new Vendedor(nome, cpf, login, senha, nascimento, salario,comissao);
+        Vendedor vendedor = new Vendedor(nome, cpf, login, senha, nascimento, salario, comissao);
         JOptionPane.showMessageDialog(this, "Vendedor cadastrado com sucesso!");
     }
 
+    /**
+     * Método principal para iniciar a interface gráfica.
+     *
+     * @param args Argumentos da linha de comando.
+     */
     public static void main(String[] args) {
         TemplateView tela = new CadastroVendedorView();
         tela.setVisible(true);
     }
 }
-
-

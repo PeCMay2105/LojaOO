@@ -13,14 +13,22 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Classe que representa a interface gráfica do carrinho de compras.
+ */
 public class CarrinhoView extends TemplateView {
 
+    /**
+     * Construtor da classe CarrinhoView.
+     *
+     * @param titulo O título da janela.
+     * @param userData Os dados do usuário.
+     */
     public CarrinhoView(String titulo, HashMap<String,String> userData) {
         super(titulo);
         CarrinhoController controller = new CarrinhoController(Global.getPessoa());
 
         Carrinho carrinhoAtual = controller.getCarrinho();
-
 
         JPanel telaInicial = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -35,24 +43,14 @@ public class CarrinhoView extends TemplateView {
         JPanel produtosPanel = new JPanel();
         produtosPanel.setLayout(new BoxLayout(produtosPanel, BoxLayout.Y_AXIS));
         CarrinhoController carrinhoController = new CarrinhoController(Global.getPessoa());
-//        Carrinho carrinho = new Carrinho(1,null);
-//        carrinho.adicionarProduto(new Produto("me",2,"3","marca"), 4);
-//        carrinho.adicionarProduto(new Produto("no",2,"2","marca"), 1);
-//        carrinho.adicionarProduto(new Produto("nome",2,"1","marca"), 14); as linhas foram comentadas pois agora há carrinhoControler que é onde essas funções devem se concentrar
+
         Map<Produto,Integer> conteudo = carrinhoController.retornaProdutos();
-        // carrinho.getConteudo() está retornando um map vazio
+
         if(carrinhoAtual.getConteudo() != null) {
             System.out.println("Carrinho não está vazio");
             System.out.println(carrinhoAtual.getConteudo());
             for (Map.Entry<Produto, Integer> produto : conteudo.entrySet()) {
                 System.out.println("Produto: " + produto.getKey().getNome() + " Quantidade: " + produto.getValue());
-
-
-
-
-
-
-
 
                 JPanel produtoLinha = new JPanel(new BorderLayout());
                 produtoLinha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -64,7 +62,6 @@ public class CarrinhoView extends TemplateView {
                 JButton labelQuantidade = new JButton(produto.getValue() + "");
                 labelQuantidade.setFont(new Font("Arial", Font.PLAIN, 14));
                 produtoLinha.add(labelQuantidade, BorderLayout.CENTER);
-
 
                 JButton adicionarButton = new JButton("+");
                 adicionarButton.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -90,7 +87,7 @@ public class CarrinhoView extends TemplateView {
 
                 produtosPanel.add(produtoLinha);
             }
-        }else{
+        } else {
             JLabel semProdutos = new JLabel("Nenhum produto no carrinho");
             produtosPanel.add(semProdutos);
         }
@@ -103,7 +100,6 @@ public class CarrinhoView extends TemplateView {
 
         JButton pagar = new JButton("Pagar");
         ajustarBotao(pagar, gbc, telaInicial);
-
 
         adicionarConteudo(telaInicial);
 
@@ -123,14 +119,21 @@ public class CarrinhoView extends TemplateView {
         botaoVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TemplateView telaInicial = new TelaInicialView("Tela Inicial",true);
-                telaInicial.setVisible(true);
+                TemplateView telaprodutos = new ListaProdutosView("Lista de Produtos");
+                telaprodutos.setVisible(true);
                 dispose();
             }
         });
 
     }
 
+    /**
+     * Ajusta o botão na interface gráfica.
+     *
+     * @param botao O botão a ser ajustado.
+     * @param gbc As restrições do layout.
+     * @param painel O painel onde o botão será adicionado.
+     */
     private void ajustarBotao(JButton botao, GridBagConstraints gbc, JPanel painel) {
         botao.setPreferredSize(new Dimension(200, 50));
         botao.setHorizontalAlignment(SwingConstants.CENTER);
@@ -139,7 +142,14 @@ public class CarrinhoView extends TemplateView {
         painel.add(botao, gbc);
     }
 
-    private void atualizarCarrinho(Produto produto, JPanel quantidadePanel,CarrinhoController carrinho) {
+    /**
+     * Atualiza a quantidade de um produto no carrinho.
+     *
+     * @param produto O produto a ser atualizado.
+     * @param quantidadePanel O painel que exibe a quantidade do produto.
+     * @param carrinho O controlador do carrinho.
+     */
+    private void atualizarCarrinho(Produto produto, JPanel quantidadePanel, CarrinhoController carrinho) {
         int quantidade = carrinho.retornaProdutos().get(produto);
         JButton quantidadeLabel = (JButton) quantidadePanel.getComponent(1);
         quantidadeLabel.setText(String.valueOf(quantidade));

@@ -15,15 +15,27 @@ import static java.lang.Integer.parseInt;
 import static model.Global.database;
 import static model.Helper.converterProdutos;
 
+/**
+ * Essa classe realiza a intermediação entre a interface gráfica e o modelo de carrinho.
+ * Gerencia produtos adicionados no carrinho, bem como a busca e o retorno geral
+ */
 public class CarrinhoController {
     Carrinho carrinho;
     HashMap<String,String> sessionUsuario;
 
+    /**
+     * Este método realiza uma ação importante.
+     *
+     * @param pessoa  Pessoa necessariamente atrelada ao carrinho da sessão ativa
+     *  A classe já é criada com um usuario atrelado a ela para que todas as ações sejam necessariamente atribudas a alguém
+     *
+     */
     public CarrinhoController(Pessoa pessoa){ ///userData deve ser um objeto recebido da classe que que chama o controller contento usuario e senha
         ///// Código provisório
         this.carrinho = buscaCarrinho((Cliente) pessoa);
 
     }
+
 
 
     public Map<Produto,Integer> contentUser(){
@@ -34,11 +46,25 @@ public class CarrinhoController {
 
     }
 
+
+
+    /**
+     * Este método realiza uma ação importante.
+     *
+     *
+     * @return conteudo retorna todo o conteúdo do carrinho
+     */
     public Map<Produto,Integer> retornaProdutos(){
         Map<Produto,Integer> conteudo = carrinho.getConteudo();
         return conteudo;
     }
-
+    /**
+     * Este método realiza uma ação importante.
+     *
+     * @param produto Produto a ser adicionado ao carrinho
+     * @param quantidade Quantidade de produtos a serem adicionados
+     * @return void retorna nada
+     */
     public void adicionarProduto(Produto produto, int quantidade){
         try {
             database.inserirProdutoCarrinho(produto, Global.getCliente(), quantidade);
@@ -48,11 +74,25 @@ public class CarrinhoController {
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * Este método realiza uma ação importante.
+     *
+     * @param produto Produto a ser removido do carrinho
+     * @param quantidade Quantidade de produtos a serem removidos
+     * @return void retorna nada
+     */
     public void removerProduto(Produto produto, int quantidade){
         carrinho.removerProduto(produto, quantidade);
     }
 
+    /**
+     * Este método realiza uma ação importante.
+     *  Este método é responsável por buscar o carrinho de um cliente no banco de dados
+     *  e retornar um objeto Carrinho com os produtos do carrinho
+     *  Se o carrinho estiver vazio, uma mensagem é exibida na tela
+     * @param pessoa Pessoa que está atrelada ao carrinho
+     * @return Carrinho retorna o carrinho da pessoa
+     */
     public Carrinho buscaCarrinho(Cliente pessoa){
         Carrinho carrinhoAtual = new Carrinho(pessoa);
         System.out.println("Login:" + pessoa.getLogin());
@@ -96,6 +136,12 @@ public class CarrinhoController {
         }
 
     }
+
+    /**
+     * Este método realiza uma ação importante.
+     *
+     * @return Carrinho retorna o carrinho
+     */
     public Carrinho getCarrinho(){
         return this.carrinho;
     }
