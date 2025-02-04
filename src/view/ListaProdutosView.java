@@ -17,11 +17,18 @@ public class ListaProdutosView extends TemplateView {
     HashMap<String, String> userData;
     JScrollPane scrollPane;
     JPanel produtosPanel;
+    private JLabel totalPriceLabel;
+    private CarrinhoController carrinhoController;
 
     public ListaProdutosView(String titulo) {
         super(titulo);
         setLayout(null);
-        setSize(900, 700); // Aumentando o tamanho do painel principal
+        setSize(900, 700);
+
+        // Initialize carrinho controller if user is a client
+        if (Global.pessoa instanceof Cliente) {
+            carrinhoController = new CarrinhoController(Global.getPessoa());
+        }
 
         // Campo de pesquisa
         JTextArea campoPesquisa = new JTextArea();
@@ -36,6 +43,12 @@ public class ListaProdutosView extends TemplateView {
         // Painel de produtos
         produtosPanel = new JPanel();
         produtosPanel.setLayout(new BoxLayout(produtosPanel, BoxLayout.Y_AXIS));
+
+        // Add total price display
+        totalPriceLabel = new JLabel("Total: R$ 0.00");
+        totalPriceLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        totalPriceLabel.setBounds(50, 480, 200, 30);
+        add(totalPriceLabel);
 
         // Carregar produtos
         List<Produto> produtos;
@@ -54,7 +67,6 @@ public class ListaProdutosView extends TemplateView {
             nomeProduto.setFont(new Font("Arial", Font.PLAIN, 14));
             produtoLinha.add(nomeProduto, BorderLayout.CENTER);
 
-
             JButton adicionarButton = new JButton("Adicionar");
             adicionarButton.setFont(new Font("Arial", Font.PLAIN, 12));
             adicionarButton.addActionListener(new ActionListener() {
@@ -62,9 +74,8 @@ public class ListaProdutosView extends TemplateView {
                 public void actionPerformed(ActionEvent e) {
                     if (Global.pessoa instanceof Cliente) {
                         JOptionPane.showMessageDialog(null, produto + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
-
-                        CarrinhoController carrinhoController = new CarrinhoController(Global.getPessoa());
                         carrinhoController.adicionarProduto(produto, 1);
+                        atualizaPrecoTotal(); // Update price after adding product
                     }
                 }
             });
@@ -75,7 +86,7 @@ public class ListaProdutosView extends TemplateView {
 
         // ScrollPane para a lista de produtos
         scrollPane = new JScrollPane(produtosPanel);
-        scrollPane.setBounds(50, 70, 370, 400); // Aumentando tamanho da lista de produtos
+        scrollPane.setBounds(50, 70, 370, 400);
         add(scrollPane);
 
         // Botão Ver Carrinho
@@ -103,6 +114,7 @@ public class ListaProdutosView extends TemplateView {
 
         // Ação do botão Ver Carrinho
         if (Global.pessoa instanceof Cliente) {
+            JButton finalVerCarrinho = verCarrinho;
             verCarrinho.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
@@ -120,12 +132,13 @@ public class ListaProdutosView extends TemplateView {
                 atualizarListaProdutos(campoPesquisa.getText());
             }
         });
+
         // Definir posição do título
         setorTitulo.setBounds(300, 10, 400, 30);
         setorTitulo.setFont(new Font("Arial", Font.BOLD, 18));
         add(setorTitulo);
 
-// Definir posição do botão de voltar
+        // Definir posição do botão de voltar
         botaoVoltar.setBounds(10, 10, 50, 30);
         add(botaoVoltar);
 
@@ -133,12 +146,14 @@ public class ListaProdutosView extends TemplateView {
         botaoVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                    TemplateView TelaInicialView = new TelaInicialView("", true,Global.pessoa);
-                    TelaInicialView.setVisible(true);
-                    dispose();
-
+                TemplateView TelaInicialView = new TelaInicialView("", true, Global.pessoa);
+                TelaInicialView.setVisible(true);
+                dispose();
             }
         });
+
+        // Initialize total price
+        atualizaPrecoTotal();
     }
 
     // Método para atualizar a lista de produtos com base na pesquisa
@@ -157,7 +172,7 @@ public class ListaProdutosView extends TemplateView {
             JPanel produtoLinha = new JPanel(new BorderLayout());
             produtoLinha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-            JLabel nomeProduto = new JLabel(produto.getNome());
+            JLabel nomeProduto = new JLabel(produto.getNome() + " - R$ " + String.format("%.2f", produto.getPreco()));
             nomeProduto.setFont(new Font("Arial", Font.PLAIN, 14));
             produtoLinha.add(nomeProduto, BorderLayout.CENTER);
 
@@ -168,9 +183,8 @@ public class ListaProdutosView extends TemplateView {
                 public void actionPerformed(ActionEvent e) {
                     if (Global.pessoa instanceof Cliente) {
                         JOptionPane.showMessageDialog(null, produto + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
-
-                        CarrinhoController carrinhoController = new CarrinhoController(Global.getPessoa());
                         carrinhoController.adicionarProduto(produto, 1);
+                        atualizaPrecoTotal(); // Update price after adding product
                     }
                 }
             });
@@ -181,6 +195,14 @@ public class ListaProdutosView extends TemplateView {
 
         produtosPanel.revalidate();
         produtosPanel.repaint();
+    }
+
+    // Method to update the total price display
+    private void atualizaPrecoTotal() {
+        if (carrinhoController != null) {
+            double total = carrinhoController.getCarrinho().calcularValorTotal();
+            totalPriceLabel.setText(String.format("Total: R$ %.2f", total));
+        }
     }
 
     public static void main(String[] args) {

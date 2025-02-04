@@ -91,12 +91,13 @@ public class Carrinho {
         }
     }
 
-    //    public double calcularValorTotal(){
-    //        for(Produto produto : this.conteudo.keySet()){
-    //            this.valorTotal += produto.getPreco() * this.conteudo.get(produto);
-    //        }
-    //        return this.valorTotal;
-    //    }
+    public double calcularValorTotal() {
+        this.valorTotal = 0.0;
+        for(Produto produto : this.conteudo.keySet()) {
+            this.valorTotal += produto.getPreco() * this.conteudo.get(produto);
+        }
+        return this.valorTotal;
+    }
 
     /**
      * Retorna o conteúdo do carrinho.
