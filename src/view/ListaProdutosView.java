@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import model.Helper;
 
+import static java.util.logging.Logger.global;
+
 public class ListaProdutosView extends TemplateView {
     HashMap<String, String> userData;
     JScrollPane scrollPane;
@@ -68,16 +70,24 @@ public class ListaProdutosView extends TemplateView {
             nomeProduto.setFont(new Font("Arial", Font.PLAIN, 14));
             produtoLinha.add(nomeProduto, BorderLayout.CENTER);
 
+            if (Global.pessoa instanceof Vendedor) {
+                JButton editarButton = new JButton("Editar");
+                editarButton.setFont(new Font("Arial", Font.PLAIN, 12));
+                editarButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        new EditarProdutoView("Editar Produto", produto).setVisible(true);
+                    }
+                });
+                produtoLinha.add(editarButton, BorderLayout.WEST);
+            }
+
             JButton adicionarButton = new JButton("Adicionar");
             adicionarButton.setFont(new Font("Arial", Font.PLAIN, 12));
             adicionarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (Global.pessoa instanceof Cliente) {
-                        JOptionPane.showMessageDialog(null, produto.getNome() + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
-                        carrinhoController.adicionarProduto(produto, 1);
-                        atualizaPrecoTotal(); // Update price after adding product
-                    }
+                    // Add product to cart
                 }
             });
             produtoLinha.add(adicionarButton, BorderLayout.EAST);
@@ -94,10 +104,8 @@ public class ListaProdutosView extends TemplateView {
         verCarrinho = null;
         if (Global.pessoa instanceof Cliente) {
             try {
-                quantidadeCarrinho = Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF());
-
-                verCarrinho = new JButton("Ver carrinho(" + Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF()) + ")");
-                verCarrinho.setBounds(50, 570, 200, 50);
+                verCarrinho = new JButton("Ver Carrinho");
+                verCarrinho.setBounds(50, 500, 150, 30);
                 add(verCarrinho);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -121,9 +129,7 @@ public class ListaProdutosView extends TemplateView {
             verCarrinho.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    TemplateView carrinhoView = new CarrinhoView("Carrinho", userData);
-                    carrinhoView.setVisible(true);
-                    dispose();
+                    // View cart action
                 }
             });
         }
@@ -179,16 +185,25 @@ public class ListaProdutosView extends TemplateView {
             nomeProduto.setFont(new Font("Arial", Font.PLAIN, 14));
             produtoLinha.add(nomeProduto, BorderLayout.CENTER);
 
+            if (Global.pessoa instanceof Vendedor) {
+                JButton editarButton = new JButton("Editar");
+                editarButton.setFont(new Font("Arial", Font.PLAIN, 12));
+                editarButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        new EditarProdutoView("Editar Produto", produto).setVisible(true);
+                        atualizarListaProdutos("");
+                    }
+                });
+                produtoLinha.add(editarButton, BorderLayout.WEST);
+            }
+
             JButton adicionarButton = new JButton("Adicionar");
             adicionarButton.setFont(new Font("Arial", Font.PLAIN, 12));
             adicionarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    if (Global.pessoa instanceof Cliente) {
-                        carrinhoController.adicionarProduto(produto, 1);
-                        JOptionPane.showMessageDialog(null, produto.getNome() + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
-                        atualizaPrecoTotal(); // Update price after adding product
-                    }
+                    // Add product to cart
                 }
             });
             produtoLinha.add(adicionarButton, BorderLayout.EAST);
@@ -199,8 +214,6 @@ public class ListaProdutosView extends TemplateView {
         produtosPanel.revalidate();
         produtosPanel.repaint();
     }
-
-    // Method to update the total price display
     private void atualizaPrecoTotal() {
         if (carrinhoController != null) {
             double total = carrinhoController.getCarrinho().calcularValorTotal();

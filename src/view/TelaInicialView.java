@@ -169,9 +169,6 @@ public class TelaInicialView extends TemplateView {
                 JButton adicionarProdutos = new JButton("Adicionar produtos");
                 ajustarBotao(adicionarProdutos, gbc, telaInicial);
 
-                JButton verCarrinho = new JButton("Ver carrinho");
-                ajustarBotao(verCarrinho, gbc, telaInicial);
-
                 JButton verPerfil = new JButton("Ver Perfil");
                 ajustarBotao(verPerfil, gbc, telaInicial);
 
@@ -193,14 +190,6 @@ public class TelaInicialView extends TemplateView {
                     }
                 });
 
-                verCarrinho.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        TemplateView carrinhoView = new CarrinhoView("Carrinho", new HashMap<>());//adicionei o new hashmap so pra compilar (inacio)
-                        carrinhoView.setVisible(true);
-                        dispose();
-                    }
-                });
                 verPerfil.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -300,6 +289,15 @@ public class TelaInicialView extends TemplateView {
         // Botões do rodapé
         JButton ajuda = new JButton("Ajuda");
         JButton sair = new JButton("Sair");
+
+        sair.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                LoginView loginView = new LoginView("Login");
+                loginView.setVisible(true);
+                dispose();
+            }
+        });
         adicionarAoRodape(ajuda);
         adicionarAoRodape(sair);
     }

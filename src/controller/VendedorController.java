@@ -37,6 +37,14 @@ public class VendedorController {
         return null;
     }
 
+    public static void atualizarVendedor(Vendedor vendedor) {
+        try {
+            database.atualizarVendedor(vendedor);
+        } catch (Exception e) {
+            e.printStackTrace();
+    }
+    }
+
     /**
      * Insere um produto no banco de dados.
      *

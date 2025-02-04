@@ -23,21 +23,26 @@ public class PerfilView extends TemplateView {
     public PerfilView(String titulo, Cliente cliente) {
         super(titulo);
         this.cliente = cliente;
-        initializeProfileComponents();
+        initializeProfileComponents(cliente);
         setupProfileLayout();
         setupProfileEvents();
     }
     public PerfilView(String titulo, Vendedor vendedor){
         super(titulo);
         this.vendedor = vendedor;
-        initializeProfileComponents();
+        initializeProfileComponents(vendedor);
         setupProfileLayout();
         setupProfileEvents();
     }
 
-    private void initializeProfileComponents() {
+    private void initializeProfileComponents(Cliente cliente) {
         nomeField = new JLabel(cliente.getNome());
         emailField = new JLabel(cliente.getLogin());
+        editarDadosButton = new JButton("Editar Dados");
+    }
+    private void initializeProfileComponents(Vendedor vendedor){
+        nomeField = new JLabel(vendedor.getNome());
+        emailField = new JLabel(vendedor.getLogin());
         editarDadosButton = new JButton("Editar Dados");
     }
 

@@ -165,6 +165,12 @@ public class AdicionarProdutosView extends TemplateView {
 
         return painel;
     }
+    @Override
+    protected void aoVoltar(){
+        TelaInicialView telaInicial = new TelaInicialView("Tela Inicial", true, vendedor);
+        telaInicial.setVisible(true);
+        dispose();
+    }
 
     /**
      * Atualiza o contador de caracteres restantes na descrição.

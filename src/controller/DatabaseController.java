@@ -8,6 +8,8 @@ import java.util.EmptyStackException;
 import java.util.HashMap;
 import java.util.List;
 
+import static model.Global.database;
+
 
 /**
  * Essa classe é responsável por intermediar a interface gráfica com o modelo de Banco de Dados.
@@ -150,7 +152,7 @@ public class DatabaseController {
 
         return stmt.executeQuery();
     }
-    
+
 
     /**
      * Este método realiza uma ação importante.
@@ -529,21 +531,56 @@ public class DatabaseController {
         return qtd;
     }
     public List<Vendedor> getVendedoresByQuery(String query) throws SQLException {
-        /*if (query.equals("")) {
 
-        }*/
-        String sqlSelect = "SELECT * FROM Pessoa p " +
-                "JOIN Vendedor v ON p.CPF = v.CPF ";
+        List<Vendedor> listaVendedores = new ArrayList<>();
+        String sqlSelect = "SELECT * FROM Pessoa p JOIN Vendedor v ON p.CPF = v.CPF WHERE p.CPF LIKE ? OR p.Nome LIKE ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sqlSelect)) {
+            stmt.setString(1, "%" + query + "%");
+            stmt.setString(2, "%" + query + "%");
+            try (ResultSet rs = stmt.executeQuery()) {
+                listaVendedores = Helper.converterVendedores(rs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listaVendedores;
+    }
 
-        PreparedStatement stmt = conn.prepareStatement(sqlSelect);
-        ResultSet rs = stmt.executeQuery();
-        return Helper.converterVendedores(rs);
+    public void atualizarVendedor(Vendedor vendedor) {
+        String sqlUpdatePessoa = "UPDATE Pessoa SET Nome = ? WHERE CPF = ?";
+        String sqlUpdateVendedor = "UPDATE Vendedor SET Salario = ?, Comissao = ? WHERE CPF = ?";
+        try (PreparedStatement stmtPessoa = conn.prepareStatement(sqlUpdatePessoa);
+             PreparedStatement stmtVendedor = conn.prepareStatement(sqlUpdateVendedor)) {
+            stmtPessoa.setString(1, vendedor.getNome());
+            stmtPessoa.setString(2, vendedor.getCPF());
+            stmtPessoa.executeUpdate();
 
+            stmtVendedor.setDouble(1, vendedor.getSalario());
+            stmtVendedor.setDouble(2, vendedor.getComissao());
+            stmtVendedor.setString(3, vendedor.getCPF());
+            stmtVendedor.executeUpdate();
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 
-
-
+    public void atualizarProduto(Produto produto) {
+        String sqlUpdate = "UPDATE Produto SET Nome = ?, Preco = ?, Estoque = ?, Descricao = ?, ID_Categoria = ? WHERE ID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sqlUpdate)) {
+            stmt.setString(1, produto.getNome());
+            stmt.setDouble(2, produto.getPreco());
+            stmt.setInt(3, produto.getEstoque());
+            stmt.setString(4, produto.getDescricao());
+            //stmt.setString(5, produto.getImagem());
+            stmt.setString(5, produto.getCategoria());
+            stmt.setInt(6, produto.getId());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
+
 
 
 
