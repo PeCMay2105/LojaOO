@@ -187,10 +187,12 @@ public class AdicionarProdutosView extends TemplateView {
      */
     private void publicarProduto() {
         // Validação dos campos
-        if (campoNome.getText().trim().isEmpty() ||
-                campoPreco.getText().trim().isEmpty() ||
-                campoEstoque.getText().trim().isEmpty() ||
-                campoDescricao.getText().trim().isEmpty()) {
+        String nome = campoNome.getText().trim();
+        String precoText = campoPreco.getText().trim();
+        String estoqueText = campoEstoque.getText().trim();
+        String descricao = campoDescricao.getText().trim();
+
+        if (nome.isEmpty() || precoText.isEmpty() || estoqueText.isEmpty() || descricao.isEmpty()) {
             JOptionPane.showMessageDialog(this,
                     "Todos os campos são obrigatórios!",
                     "Erro",
@@ -198,38 +200,62 @@ public class AdicionarProdutosView extends TemplateView {
             return;
         }
 
+        // Verificação do preço
+        float preco;
         try {
-            float preco = Float.parseFloat(campoPreco.getText());
-            int estoque = Integer.parseInt(campoEstoque.getText());
-
-            if (preco <= 0 || estoque < 0) {
+            preco = Float.parseFloat(precoText);
+            if (preco <= 0) {
                 throw new NumberFormatException();
             }
-
-            Produto novoProduto = new Produto(
-                    campoNome.getText(),
-                    preco,
-                    estoque,
-                    campoDescricao.getText(),
-                    campoCategoria.getSelectedItem().toString()
-            );
-
-            vendedorController.inserirProduto(novoProduto);
-
-            JOptionPane.showMessageDialog(this,
-                    "Produto publicado com sucesso!",
-                    "Sucesso",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            // Volta para a tela inicial
-            new TelaInicialView("Início",true, vendedor).setVisible(true);
-            dispose();
-
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this,
-                    "Preço e estoque devem ser números válidos!",
+                    "Preço deve ser um número válido e maior que zero!",
                     "Erro",
                     JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        // Verificação do estoque
+        int estoque;
+        try {
+            estoque = Integer.parseInt(estoqueText);
+            if (estoque < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Quantidade em estoque deve ser um número válido e não negativo!",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verificação da descrição
+        if (descricao.length() > MAX_DESCRICAO) {
+            JOptionPane.showMessageDialog(this,
+                    "Descrição não pode exceder " + MAX_DESCRICAO + " caracteres!",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        Produto novoProduto = new Produto(
+                nome,
+                preco,
+                estoque,
+                descricao,
+                campoCategoria.getSelectedItem().toString()
+        );
+
+        vendedorController.inserirProduto(novoProduto);
+
+        JOptionPane.showMessageDialog(this,
+                "Produto publicado com sucesso!",
+                "Sucesso",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        // Volta para a tela inicial
+        new TelaInicialView("Início", true, vendedor).setVisible(true);
+        dispose();
     }
 }

@@ -107,71 +107,67 @@ public class cadastroClienteView extends TemplateView {
         cadastrar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Cria e exibe a nova interface gráfica de sucesso
+                String nome = campoNome.getText().trim();
+                String cpf = campoCpf.getText().trim();
+                String email = campoEmail.getText().trim();
+                String senha = campoSenha.getText().trim();
+                String nascimento = campoNascimento.getText().trim();
+                String telefone = campoTelefone.getText().trim();
 
-                ClienteController clienteController = new ClienteController();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
-                try{
-                    if(campoNome.getText().equals("") || campoCpf.getText().equals("") || campoEmail.getText().equals("") || campoSenha.getText().equals("") || campoNascimento.getText().equals("")){
-                        throw new IOException("Campo vazio");
-
-                    }
-                    else if(campoCpf.getText().length() != 11) {
-                        throw new IOException("CPF invalido");
-                    }
-
-                    clienteController.criaCliente(campoNome.getText(), campoCpf.getText(), campoEmail.getText(), campoSenha.getText(), Date.valueOf(LocalDate.parse(campoNascimento.getText(),formatter)));
-                    System.out.println("CadastroCLienteView: Nome = " + campoNome.getText() + " Cpf = " + campoCpf.getText());
-                }catch(SQLException erroDatabase){
-                    JFrame erroFrame = new JFrame("Erro");
-                    erroFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    erroFrame.setSize(500, 300);
-                    erroFrame.setLocationRelativeTo(null);
-                    erroFrame.add(new FimCadastroView("Erro"));
-                    erroFrame.setVisible(true);
-                    dispose();
-                }catch(DateTimeParseException erroData){
-                    JFrame erroFrame = new JFrame("Erro");
-                    erroFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    erroFrame.setSize(500, 300);
-                    erroFrame.setLocationRelativeTo(null);
-                    erroFrame.add(new FimCadastroView("Data"));
-                    erroFrame.setVisible(true);
-                    dispose();
-                }catch(IOException erroIOE){
-                    switch(erroIOE.getMessage()){
-                        case "Campo vazio":
-                            JFrame erroFrame = new JFrame("Erro");
-                            JLabel erroLabel = new JLabel("Campo vazio");
-                            erroFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                            erroFrame.setSize(500, 300);
-                            erroFrame.setLocationRelativeTo(null);
-                            erroFrame.add(new FimCadastroView("Campo"));
-                            erroFrame.setVisible(true);
-                            dispose();
-                            break;
-                        case "CPF invalido":
-                            JFrame erroFrame2 = new JFrame("Erro");
-                            JLabel erroLabel2 = new JLabel("CPF invalido");
-                            erroFrame2.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                            erroFrame2.setSize(500, 300);
-                            erroFrame2.setLocationRelativeTo(null);
-                            erroFrame2.add(new FimCadastroView("CPF"));
-                            erroFrame2.setVisible(true);
-                            dispose();
-                            break;
-                    }
-
+                // Verificação do nome
+                if (nome.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Nome não pode estar vazio.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
 
-                JFrame sucessoFrame = new JFrame("Sucesso");
-                sucessoFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                sucessoFrame.setSize(500, 300);
-                sucessoFrame.setLocationRelativeTo(null);
-                sucessoFrame.add(new FimCadastroView("Sucesso"));
-                sucessoFrame.setVisible(true);
-                dispose();
+                // Verificação do CPF
+                if (!cpf.matches("\\d{11}")) {
+                    JOptionPane.showMessageDialog(null, "CPF deve conter 11 dígitos numéricos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificação do email
+                if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+                    JOptionPane.showMessageDialog(null, "Email inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificação da senha
+                if (senha.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Senha não pode estar vazia.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificação da data de nascimento
+                if (!nascimento.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                    JOptionPane.showMessageDialog(null, "Data de nascimento deve estar no formato dd/MM/yyyy.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificação do telefone
+                if (!telefone.matches("\\d+")) {
+                    JOptionPane.showMessageDialog(null, "Telefone deve conter apenas números.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Formatação da data de nascimento
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate dataNascimento;
+                try {
+                    dataNascimento = LocalDate.parse(nascimento, formatter);
+                } catch (DateTimeParseException ex) {
+                    JOptionPane.showMessageDialog(null, "Data de nascimento inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                try {
+                    ClienteController clienteController = new ClienteController();
+                    clienteController.criaCliente(nome, cpf, email, senha, Date.valueOf(dataNascimento));
+                    JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao cadastrar cliente.", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

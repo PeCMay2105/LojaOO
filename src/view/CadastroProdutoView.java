@@ -73,27 +73,27 @@ public class CadastroProdutoView extends TemplateView {
             JOptionPane.showMessageDialog(this, "Todos os campos devem ser preenchidos.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        else if(nome.length() > 50){
+        if (nome.length() > 50) {
             JOptionPane.showMessageDialog(this, "Nome do produto deve ter no máximo 50 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        else if(marca.length() > 50){
+        if (marca.length() > 50) {
             JOptionPane.showMessageDialog(this, "Marca do produto deve ter no máximo 50 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        else if(precoTexto.length() > 10){
+        if (precoTexto.length() > 10) {
             JOptionPane.showMessageDialog(this, "Preço do produto deve ter no máximo 10 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        else if(idTexto.length() > 10){
+        if (idTexto.length() > 10) {
             JOptionPane.showMessageDialog(this, "ID do produto deve ter no máximo 10 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        else if(!precoTexto.matches("[0-9]+(\\.[0-9][0-9]?)?")){
+        if (!precoTexto.matches("[0-9]+(\\.[0-9][0-9]?)?")) {
             JOptionPane.showMessageDialog(this, "Preço do produto deve ser um número.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        else if(!idTexto.matches("[0-9]+")){
+        if (!idTexto.matches("[0-9]+")) {
             JOptionPane.showMessageDialog(this, "ID do produto deve ser um número.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }

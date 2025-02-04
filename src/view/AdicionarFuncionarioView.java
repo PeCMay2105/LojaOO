@@ -76,17 +76,69 @@ public class AdicionarFuncionarioView extends TemplateView {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String cpf = cpfField.getText();
-                double comissao = Double.valueOf(comissaoField.getText());
                 String nome = nomeField.getText();
                 String dateText = dataNascimentoField.getText();
+                String telefone = telefoneField.getText();
+                String email = emailField.getText();
+                String senha = new String(senhaField.getPassword());
+                String salarioText = salarioField.getText();
+                String comissaoText = comissaoField.getText();
+
+                // Verificação do CPF
+                if (!cpf.matches("\\d{11}")) {
+                    JOptionPane.showMessageDialog(null, "CPF deve conter 11 dígitos numéricos.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificação do nome
+                if (!nome.matches("[a-zA-Z\\s]+")) {
+                    JOptionPane.showMessageDialog(null, "Nome deve conter apenas letras.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificação da data de nascimento
+                if (!dateText.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                    JOptionPane.showMessageDialog(null, "Data de nascimento deve estar no formato dd/MM/yyyy.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificação do telefone
+                if (!telefone.matches("\\d+")) {
+                    JOptionPane.showMessageDialog(null, "Telefone deve conter apenas números.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificação do email
+                if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+                    JOptionPane.showMessageDialog(null, "Email inválido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificação do salário
+                double salario;
+                try {
+                    salario = Double.parseDouble(salarioText);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Salário deve ser um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Verificação da comissão
+                double comissao;
+                try {
+                    comissao = Double.parseDouble(comissaoText);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Comissão deve ser um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Formatação da data de nascimento
                 String[] dateParts = dateText.split("/");
                 String formattedDate = dateParts[2] + "-" + dateParts[1] + "-" + dateParts[0];
                 Date dataNascimento = Date.valueOf(formattedDate);
-                double salario = Double.parseDouble(salarioField.getText());
-                String email = emailField.getText();
-                String senha = new String(senhaField.getPassword());
+
                 try {
-                    database.cadastrarVendedor(new Vendedor(nome, cpf, email, senha, dataNascimento, Double.valueOf(salario), comissao));
+                    database.cadastrarVendedor(new Vendedor(nome, cpf, email, senha, dataNascimento, salario, comissao));
                     JOptionPane.showMessageDialog(null, "Vendedor adicionado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                     clearForm();
                 } catch (Exception ex) {

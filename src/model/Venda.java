@@ -1,13 +1,13 @@
 package model;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Classe que representa uma Venda.
  */
 public class Venda {
     public Produto produto;
-    public HashMap<String, Float> produtos;
+    public Map<Produto,Integer> produtos;
     public Vendedor vendedor;
     public int quantidade;
     public Cliente cliente;
@@ -25,7 +25,7 @@ public class Venda {
      * @param valor O valor total da venda.
      * @param data A data da venda.
      */
-    public Venda(HashMap<String, Float> produtos, Vendedor vendedor, int quantidade, Cliente cliente, float valor, Date data) {
+    public Venda(Map<Produto, Integer> produtos, Vendedor vendedor, int quantidade, Cliente cliente, float valor, Date data) {
         this.produtos = produtos;
         this.vendedor = vendedor;
         this.quantidade = quantidade;
@@ -40,23 +40,8 @@ public class Venda {
      * @param nome O nome do produto.
      * @param preco O preço do produto.
      */
-    public void adicionaProdutos(String nome, Float preco) {
-        if (produtos.containsKey(nome)) {
-            System.out.println("Produto já está no carrinho.");
-        } else {
-            produtos.put(nome, preco);
-        }
-    }
 
-    /**
-     * Calcula o valor total da venda.
-     */
-    public void valorTotal() {
-        valorTotal = 0;
-        for (Float preco : produtos.values()) {
-            valorTotal += preco * quantidade;
-        }
-    }
+
 
     /**
      * Retorna o produto da venda.
@@ -81,18 +66,12 @@ public class Venda {
      *
      * @return O mapa de produtos da venda.
      */
-    public HashMap<String, Float> getProdutos() {
-        return produtos;
-    }
 
     /**
      * Define o mapa de produtos da venda.
      *
      * @param produtos O novo mapa de produtos da venda.
      */
-    public void setProdutos(HashMap<String, Float> produtos) {
-        this.produtos = produtos;
-    }
 
     /**
      * Retorna o vendedor responsável pela venda.
@@ -200,5 +179,8 @@ public class Venda {
      */
     public void setValorTotal(int valorTotal) {
         this.valorTotal = valorTotal;
+    }
+
+    public void setDigitosCartao(int digitosCartao) {
     }
 }

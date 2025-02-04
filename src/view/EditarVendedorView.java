@@ -104,13 +104,48 @@ public class EditarVendedorView extends TemplateView {
     }
 
     private void salvarVendedor() {
-        vendedor.setNome(nomeField.getText());
-        vendedor.setSalario(Double.parseDouble(salarioField.getText()));
-        vendedor.setComissao(Double.parseDouble(comissaoField.getText()));
+        String nome = nomeField.getText().trim();
+        String salarioTexto = salarioField.getText().trim();
+        String comissaoTexto = comissaoField.getText().trim();
+
+        // Verificação do nome
+        if (nome.isEmpty() || nome.length() > 50) {
+            JOptionPane.showMessageDialog(this, "Nome deve ter entre 1 e 50 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verificação do salário
+        double salario;
+        try {
+            salario = Double.parseDouble(salarioTexto);
+            if (salario <= 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Salário deve ser um número válido e maior que zero.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verificação da comissão
+        double comissao;
+        try {
+            comissao = Double.parseDouble(comissaoTexto);
+            if (comissao < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Comissão deve ser um número válido e não negativa.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        vendedor.setNome(nome);
+        vendedor.setSalario(salario);
+        vendedor.setComissao(comissao);
+
         try {
             VendedorController.atualizarVendedor(vendedor);
             JOptionPane.showMessageDialog(this, "Vendedor atualizado com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            GerenciarFuncionariosView gerenciarFuncionariosView = new GerenciarFuncionariosView("Gerenciar Funcionários",usuario);
+            GerenciarFuncionariosView gerenciarFuncionariosView = new GerenciarFuncionariosView("Gerenciar Funcionários", usuario);
             gerenciarFuncionariosView.setVisible(true);
             dispose();
         } catch (Exception e) {

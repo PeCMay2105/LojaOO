@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Classe que representa um Vendedor.
@@ -117,8 +118,8 @@ public class Vendedor extends Pessoa {
      * @return A venda realizada.
      */
     public Venda vende(Produto produto, Cliente cliente, int quantidade) {
-        HashMap<String, Float> produtos = new HashMap<>();
-        produtos.put(produto.getNome(), produto.getPreco());
+        Map<Produto, Float> produtos = new HashMap<>();
+        produtos.put(produto, (produto.getPreco()));
 
         float valorTotal = produto.getPreco() * quantidade;
         Date now = new Date(new java.util.Date().getTime());

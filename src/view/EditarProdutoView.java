@@ -111,16 +111,57 @@ public class EditarProdutoView extends TemplateView {
     }
 
     private void salvarProduto() {
-        produto.setNome(nomeField.getText());
-        produto.setEstoque(Integer.parseInt(estoqueField.getText()));
-        produto.setPreco(Float.parseFloat(precoField.getText()));
-        produto.setDescricao(descricaoArea.getText());
-        //produto.setImagem(imagemField.getText());
+        String nome = nomeField.getText().trim();
+        String precoTexto = precoField.getText().trim();
+        String estoqueTexto = estoqueField.getText().trim();
+        String descricao = descricaoArea.getText().trim();
+
+        if (nome.isEmpty() || precoTexto.isEmpty() || estoqueTexto.isEmpty() || descricao.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Todos os campos são obrigatórios.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (nome.length() > 50) {
+            JOptionPane.showMessageDialog(this, "Nome do produto deve ter no máximo 50 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (descricao.length() > 200) {
+            JOptionPane.showMessageDialog(this, "Descrição do produto deve ter no máximo 200 caracteres.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verificação do preço
+        float preco;
+        try {
+            preco = Float.parseFloat(precoTexto);
+            if (preco <= 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Preço deve ser um número válido e maior que zero.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Verificação do estoque
+        int estoque;
+        try {
+            estoque = Integer.parseInt(estoqueTexto);
+            if (estoque < 0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Quantidade em estoque deve ser um número válido e não negativa.", "Erro", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        produto.setNome(nome);
+        produto.setEstoque(estoque);
+        produto.setPreco(preco);
+        produto.setDescricao(descricao);
+
         try {
             ProdutoController produtoController = new ProdutoController();
             produtoController.atualizarProduto(produto);
             JOptionPane.showMessageDialog(this, "Produto atualizado com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-
             dispose();
         } catch (Exception e) {
             e.printStackTrace();
