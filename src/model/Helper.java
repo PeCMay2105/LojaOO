@@ -126,8 +126,9 @@ public class Helper {
                 String email = rs.getString("Email");
                 float salario = rs.getFloat("Salario");
                 float comissao = rs.getFloat("Comissao");
+                //public Vendedor(String nome, String CPF, String login, String senha, Date nascimento, Double salario, double comissao) {
 
-                vendedor = new Vendedor(nome, cpf, senha, email, nascimento, Double.valueOf(salario), comissao);
+                vendedor = new Vendedor(nome, cpf, email,senha, nascimento, Double.valueOf(salario), comissao);
                 vendedores.add(vendedor);
             } catch (SQLException e) {
                 throw new RuntimeException(e);

@@ -26,9 +26,7 @@ public class VendedorController {
 
     public static List<Vendedor> pesquisarVendedores(String query) {
         try {
-            ResultSet vendedores =  database.consulta(Tabela.vendedor);
-            Helper converter = new Helper();
-            List<Vendedor> listaVendedores = converter.converterVendedores(vendedores);
+            List<Vendedor> listaVendedores = database.getVendedoresByQuery(query);
             return listaVendedores;
             /////// TODO: 06/06/2021 Implementar a lógica de pesquisa de vendedores
 

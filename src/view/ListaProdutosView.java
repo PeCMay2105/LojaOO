@@ -133,9 +133,10 @@ public class ListaProdutosView extends TemplateView {
         botaoVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TemplateView telaCarrinho = new CarrinhoView("Carrinho",userData);
-                telaCarrinho.setVisible(true);
-                dispose();
+                    TemplateView TelaInicialView = new TelaInicialView("", true,Global.pessoa);
+                    TelaInicialView.setVisible(true);
+                    dispose();
+
             }
         });
     }

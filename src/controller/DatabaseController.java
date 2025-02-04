@@ -520,8 +520,21 @@ public class DatabaseController {
         System.out.println(stmt.toString());
         return qtd;
     }
+    public List<Vendedor> getVendedoresByQuery(String query) throws SQLException {
+        /*if (query.equals("")) {
+
+        }*/
+        String sqlSelect = "SELECT * FROM Pessoa p " +
+                "JOIN Vendedor v ON p.CPF = v.CPF ";
+
+        PreparedStatement stmt = conn.prepareStatement(sqlSelect);
+        ResultSet rs = stmt.executeQuery();
+        return Helper.converterVendedores(rs);
 
 
+
+
+    }
 }
 
 
