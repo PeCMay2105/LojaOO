@@ -50,16 +50,16 @@ public class Carrinho {
      * @param quantidade A quantidade do produto a ser adicionada.
      * @return 2 se o produto já estava no carrinho e a quantidade foi atualizada, 1 se o produto foi adicionado pela primeira vez.
      */
-    public int adicionarProduto(Produto produto, int quantidade) {
+    public void adicionarProduto(Produto produto, int quantidade) {
         if (this.conteudo.containsKey(produto.getId())) {
             this.conteudo.put(produto, Integer.valueOf(this.conteudo.get(produto) + quantidade));
             this.quantidade += quantidade;
-            return 2;
         } else {
             this.conteudo.put(produto, Integer.valueOf(quantidade));
             this.quantidade += quantidade;
-            return 1;
+
         }
+
     }
 
     /**

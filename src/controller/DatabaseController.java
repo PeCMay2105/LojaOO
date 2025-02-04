@@ -417,25 +417,33 @@ public class DatabaseController {
      * @throws SQLException
      */
     void inserirProdutoCarrinho(Produto produto,Cliente cliente,int quantidade) throws SQLException {
+        if (quantidade > 0) {
+            String sqlInsert =
+                    "INSERT INTO" +
+                            " item_carrinho (ID_Carrinho,ID_Produto,Quantidade)" +
+                            " VALUES (?,?,?)" +
+                            " ON CONFLICT " +
+                            "(ID_Produto,ID_Carrinho)" +
+                            " DO UPDATE SET" +
+                            " Quantidade = excluded.Quantidade;";
 
-        String sqlInsert =
-            "INSERT INTO" +
-                    " item_carrinho (ID_Carrinho,ID_Produto,Quantidade)" +
-                    " VALUES (?,?,?)" +
-            " ON CONFLICT " +
-                    "(ID_Produto,ID_Carrinho)" +
-            " DO UPDATE SET" +
-                    " Quantidade = excluded.Quantidade;";
+            PreparedStatement stmt = conn.prepareStatement(sqlInsert);
+            stmt.setString(1, cliente.getCPF());
+            stmt.setInt(2, produto.getId());
+            stmt.setInt(3, quantidade);
 
-        PreparedStatement stmt = conn.prepareStatement(sqlInsert);
-        stmt.setString(1, cliente.getCPF());
-        stmt.setInt(2, produto.getId());
-        stmt.setInt(3, quantidade);
-
-        stmt.executeUpdate();
-        stmt.close();
+            stmt.executeUpdate();
+            stmt.close();
         }
-
+        else {
+            String sqlRemove = "DELETE FROM item_carrinho WHERE ID_Carrinho = ? AND ID_Produto = ?";
+            PreparedStatement removeStmt = conn.prepareStatement(sqlRemove);
+            removeStmt.setString(1, cliente.getCPF());
+            removeStmt.setInt(2, produto.getId());
+            removeStmt.executeUpdate();
+            removeStmt.close();
+        }
+    }
         HashMap<Produto,Integer> GetProdutosByCPF(String CPF) throws SQLException {
         String sqlSelect = "SELECT * FROM item_carrinho INNER JOIN Produto ON ID_Produto = ID WHERE ID_Carrinho = ?";
         PreparedStatement stmt = conn.prepareStatement(sqlSelect);

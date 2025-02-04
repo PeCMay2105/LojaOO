@@ -16,10 +16,11 @@ import model.Helper;
 public class ListaProdutosView extends TemplateView {
     HashMap<String, String> userData;
     JScrollPane scrollPane;
+    JButton verCarrinho;
     JPanel produtosPanel;
     private JLabel totalPriceLabel;
     private CarrinhoController carrinhoController;
-
+    int quantidadeCarrinho;
     public ListaProdutosView(String titulo) {
         super(titulo);
         setLayout(null);
@@ -73,7 +74,7 @@ public class ListaProdutosView extends TemplateView {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (Global.pessoa instanceof Cliente) {
-                        JOptionPane.showMessageDialog(null, produto + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, produto.getNome() + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
                         carrinhoController.adicionarProduto(produto, 1);
                         atualizaPrecoTotal(); // Update price after adding product
                     }
@@ -90,9 +91,11 @@ public class ListaProdutosView extends TemplateView {
         add(scrollPane);
 
         // Botão Ver Carrinho
-        JButton verCarrinho = null;
+        verCarrinho = null;
         if (Global.pessoa instanceof Cliente) {
             try {
+                quantidadeCarrinho = Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF());
+
                 verCarrinho = new JButton("Ver carrinho(" + Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF()) + ")");
                 verCarrinho.setBounds(50, 570, 200, 50);
                 add(verCarrinho);
@@ -182,8 +185,8 @@ public class ListaProdutosView extends TemplateView {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     if (Global.pessoa instanceof Cliente) {
-                        JOptionPane.showMessageDialog(null, produto + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
                         carrinhoController.adicionarProduto(produto, 1);
+                        JOptionPane.showMessageDialog(null, produto.getNome() + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
                         atualizaPrecoTotal(); // Update price after adding product
                     }
                 }
@@ -202,7 +205,17 @@ public class ListaProdutosView extends TemplateView {
         if (carrinhoController != null) {
             double total = carrinhoController.getCarrinho().calcularValorTotal();
             totalPriceLabel.setText(String.format("Total: R$ %.2f", total));
+            try {
+                quantidadeCarrinho = Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF());
+                verCarrinho.setText("Ver carrinho(" + Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF()) + ")");
+
+
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
     }
 
     public static void main(String[] args) {

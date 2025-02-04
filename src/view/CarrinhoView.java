@@ -24,6 +24,7 @@ public class CarrinhoView extends TemplateView {
      * @param titulo O título da janela.
      * @param userData Os dados do usuário.
      */
+    JPanel produtosPanel;
     public CarrinhoView(String titulo, HashMap<String,String> userData) {
         super(titulo);
         CarrinhoController controller = new CarrinhoController(Global.getPessoa());
@@ -40,7 +41,7 @@ public class CarrinhoView extends TemplateView {
         header.setHorizontalAlignment(JLabel.CENTER);
         header.setPreferredSize(new Dimension(400, 100));
 
-        JPanel produtosPanel = new JPanel();
+        produtosPanel = new JPanel();
         produtosPanel.setLayout(new BoxLayout(produtosPanel, BoxLayout.Y_AXIS));
         CarrinhoController carrinhoController = new CarrinhoController(Global.getPessoa());
 
@@ -78,7 +79,13 @@ public class CarrinhoView extends TemplateView {
                 removerButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+
                         carrinhoController.adicionarProduto(produto.getKey(), produto.getValue() - 1);
+
+                        if(produto.getValue() -1<= 0){
+                            atualizarCarrinho(produto.getKey(), produtoLinha, carrinhoController);
+
+                        }
                         atualizarCarrinho(produto.getKey(), produtoLinha, carrinhoController);
                     }
                 });
@@ -119,9 +126,10 @@ public class CarrinhoView extends TemplateView {
         botaoVoltar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                TemplateView telaprodutos = new ListaProdutosView("Lista de Produtos");
-                telaprodutos.setVisible(true);
+                TemplateView TelaInicialView = new TelaInicialView("", true,Global.pessoa);
+                TelaInicialView.setVisible(true);
                 dispose();
+
             }
         });
 
@@ -150,9 +158,14 @@ public class CarrinhoView extends TemplateView {
      * @param carrinho O controlador do carrinho.
      */
     private void atualizarCarrinho(Produto produto, JPanel quantidadePanel, CarrinhoController carrinho) {
-        int quantidade = carrinho.retornaProdutos().get(produto);
-        JButton quantidadeLabel = (JButton) quantidadePanel.getComponent(1);
-        quantidadeLabel.setText(String.valueOf(quantidade));
-    }
+        int quantidade = carrinho.retornaProdutos().getOrDefault(produto, 0);
+        if (quantidade <= 0) {
+            produtosPanel.remove(quantidadePanel);
+            produtosPanel.revalidate();
+            produtosPanel.repaint();
+        } else {
+            JButton quantidadeLabel = (JButton) quantidadePanel.getComponent(1);
+            quantidadeLabel.setText(String.valueOf(quantidade));
+        }    }
 
 }

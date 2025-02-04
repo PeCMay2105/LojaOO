@@ -68,7 +68,9 @@ public class CarrinhoController {
     public void adicionarProduto(Produto produto, int quantidade){
         try {
             database.inserirProdutoCarrinho(produto, Global.getCliente(), quantidade);
+
             carrinho.adicionarProduto(produto, quantidade);
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
