@@ -98,4 +98,41 @@ public class Helper {
         }
         return clientes;
     }
+
+
+    /**
+     * Converte um ResultSet em uma lista de vendedores.
+     *
+     * @param rs O ResultSet a ser convertido.
+     * @return Uma lista de vendedores.
+     * @throws SQLException Se ocorrer um erro ao acessar o ResultSet.
+     */
+
+
+    public static List<Vendedor> converterVendedores(ResultSet rs) throws SQLException {
+        List<Vendedor> vendedores = new ArrayList<>();
+        while (rs.next()) {
+            Vendedor vendedor;
+            try {
+                String cpf = rs.getString("CPF");
+                java.sql.Date nascimento;
+                try {
+                    nascimento = rs.getDate("Data_Nascimento");
+                } catch (SQLException e) {
+                    throw new RuntimeException("Error parsing date for CPF: " + rs.getString("CPF"), e);
+                }
+                String nome = rs.getString("Nome");
+                String senha = rs.getString("Senha");
+                String email = rs.getString("Email");
+                float salario = rs.getFloat("Salario");
+                float comissao = rs.getFloat("Comissao");
+
+                vendedor = new Vendedor(nome, cpf, senha, email, nascimento, Double.valueOf(salario), comissao);
+                vendedores.add(vendedor);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return vendedores;
+    }
 }

@@ -1,8 +1,12 @@
 package controller;
 
 import model.Global;
+import model.Helper;
 import model.Produto;
 import model.Vendedor;
+
+import java.sql.ResultSet;
+import java.util.List;
 
 import static model.Global.database;
 
@@ -18,6 +22,21 @@ public class VendedorController {
      */
     public VendedorController(){
         this.vendedor = (Vendedor) Global.getPessoa();
+    }
+
+    public static List<Vendedor> pesquisarVendedores(String query) {
+        try {
+            ResultSet vendedores =  database.consulta(Tabela.vendedor);
+            Helper converter = new Helper();
+            List<Vendedor> listaVendedores = converter.converterVendedores(vendedores);
+            return listaVendedores;
+            /////// TODO: 06/06/2021 Implementar a lógica de pesquisa de vendedores
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
     }
 
     /**

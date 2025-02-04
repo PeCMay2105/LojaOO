@@ -211,23 +211,20 @@ public class TelaInicialView extends TemplateView {
                 });
             }else if( usuarioAtual instanceof Administrador){
                 System.out.println("Administrador");
-                System.out.println("AAAAAAAAAAA");
+
                 JButton verProdutos = new JButton("Ver produtos");
                 ajustarBotao(verProdutos, gbc, telaInicial);
-
-                JButton verCarrinho = new JButton("Ver carrinho");
-                ajustarBotao(verCarrinho, gbc, telaInicial);
-
-                JButton verPerfil = new JButton("Ver Perfil");
-                ajustarBotao(verPerfil, gbc, telaInicial);
 
                 JButton cadastroFuncionario = new JButton("Cadastrar Funcionário");
                 ajustarBotao(cadastroFuncionario, gbc, telaInicial);
 
+                JButton gerenciarFuncionarios = new JButton("Gerenciar Funcionários");
+                ajustarBotao(gerenciarFuncionarios, gbc, telaInicial);
+
                 cadastroFuncionario.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        TemplateView adicionarProdutosView = new AdicionarFuncionarioView("Adicionar Produtos",(Administrador)usuarioAtual);
+                        TemplateView adicionarProdutosView = new AdicionarFuncionarioView("Adicionar Vendedores",(Administrador)usuarioAtual);
                         adicionarProdutosView.setVisible(true);
                         dispose();
                     }
@@ -251,22 +248,16 @@ public class TelaInicialView extends TemplateView {
                     }
                 });
 
-                verCarrinho.addActionListener(new ActionListener() {
+                gerenciarFuncionarios.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        TemplateView carrinhoView = new CarrinhoView("Carrinho", new HashMap<>());//adicionei o new hashmap so pra compilar (inacio)
-                        carrinhoView.setVisible(true);
+                        TemplateView gerenciarFuncionariosView = new GerenciarFuncionariosView("Gerenciar Funcionários",(Administrador)usuarioAtual);
+                        gerenciarFuncionariosView.setVisible(true);
                         dispose();
                     }
                 });
-                verPerfil.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        TemplateView perfilView = new PerfilView("Perfil", (Vendedor)usuarioAtual);
-                        perfilView.setVisible(true);
-                        dispose();
-                    }
-                });
+
+
 
 
             }
