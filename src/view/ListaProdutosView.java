@@ -213,6 +213,7 @@ public class ListaProdutosView extends TemplateView {
                                 carrinhoController.adicionarProduto(produto, 1);
                                 FileInputStream fis = produto.getImagem();
                                 byte[] bytes = fis.readAllBytes();
+                                fis.getChannel().position(0);
                                 ImageIcon imagem = new ImageIcon(bytes);
                                 Image img = imagem.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
                                 imagem = new ImageIcon(img);
@@ -222,8 +223,6 @@ public class ListaProdutosView extends TemplateView {
                                 JOptionPane.showMessageDialog(null, label, "Imagem", JOptionPane.PLAIN_MESSAGE);
                             } catch (Exception ex) {
                                 JOptionPane.showMessageDialog(null, produto.getNome() + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
-                                ex.printStackTrace();
-                                System.out.println("entrou no catch");
 
                             }
                             atualizaPrecoTotal();
