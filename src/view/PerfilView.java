@@ -46,10 +46,17 @@ public class PerfilView extends TemplateView {
     private void setupProfileLayout() {
         JPanel profilePanel = new JPanel(null);
         profilePanel.setPreferredSize(new Dimension(400, 300));
-
-        ImageIcon imagemPerfil = (Helper.fisToImageIcon((Global.getCliente().getImagemPerfil())));
-        if(imagemPerfil == null){
+        ImageIcon imagemPerfil;
+        if(Global.pessoa instanceof Cliente) {
+            imagemPerfil = (Helper.fisToImageIcon((Global.getCliente().getImagemPerfil())));
+            if (imagemPerfil == null) {
+                imagemPerfil = Helper.fisToImageIcon((Global.database.getDefault().getImagemPerfil()));
+            }
+        }
+        else
+        {
             imagemPerfil = Helper.fisToImageIcon((Global.database.getDefault().getImagemPerfil()));
+
         }
         JLabel labelImagem = new JLabel(imagemPerfil);
         labelImagem.setBounds(320, 80, 100, 100);
