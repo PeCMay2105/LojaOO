@@ -75,11 +75,13 @@ public class PerfilView extends TemplateView {
 
         emailField.setBounds(350, 300, 100, 25);
         profilePanel.add(emailField);
+        if(Global.pessoa instanceof Cliente) {
+            editarDadosButton.setBounds(550, 422, 150, 25);
+            profilePanel.add(editarDadosButton);
 
-        editarDadosButton.setBounds(550, 422, 150, 25);
-        profilePanel.add(editarDadosButton);
-
+        }
         adicionarConteudo(profilePanel);
+
     }
 
     private void setupProfileEvents() {
