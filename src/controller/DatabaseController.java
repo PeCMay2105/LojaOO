@@ -681,9 +681,8 @@ public class DatabaseController {
             try {
                 var getblob = rs.getBytes("fotoPerfil");
                 File tempFile = File.createTempFile("tempfile", ".tmp");
-                tempFile.deleteOnExit(); // Garante que o arquivo será excluído após a execução
+                tempFile.deleteOnExit();
 
-                // Escrever os bytes no arquivo
                 try (FileOutputStream fos = new FileOutputStream(tempFile)) {
                     fos.write(getblob);
                 }
