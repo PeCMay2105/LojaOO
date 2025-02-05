@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -14,6 +16,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class cadastroClienteView extends TemplateView {
+
+    private FileInputStream fis;
+
     public cadastroClienteView(String titulo) {
         super(titulo);
         JPanel telaCadastroCliente = new JPanel(new GridBagLayout());
@@ -89,12 +94,26 @@ public class cadastroClienteView extends TemplateView {
         gbc.anchor = GridBagConstraints.CENTER;
         telaCadastroCliente.add(cadastrar, gbc);
 
+        JButton botaoImagem = new JButton("Foto de Perfil");
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        telaCadastroCliente.add(botaoImagem, gbc);
+
         JButton cancelar = new JButton("Cancelar");
         JButton ajuda = new JButton("Ajuda");
         adicionarConteudo(telaCadastroCliente);
         adicionarAoRodape(cancelar);
         adicionarAoRodape(ajuda);
 
+
+        botaoImagem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addImagem();
+            }
+        });
 
         botaoVoltar.addActionListener(new ActionListener() {
             @Override
@@ -162,7 +181,7 @@ public class cadastroClienteView extends TemplateView {
 
                 try {
                     ClienteController clienteController = new ClienteController();
-                    clienteController.criaCliente(nome, cpf, email, senha, Date.valueOf(dataNascimento));
+                    clienteController.criaCliente(nome, cpf, email, senha, Date.valueOf(dataNascimento),fis);
                     JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                     dispose();
                 } catch (SQLException ex) {
@@ -170,6 +189,21 @@ public class cadastroClienteView extends TemplateView {
                 }
             }
         });
+    }
+    void addImagem()
+    {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Escolha uma imagem");
+        int resultado = fileChooser.showOpenDialog(null);
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                fis = new FileInputStream(file);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 }

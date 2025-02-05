@@ -92,11 +92,5 @@ public class PerfilView extends TemplateView {
         });
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            Cliente cli= new Cliente("aranldo","25","penis12","oi", new Date(21,05,2004));
-            PerfilView tela = new PerfilView("Piroca",cli);
-            tela.setVisible(true);
-        });
-    }
+
 }

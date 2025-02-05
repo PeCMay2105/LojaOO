@@ -40,25 +40,11 @@ public abstract class Pessoa {
         return CPF;
     }
 
-    /**
-     * Define a imagem da pessoa.
-     *
-     * @param imagePath O caminho da imagem.
-     * @return O caminho da imagem.
-     */
-    public String setImagem(String imagePath) {
-        this.imagePath = imagePath;
-        return imagePath;
-    }
 
-    /**
-     * Retorna o caminho da imagem da pessoa.
-     *
-     * @return O caminho da imagem.
-     */
-    public String getImagem() {
-        return imagePath;
-    }
+
+
+
+
 
     /**
      * Define o CPF da pessoa.

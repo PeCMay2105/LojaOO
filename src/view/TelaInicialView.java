@@ -124,7 +124,7 @@ public class TelaInicialView extends TemplateView {
             // Opções disponíveis apenas para usuários logados
             if(usuarioAtual instanceof Cliente){
                 JLabel imagem = new JLabel();
-                imagem.setIcon(new ImageIcon(((Cliente) usuarioAtual).getImagem()));
+                imagem.setIcon(Helper.fisToImageIcon(((Cliente) usuarioAtual).getImagemPerfil()));
                 gbc.gridy++;
                 telaInicial.add(imagem, gbc);
 

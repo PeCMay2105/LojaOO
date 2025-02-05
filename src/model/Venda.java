@@ -183,4 +183,17 @@ public class Venda {
 
     public void setDigitosCartao(int digitosCartao) {
     }
+
+    public String toString() {
+        return "Venda{" +
+                "produto=" + produto +
+                ", produtos=" + produtos +
+                ", vendedor=" + vendedor +
+                ", quantidade=" + quantidade +
+                ", cliente=" + cliente +
+                ", valor=" + valor +
+                ", data=" + data +
+                ", valorTotal=" + valorTotal +
+                '}';
+    }
 }

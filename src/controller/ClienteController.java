@@ -2,6 +2,8 @@ package controller;
 
 import model.Cliente;
 import model.Global;
+
+import java.io.FileInputStream;
 import java.sql.Date;
 import java.sql.SQLException;
 import controller.Tabela;
@@ -23,8 +25,8 @@ public class ClienteController {
      * @param nascimento Data de nascimento do cliente
      * @throws SQLException
      */
-    public void criaCliente(String nome , String cpf, String email, String senha, Date nascimento) throws SQLException {
-        Cliente clienteDTO = new Cliente(nome,cpf,email,senha,nascimento);
+    public void criaCliente(String nome , String cpf, String email, String senha, Date nascimento, FileInputStream fis) throws SQLException {
+        Cliente clienteDTO = new Cliente(nome,cpf,email,senha,nascimento,fis);
         Global.setPessoa(clienteDTO);
         System.out.println("Global.pessoa: "+Global.getPessoa().getNome());
         try{

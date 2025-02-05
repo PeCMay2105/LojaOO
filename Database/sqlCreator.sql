@@ -94,4 +94,6 @@ CREATE TABLE Pagamento (
     FOREIGN KEY (ID_Pedido) REFERENCES Pedido(ID)
 );
 
-SELECT * FROM item_Carrinho WHERE ID_Carrinho = '06654505166'
+SELECT * FROM item_Carrinho WHERE ID_Carrinho = '06654505166';
+
+ALTER TABLE Cliente ADD COLUMN fotoPerfil BLOB;

@@ -197,40 +197,41 @@ public class ListaProdutosView extends TemplateView {
                     }
                 });
                 produtoLinha.add(editarButton, BorderLayout.WEST);
-            }
+            }else {
 
-            JButton adicionarButton = new JButton("Adicionar");
-            adicionarButton.setFont(new Font("Arial", Font.PLAIN, 12));
-            adicionarButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    System.out.println("exibir imagem");
-                    if (Global.pessoa instanceof Cliente) {
-                        System.out.println("é cliente");
-                        try {
+                JButton adicionarButton = new JButton("Adicionar");
+                adicionarButton.setFont(new Font("Arial", Font.PLAIN, 12));
+                adicionarButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.out.println("exibir imagem");
+                        if (Global.pessoa instanceof Cliente) {
+                            System.out.println("é cliente");
+                            try {
 
 
-                            carrinhoController.adicionarProduto(produto, 1);
-                            FileInputStream fis = produto.getImagem();
-                            byte[] bytes = fis.readAllBytes();
-                            ImageIcon imagem = new ImageIcon(bytes);
-                            Image img = imagem.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-                            imagem = new ImageIcon(img);
-                            JLabel label = new JLabel(imagem);
-                            System.out.println("IMAGEM TA SENDO EXIBIDA TEORICAMENTE");
-                            // Exibir no JOptionPane
-                            JOptionPane.showMessageDialog(null, label, "Imagem", JOptionPane.PLAIN_MESSAGE);
-                        } catch (Exception ex) {
-                            JOptionPane.showMessageDialog(null, produto.getNome() + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
-                            ex.printStackTrace();
-                            System.out.println("entrou no catch");
+                                carrinhoController.adicionarProduto(produto, 1);
+                                FileInputStream fis = produto.getImagem();
+                                byte[] bytes = fis.readAllBytes();
+                                ImageIcon imagem = new ImageIcon(bytes);
+                                Image img = imagem.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                                imagem = new ImageIcon(img);
+                                JLabel label = new JLabel(imagem);
+                                System.out.println("IMAGEM TA SENDO EXIBIDA TEORICAMENTE");
+                                // Exibir no JOptionPane
+                                JOptionPane.showMessageDialog(null, label, "Imagem", JOptionPane.PLAIN_MESSAGE);
+                            } catch (Exception ex) {
+                                JOptionPane.showMessageDialog(null, produto.getNome() + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
+                                ex.printStackTrace();
+                                System.out.println("entrou no catch");
 
+                            }
+                            atualizaPrecoTotal();
                         }
-                        atualizaPrecoTotal();
                     }
-                }
-            });
-            produtoLinha.add(adicionarButton, BorderLayout.EAST);
+                });
+                produtoLinha.add(adicionarButton, BorderLayout.EAST);
+            }
 
             produtosPanel.add(produtoLinha);
         }

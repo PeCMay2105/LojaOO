@@ -1,8 +1,11 @@
 package model;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -114,7 +117,7 @@ public class Helper {
                 String senha = rs.getString("Senha");
                 String email = rs.getString("Email");
 
-                cliente = new Cliente(nome, cpf, senha, email, nascimento);
+                cliente = new Cliente(nome, cpf, senha, email, nascimento, converterImagem(rs.getBlob("Imagem_Perfil")));
                 clientes.add(cliente);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -122,15 +125,61 @@ public class Helper {
         }
         return clientes;
     }
+    public static FileInputStream converterImagem(Blob blob){
+        FileInputStream fis = null;
+        try {
+            InputStream inputStream = blob.getBinaryStream();
+            if(inputStream != null) {
+                File tempFile = File.createTempFile("imagem", ".tmp");
+                FileOutputStream fos = new FileOutputStream(tempFile);
+                byte[] buffer = new byte[4096];
+                int bytesRead;
+                while ((bytesRead = inputStream.read(buffer)) != -1) {
+                    fos.write(buffer, 0, bytesRead);
+                }
+                fos.close();
+                inputStream.close();
+                fis = new FileInputStream(tempFile);
+            }
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+        return fis;
+    }
+
+    public static ImageIcon fisToImageIcon(FileInputStream fis){
+        try {
+            // Criar um FileInputStream a partir de um arquivo de imagem
+
+            // Converter FileInputStream para um array de bytes
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            byte[] dados = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(dados)) != -1) {
+                buffer.write(dados, 0, bytesRead);
+            }
+            fis.close();
+
+            // Criar um ImageIcon a partir dos bytes
+            ImageIcon imageIcon = new ImageIcon(buffer.toByteArray());
+
+            // Redimensionar a imagem (opcional)
+            Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(image);
+            return resizedIcon;
+        }
+        catch (IOException e) {}
+    return null;
+    }
 
 
-    /**
-     * Converte um ResultSet em uma lista de vendedores.
-     *
-     * @param rs O ResultSet a ser convertido.
-     * @return Uma lista de vendedores.
-     * @throws SQLException Se ocorrer um erro ao acessar o ResultSet.
-     */
+            /**
+             * Converte um ResultSet em uma lista de vendedores.
+             *
+             * @param rs O ResultSet a ser convertido.
+             * @return Uma lista de vendedores.
+             * @throws SQLException Se ocorrer um erro ao acessar o ResultSet.
+             */
 
 
     public static List<Vendedor> converterVendedores(ResultSet rs) throws SQLException {

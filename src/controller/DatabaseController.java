@@ -268,9 +268,10 @@ public class DatabaseController {
      * @throws SQLException
      */
     public int cadastrar(Cliente cliente) throws SQLException {
-        String insertCliente = "INSERT INTO Cliente (CPF,Endereco) VALUES (?,?)";
+        String insertCliente = "INSERT INTO Cliente (CPF,Endereco) VALUES (?,?,?)";
         String insertPessoa = "INSERT INTO Pessoa (CPF,Nome,Email,Senha,Data_Nascimento) VALUES (?,?,?,?,?)";
         String insertCarrinho = "INSERT INTO Carrinho (ID,Data_Criacao) VALUES (?,?)";
+
         try {
             PreparedStatement stmtPessoa = conn.prepareStatement(insertPessoa);
             PreparedStatement stmtCliente = conn.prepareStatement(insertCliente);
@@ -283,7 +284,22 @@ public class DatabaseController {
             stmtPessoa.setString(4, cliente.getSenha());
 
             stmtCliente.setString(1, cliente.getCPF());
+            try {
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+                byte[] data = new byte[4096];
+                int bytesRead;
+                FileInputStream fis = cliente.getImagemPerfil();
+                while ((bytesRead = fis.read(data, 0, data.length)) != -1) {
+                    buffer.write(data, 0, bytesRead);
+                }
 
+                byte[] imagemBytes = buffer.toByteArray();
+                fis.close();
+                stmtCliente.setBytes(3, imagemBytes);
+
+            }
+            catch (Exception e) {
+            }
             stmtCarrinho.setString(1,cliente.getCPF());
             stmtCarrinho.setDate(2, new Date(1));
 
@@ -354,13 +370,30 @@ public class DatabaseController {
             stmt = conn.prepareStatement(sqlCliente);
             stmt.setString(1, login);
             rs = stmt.executeQuery();
+            FileInputStream fis = null;
+            try {
+                var getblob = rs.getBytes("Imagem");
+                File tempFile = File.createTempFile("tempfile", ".tmp");
+                tempFile.deleteOnExit(); // Garante que o arquivo será excluído após a execução
+
+                // Escrever os bytes no arquivo
+                try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                    fos.write(getblob);
+                }
+
+                // Criar FileInputStream a partir do arquivo
+                 fis = new FileInputStream(tempFile);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             if (rs.next()) {
                 list.add(new Cliente(
                         rs.getString("Nome"),
                         rs.getString("CPF"),
                         rs.getString("Email"),
                         rs.getString("Senha"),
-                        rs.getDate("Data_Nascimento")
+                        rs.getDate("Data_Nascimento"),
+                        fis
                 ));
                 return list; // Retorna imediatamente se encontrar um cliente
             }

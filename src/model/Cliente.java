@@ -1,4 +1,5 @@
 package model;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.sql.Date;
 
@@ -10,6 +11,8 @@ public class Cliente extends Pessoa{
 
     private String login;
     private String senha;
+
+    private FileInputStream imagemPerfil;
     private boolean possuiCartao;
     private ArrayList<String> carteira;
     private String telefone;
@@ -35,7 +38,7 @@ public class Cliente extends Pessoa{
     }
 
     /**
-     * Construtor da classe Cliente.
+     * Segundo construtor da classe Cliente.
      *
      * @param nome O nome do cliente.
      * @param CPF O CPF do cliente.
@@ -43,9 +46,10 @@ public class Cliente extends Pessoa{
      * @param senha A senha do cliente.
      * @param nascimento A data de nascimento do cliente.
      */
-    public Cliente(String nome, String CPF, String login, String senha, Date nascimento){
+    public Cliente(String nome, String CPF, String login, String senha, Date nascimento,FileInputStream imagem){
         super(nome, CPF, nascimento);
         System.out.println("Nome: " + nome + "\nCPF: " + CPF);
+        this.imagemPerfil = imagem;
         this.login = login;
         this.possuiCartao = false;
         this.senha = senha;
@@ -181,4 +185,9 @@ public class Cliente extends Pessoa{
             return 1;
         }
     }
+
+    public FileInputStream getImagemPerfil(){
+        return imagemPerfil;
+    }
+
 }

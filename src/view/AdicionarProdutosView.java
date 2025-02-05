@@ -1,4 +1,5 @@
 package view;
+
 import controller.VendedorController;
 import model.*;
 
@@ -13,171 +14,123 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.HashMap;
 
-/**
- * Classe que representa a interface gráfica para adicionar produtos.
- */
 public class AdicionarProdutosView extends TemplateView {
 
     private Vendedor vendedor;
-    private JTextField campoNome;
-    private JTextField campoPreco;
-    private JTextField campoEstoque;
+    private JTextField campoNome, campoPreco, campoEstoque;
     private JTextArea campoDescricao;
     private JComboBox<String> campoCategoria;
-    private JButton botaoPublicar;
+    private JButton botaoPublicar, botaoImagem;
     private JLabel caracteresRestantes;
     private VendedorController vendedorController;
     private FileInputStream fis;
-    private JButton botaoImagem;
-    private final int MAX_DESCRICAO = 280; // Similar ao limite do Twitter
+    private static final int MAX_DESCRICAO = 280;
 
-    /**
-     * Construtor da classe AdicionarProdutosView.
-     *
-     * @param titulo O título da janela.
-     * @param vendedor O vendedor atual.
-     */
     public AdicionarProdutosView(String titulo, Vendedor vendedor) {
         super(titulo);
         this.vendedor = vendedor;
         this.vendedorController = new VendedorController();
 
         JPanel painelPrincipal = new JPanel();
-        painelPrincipal.setLayout(new BoxLayout(painelPrincipal, BoxLayout.Y_AXIS));
+        painelPrincipal.setLayout(new GridBagLayout());
         painelPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         painelPrincipal.setBackground(Color.WHITE);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
 
-        // Cabeçalho
-        JLabel headerLabel = new JLabel("Novo Produto");
+        JLabel headerLabel = new JLabel("Novo Produto", SwingConstants.CENTER);
         headerLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        headerLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        painelPrincipal.add(headerLabel);
-        painelPrincipal.add(Box.createRigidArea(new Dimension(0, 20)));
+        painelPrincipal.add(headerLabel, gbc);
 
-        // Campo Nome
-        JPanel painelNome = criarPainelCampo("Nome do produto");
-        campoNome = new JTextField();
-        campoNome.setPreferredSize(new Dimension(350, 35));
-        painelNome.add(campoNome);
-        painelPrincipal.add(painelNome);
+        gbc.gridy++;
+        painelPrincipal.add(criarPainelCampo("Nome do Produto", campoNome = new JTextField()), gbc);
 
-        // Botao imagem
-        JPanel painelImagem = criarPainelCampo("Imagem do produto");
-        botaoImagem = new JButton();
-        botaoImagem.setPreferredSize(new Dimension(350, 35));
-        painelImagem.add(botaoImagem);
-        painelPrincipal.add(botaoImagem);
-        botaoImagem.addActionListener(e -> {
-            addImagem();
-        });
-
-
-        // Campo Preço
-        JPanel painelPreco = criarPainelCampo("Preço (R$)");
-        campoPreco = new JTextField();
-        campoPreco.setPreferredSize(new Dimension(150, 35));
-        // Permite apenas números e um ponto decimal
+        gbc.gridy++;
+        painelPrincipal.add(criarPainelCampo("Preço (R$)", campoPreco = new JTextField()), gbc);
         campoPreco.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
                 char c = e.getKeyChar();
-                if (!((c >= '0' && c <= '9') || c == '.' || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE)) {
+                if (!Character.isDigit(c) && c != '.' && c != KeyEvent.VK_BACK_SPACE) {
                     e.consume();
                 }
             }
         });
-        painelPreco.add(campoPreco);
-        painelPrincipal.add(painelPreco);
 
-        // Campo Estoque
-        JPanel painelEstoque = criarPainelCampo("Quantidade em estoque");
-        campoEstoque = new JTextField();
-        campoEstoque.setPreferredSize(new Dimension(100, 35));
-        // Permite apenas números
+        gbc.gridy++;
+        painelPrincipal.add(criarPainelCampo("Quantidade em Estoque", campoEstoque = new JTextField()), gbc);
         campoEstoque.addKeyListener(new KeyAdapter() {
             public void keyTyped(KeyEvent e) {
-                char c = e.getKeyChar();
-                if (!Character.isDigit(c) && c != KeyEvent.VK_BACK_SPACE && c != KeyEvent.VK_DELETE) {
+                if (!Character.isDigit(e.getKeyChar())) {
                     e.consume();
                 }
             }
         });
-        painelEstoque.add(campoEstoque);
-        painelPrincipal.add(painelEstoque);
 
-        // Campo Categoria
-        JPanel painelCategoria = criarPainelCampo("Categoria");
-        String[] categorias = {"Eletrônicos", "Roupas", "Acessórios", "Livros", "Casa", "Outros"};
-        campoCategoria = new JComboBox<>(categorias);
-        campoCategoria.setPreferredSize(new Dimension(200, 35));
-        painelCategoria.add(campoCategoria);
-        painelPrincipal.add(painelCategoria);
+        gbc.gridy++;
+        campoCategoria = new JComboBox<>(new String[]{"Eletrônicos", "Roupas", "Acessórios", "Livros", "Casa", "Outros"});
+        painelPrincipal.add(criarPainelCampo("Categoria", campoCategoria), gbc);
 
-        // Campo Descrição
-        JPanel painelDescricao = criarPainelCampo("Descrição do produto");
+        gbc.gridy++;
+        painelPrincipal.add(criarPainelDescricao(), gbc);
+
+        gbc.gridy++;
+        botaoImagem = new JButton("Adicionar Imagem");
+        botaoImagem.setPreferredSize(new Dimension(350, 40));
+        botaoImagem.addActionListener(e -> addImagem());
+        painelPrincipal.add(botaoImagem, gbc);
+
+        gbc.gridy++;
+        botaoPublicar = new JButton("Publicar");
+        botaoPublicar.setPreferredSize(new Dimension(120, 40));
+        botaoPublicar.setBackground(new Color(29, 161, 242));
+        botaoPublicar.setForeground(Color.WHITE);
+        botaoPublicar.setBorderPainted(false);
+        botaoPublicar.addActionListener(e -> publicarProduto());
+
+        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        painelBotoes.setBackground(Color.WHITE);
+        painelBotoes.add(botaoPublicar);
+        painelPrincipal.add(painelBotoes, gbc);
+
+        adicionarConteudo(painelPrincipal);
+    }
+
+    private JPanel criarPainelCampo(String labelText, JComponent campo) {
+        JPanel painel = new JPanel(new BorderLayout());
+        painel.setBackground(Color.WHITE);
+        JLabel label = new JLabel(labelText);
+        label.setFont(new Font("Arial", Font.PLAIN, 14));
+        painel.add(label, BorderLayout.NORTH);
+        painel.add(campo, BorderLayout.CENTER);
+        return painel;
+    }
+
+    private JPanel criarPainelDescricao() {
+        JPanel painel = new JPanel(new BorderLayout());
+        painel.setBackground(Color.WHITE);
+        JLabel label = new JLabel("Descrição do Produto");
+        label.setFont(new Font("Arial", Font.PLAIN, 14));
+        painel.add(label, BorderLayout.NORTH);
+
         campoDescricao = new JTextArea();
         campoDescricao.setLineWrap(true);
         campoDescricao.setWrapStyleWord(true);
-        JScrollPane scrollDescricao = new JScrollPane(campoDescricao);
-        scrollDescricao.setPreferredSize(new Dimension(350, 100));
-        scrollDescricao.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+        JScrollPane scroll = new JScrollPane(campoDescricao);
+        scroll.setPreferredSize(new Dimension(350, 100));
+        painel.add(scroll, BorderLayout.CENTER);
 
-        // Contador de caracteres
-        caracteresRestantes = new JLabel(MAX_DESCRICAO + " caracteres restantes");
+        caracteresRestantes = new JLabel(MAX_DESCRICAO + " caracteres restantes", SwingConstants.RIGHT);
         caracteresRestantes.setForeground(Color.GRAY);
         campoDescricao.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) { atualizarContador(); }
             public void insertUpdate(DocumentEvent e) { atualizarContador(); }
             public void removeUpdate(DocumentEvent e) { atualizarContador(); }
         });
-
-        painelDescricao.add(scrollDescricao);
-        painelDescricao.add(caracteresRestantes);
-        painelPrincipal.add(painelDescricao);
-
-        // Botão Publicar
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        painelBotoes.setBackground(Color.WHITE);
-        botaoPublicar = new JButton("Publicar");
-        botaoPublicar.setPreferredSize(new Dimension(120, 40));
-        botaoPublicar.setBackground(new Color(29, 161, 242)); // Azul do Twitter
-        botaoPublicar.setForeground(Color.WHITE);
-        botaoPublicar.setFocusPainted(false);
-        botaoPublicar.setBorderPainted(false);
-        botaoPublicar.addActionListener(e -> publicarProduto());
-        painelBotoes.add(botaoPublicar);
-        painelPrincipal.add(painelBotoes);
-
-        adicionarConteudo(painelPrincipal);
-
-        // Botão Voltar no rodapé
-        JButton botaoVoltar = new JButton("Voltar");
-        botaoVoltar.addActionListener(e -> {
-            new TelaInicialView("Início",true, vendedor).setVisible(true);
-            dispose();
-        });
-        adicionarAoRodape(botaoVoltar);
-    }
-
-    /**
-     * Cria um painel para um campo de entrada.
-     *
-     * @param labelText O texto do rótulo do campo.
-     * @return O painel criado.
-     */
-    private JPanel criarPainelCampo(String labelText) {
-        JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.setAlignmentX(Component.LEFT_ALIGNMENT);
-        painel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-        painel.setBackground(Color.WHITE);
-
-        JLabel label = new JLabel(labelText);
-        label.setFont(new Font("Arial", Font.PLAIN, 14));
-        label.setAlignmentX(Component.LEFT_ALIGNMENT);
-        painel.add(label);
-        painel.add(Box.createRigidArea(new Dimension(0, 5)));
+        painel.add(caracteresRestantes, BorderLayout.SOUTH);
 
         return painel;
     }
