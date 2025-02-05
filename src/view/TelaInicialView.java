@@ -123,10 +123,6 @@ public class TelaInicialView extends TemplateView {
         if (usuarioLogado) {
             // Opções disponíveis apenas para usuários logados
             if(usuarioAtual instanceof Cliente){
-                JLabel imagem = new JLabel();
-                imagem.setIcon(Helper.fisToImageIcon(((Cliente) usuarioAtual).getImagemPerfil()));
-                gbc.gridy++;
-                telaInicial.add(imagem, gbc);
 
             JButton verProdutos = new JButton("Ver produtos");
             ajustarBotao(verProdutos, gbc, telaInicial);

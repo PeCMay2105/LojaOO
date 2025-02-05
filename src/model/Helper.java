@@ -164,7 +164,8 @@ public class Helper {
             ImageIcon imageIcon = new ImageIcon(buffer.toByteArray());
 
             // Redimensionar a imagem (opcional)
-            Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+            Image image = imageIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+
             ImageIcon resizedIcon = new ImageIcon(image);
             return resizedIcon;
         }

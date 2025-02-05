@@ -1,9 +1,6 @@
 package view;
 
-import model.Cliente;
-import model.Global;
-import model.Pessoa;
-import model.Vendedor;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -50,7 +47,7 @@ public class PerfilView extends TemplateView {
         JPanel profilePanel = new JPanel(null);
         profilePanel.setPreferredSize(new Dimension(400, 300));
 
-        ImageIcon imagemPerfil = new ImageIcon("C:\\Users\\Usuário\\Downloads\\download.png");
+        ImageIcon imagemPerfil = (Helper.fisToImageIcon((Global.getCliente().getImagemPerfil())));
         JLabel labelImagem = new JLabel(imagemPerfil);
         labelImagem.setBounds(320, 80, 100, 100);
         profilePanel.add(labelImagem);
@@ -91,6 +88,7 @@ public class PerfilView extends TemplateView {
             }
         });
     }
+
 
 
 }

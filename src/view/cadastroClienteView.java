@@ -87,6 +87,13 @@ public class cadastroClienteView extends TemplateView {
         gbc.gridx = 1;
         telaCadastroCliente.add(campoTelefone, gbc);
 
+        JButton botaoImagem = new JButton("Foto de Perfil");
+        gbc.gridy++;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        telaCadastroCliente.add(botaoImagem, gbc);
+
         JButton cadastrar = new JButton("Cadastrar");
         gbc.gridy++;
         gbc.gridx = 0;
@@ -94,12 +101,6 @@ public class cadastroClienteView extends TemplateView {
         gbc.anchor = GridBagConstraints.CENTER;
         telaCadastroCliente.add(cadastrar, gbc);
 
-        JButton botaoImagem = new JButton("Foto de Perfil");
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        telaCadastroCliente.add(botaoImagem, gbc);
 
         JButton cancelar = new JButton("Cancelar");
         JButton ajuda = new JButton("Ajuda");

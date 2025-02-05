@@ -268,7 +268,7 @@ public class DatabaseController {
      * @throws SQLException
      */
     public int cadastrar(Cliente cliente) throws SQLException {
-        String insertCliente = "INSERT INTO Cliente (CPF,Endereco) VALUES (?,?,?)";
+        String insertCliente = "INSERT INTO Cliente (CPF,Endereco,fotoPerfil) VALUES (?,?,?)";
         String insertPessoa = "INSERT INTO Pessoa (CPF,Nome,Email,Senha,Data_Nascimento) VALUES (?,?,?,?,?)";
         String insertCarrinho = "INSERT INTO Carrinho (ID,Data_Criacao) VALUES (?,?)";
 
@@ -352,13 +352,13 @@ public class DatabaseController {
      * @throws SQLException
      */
     public List<Object> GetPessoaByLogin(String login) throws SQLException {
-        String sqlCliente = "SELECT c.CPF, p.Nome, p.Data_Nascimento, p.Telefone, p.Email, p.Senha " +
+        String sqlCliente = "SELECT *" +
                 "FROM Cliente c INNER JOIN Pessoa p ON c.CPF = p.CPF WHERE p.Email = ?";
 
-        String sqlFuncionario = "SELECT f.CPF, p.Email, p.Nome, p.Senha, f.Comissao, f.Salario, p.Data_Nascimento " +
+        String sqlFuncionario = "SELECT * " +
                 "FROM Vendedor f INNER JOIN Pessoa p ON f.CPF = p.CPF WHERE p.Email = ?";
 
-        String sqlAdmin = "SELECT a.CPF, p.Email, p.Nome, p.Senha, a.Salario, p.Data_Nascimento " +
+        String sqlAdmin = "SELECT * " +
                 "FROM Administrador a INNER JOIN Pessoa p ON a.CPF = p.CPF WHERE p.Email = ?";
 
         PreparedStatement stmt = null;
@@ -372,7 +372,7 @@ public class DatabaseController {
             rs = stmt.executeQuery();
             FileInputStream fis = null;
             try {
-                var getblob = rs.getBytes("Imagem");
+                var getblob = rs.getBytes("fotoPerfil");
                 File tempFile = File.createTempFile("tempfile", ".tmp");
                 tempFile.deleteOnExit(); // Garante que o arquivo será excluído após a execução
 
