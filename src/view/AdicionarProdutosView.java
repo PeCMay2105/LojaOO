@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -26,6 +29,8 @@ public class AdicionarProdutosView extends TemplateView {
     private JButton botaoPublicar;
     private JLabel caracteresRestantes;
     private VendedorController vendedorController;
+    private FileInputStream fis;
+    private JButton botaoImagem;
     private final int MAX_DESCRICAO = 280; // Similar ao limite do Twitter
 
     /**
@@ -57,6 +62,17 @@ public class AdicionarProdutosView extends TemplateView {
         campoNome.setPreferredSize(new Dimension(350, 35));
         painelNome.add(campoNome);
         painelPrincipal.add(painelNome);
+
+        // Botao imagem
+        JPanel painelImagem = criarPainelCampo("Imagem do produto");
+        botaoImagem = new JButton();
+        botaoImagem.setPreferredSize(new Dimension(350, 35));
+        painelImagem.add(botaoImagem);
+        painelPrincipal.add(botaoImagem);
+        botaoImagem.addActionListener(e -> {
+            addImagem();
+        });
+
 
         // Campo Preço
         JPanel painelPreco = criarPainelCampo("Preço (R$)");
@@ -244,6 +260,7 @@ public class AdicionarProdutosView extends TemplateView {
                 preco,
                 estoque,
                 descricao,
+                fis,
                 campoCategoria.getSelectedItem().toString()
         );
 
@@ -258,4 +275,20 @@ public class AdicionarProdutosView extends TemplateView {
         new TelaInicialView("Início", true, vendedor).setVisible(true);
         dispose();
     }
+    void addImagem()
+    {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Escolha uma imagem");
+        int resultado = fileChooser.showOpenDialog(null);
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try {
+                fis = new FileInputStream(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 }

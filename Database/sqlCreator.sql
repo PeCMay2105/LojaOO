@@ -26,6 +26,7 @@ CREATE TABLE Vendedor (
     Salario FLoat,
     Comissao Float,
     Avaliacao Float,
+    imagem BLOB,
     PRIMARY KEY (CPF),
     FOREIGN KEY (CPF) REFERENCES Pessoa(CPF)
 );

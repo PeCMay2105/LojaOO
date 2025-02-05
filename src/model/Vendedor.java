@@ -118,8 +118,8 @@ public class Vendedor extends Pessoa {
      * @return A venda realizada.
      */
     public Venda vende(Produto produto, Cliente cliente, int quantidade) {
-        Map<Produto, Float> produtos = new HashMap<>();
-        produtos.put(produto, (produto.getPreco()));
+        Map<Produto, Integer> produtos = new HashMap<>();
+        produtos.put(produto, quantidade);
 
         float valorTotal = produto.getPreco() * quantidade;
         Date now = new Date(new java.util.Date().getTime());

@@ -1,5 +1,8 @@
 package model;
 
+import java.io.File;
+import java.io.FileInputStream;
+
 /**
  * Classe que representa um produto.
  */
@@ -10,7 +13,7 @@ public class Produto {
     private int estoque;
     private String descricao;
     private String categoria;
-
+    private FileInputStream imagem;
     /**
      * Construtor da classe Produto.
      *
@@ -37,14 +40,37 @@ public class Produto {
      * @param preco O preço do produto.
      * @param estoque A quantidade em estoque do produto.
      * @param descricao A descrição do produto.
+     * @param fis A imagem do produto
      * @param categoria A categoria do produto.
      */
-    public Produto(String nome, float preco, int estoque, String descricao, String categoria) {
+    public Produto(String nome, float preco, int estoque, String descricao, FileInputStream fis, String categoria) {
         this.nome = nome;
         this.preco = preco;
         this.estoque = estoque;
         this.descricao = descricao;
         this.categoria = categoria;
+        this.imagem = fis;
+    }
+
+    /**
+     * Construtor da classe Produto.
+     *
+     * @param id O id do produto
+     * @param nome O nome do produto.
+     * @param preco O preço do produto.
+     * @param estoque A quantidade em estoque do produto.
+     * @param descricao A descrição do produto.
+     * @param fis A imagem do produto
+     * @param categoria A categoria do produto.
+     */
+    public Produto(int id,String nome, float preco, int estoque, String descricao, FileInputStream fis, String categoria) {
+        this.id = id;
+        this.nome = nome;
+        this.preco = preco;
+        this.estoque = estoque;
+        this.descricao = descricao;
+        this.categoria = categoria;
+        this.imagem = fis;
     }
 
     /**
@@ -155,4 +181,12 @@ public class Produto {
     public String getCategoria() {
         return categoria;
     }
+
+    /**
+     * Retorna a imagem do produto
+     *
+     * @return a imagem do produto
+     */
+    public FileInputStream getImagem() {return imagem;}
+
 }

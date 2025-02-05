@@ -18,7 +18,6 @@ public class PessoaController {
      */
     public PessoaController() {
     }
-
     /**
      * Busca uma pessoa no banco de dados pelo login.
      *

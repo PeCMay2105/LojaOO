@@ -1,7 +1,7 @@
 package view;
 
 import model.Produto;
-
+import  java.io.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -16,6 +16,7 @@ public class CadastroProdutoView extends TemplateView {
     private JTextField campoId;
     private JTextField campoMarca;
     private JButton botaoSalvar;
+    private JButton botaoImagem;
 
     /**
      * Construtor da classe CadastroProdutoView.
@@ -46,6 +47,11 @@ public class CadastroProdutoView extends TemplateView {
         botaoSalvar = new JButton("Salvar");
         adicionarAoRodape(botaoSalvar);
 
+        botaoImagem = new JButton("Imagem");
+
+
+
+
         adicionarConteudo(labelNome);
         adicionarConteudo(campoNome);
         adicionarConteudo(labelPreco);
@@ -54,6 +60,7 @@ public class CadastroProdutoView extends TemplateView {
         adicionarConteudo(campoId);
         adicionarConteudo(labelMarca);
         adicionarConteudo(campoMarca);
+        adicionarConteudo(botaoImagem);
 
         botaoSalvar.addActionListener(this::salvarProduto);
     }

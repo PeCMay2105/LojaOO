@@ -4,10 +4,7 @@ import controller.DatabaseController;
 import controller.Tabela;
 import controller.VendaController;
 import controller.VendedorController;
-import model.Helper;
-import model.Pessoa;
-import model.Venda;
-import model.Vendedor;
+import model.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 public class FinalizacaoView extends TemplateView {
-    private JComboBox<Vendedor> vendedorComboBox;
+    private JComboBox<String> vendedorComboBox;
     private JLabel valorFinalLabel;
     private VendaController vendaController;
 
@@ -42,9 +39,8 @@ public class FinalizacaoView extends TemplateView {
 
         vendedorComboBox = new JComboBox<>();
         try{
-            DatabaseController db = new DatabaseController();
             try {
-                List<Vendedor> vendedores = Helper.converterVendedores(db.consulta(Tabela.vendedor)); /// Substituir pela função que requisita todos os vendedores
+                List<Vendedor> vendedores = Global.database.getVendedores();
                 this.vendedores = vendedores;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -54,7 +50,7 @@ public class FinalizacaoView extends TemplateView {
         }
 
         for (Vendedor vendedor : vendedores) {
-            vendedorComboBox.addItem(vendedor);
+            vendedorComboBox.addItem(vendedor.getNome());
         }
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -65,7 +61,7 @@ public class FinalizacaoView extends TemplateView {
         gbc.gridy = 1;
         add(valorLabel, gbc);
 
-        valorFinalLabel = new JLabel(String.format("R$ %.2f", vendaController.obterValorFinal()));
+        valorFinalLabel = new JLabel(String.format("R$ %.2f", vendaController.obterValorFinal(Global.pessoa.getCPF())));
         gbc.gridx = 1;
         gbc.gridy = 1;
         add(valorFinalLabel, gbc);
@@ -84,27 +80,36 @@ public class FinalizacaoView extends TemplateView {
     }
 
     private void finalizarCompra() {
-        Vendedor vendedor = (Vendedor) vendedorComboBox.getSelectedItem();
-        double valorFinal = vendaController.obterValorFinal();
-
-        // Lógica para gerar e baixar o recibo
-        String recibo = String.format("Recibo\n\nVendedor: %s\nValor Final: R$ %.2f", vendedor.getNome(), valorFinal);
-        JOptionPane.showMessageDialog(this, recibo, "Recibo", JOptionPane.INFORMATION_MESSAGE);
-        Venda vendaAtual = vendaController.cadastrarVenda(vendedor, digitosCartao, new Date());
-        // Código para baixar o recibo
         try {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Salvar Recibo");
-            int userSelection = fileChooser.showSaveDialog(this);
-            if (userSelection == JFileChooser.APPROVE_OPTION) {
-                File fileToSave = fileChooser.getSelectedFile();
-                try (FileWriter writer = new FileWriter(fileToSave)) {
-                    writer.write(recibo);
+            Vendedor vendedor = Global.database.getVendedoresByQuery((String) vendedorComboBox.getSelectedItem()).getFirst();
+
+            double valorFinal = vendaController.obterValorFinal(Global.pessoa.getCPF());
+
+            // Lógica para gerar e baixar o recibo
+            String recibo = String.format("Recibo\n\nVendedor: %s\nValor Final: R$ %.2f", vendedor.getNome(), valorFinal);
+            JOptionPane.showMessageDialog(this, recibo, "Recibo", JOptionPane.INFORMATION_MESSAGE);
+            Venda vendaAtual = vendaController.cadastrarVenda(vendedor, digitosCartao, new Date());
+            // Código para baixar o recibo
+            try {
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setDialogTitle("Salvar Recibo");
+                int userSelection = fileChooser.showSaveDialog(this);
+                if (userSelection == JFileChooser.APPROVE_OPTION) {
+                    File fileToSave = fileChooser.getSelectedFile();
+                    try (FileWriter writer = new FileWriter(fileToSave)) {
+                        writer.write(recibo);
+                    }
+                    JOptionPane.showMessageDialog(this, "Recibo salvo com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                    Global.database.limparCarrinhoByCpf(Global.pessoa.getCPF());
+                    dispose();
                 }
-                JOptionPane.showMessageDialog(this, "Recibo salvo com sucesso.", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Erro ao salvar recibo.", "Erro", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Erro ao salvar recibo.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 }

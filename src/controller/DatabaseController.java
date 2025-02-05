@@ -3,10 +3,9 @@ import model.*;
 
 import java.sql.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.EmptyStackException;
-import java.util.HashMap;
-import java.util.List;
+import java.sql.Date;
+import java.util.*;
+import java.io.*;
 
 import static model.Global.database;
 
@@ -478,10 +477,28 @@ public class DatabaseController {
         stmt.setDouble(2, produto.getPreco());
         stmt.setInt(3, produto.getEstoque());
         stmt.setString(4,produto.getDescricao());
-        //stmt.setBlob();
+        try {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            byte[] data = new byte[4096];
+            int bytesRead;
+            FileInputStream fis = produto.getImagem();
+            while ((bytesRead = fis.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, bytesRead);
+            }
+
+            byte[] imagemBytes = buffer.toByteArray();
+            fis.close();
+            stmt.setBytes(5, imagemBytes);
+
+        }
+        catch (Exception e) {
+
+        }
         stmt.setString(6,vendedor.getCPF());
         stmt.setString(7, produto.getCategoria());
         stmt.setInt(8, produto.getEstoque());
+        System.out.println(stmt.toString());
+        System.out.println("preco = "+produto.getPreco());
         stmt.executeUpdate();
         stmt.close();
     }
@@ -579,7 +596,50 @@ public class DatabaseController {
             e.printStackTrace();
         }
     }
+    public List<Vendedor> getVendedores()
+    {
+        String sqlSelect = "SELECT * FROM Vendedor inner join Pessoa on Vendedor.CPF = Pessoa.CPF";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sqlSelect);
+            ResultSet rs = stmt.executeQuery();
+            return Helper.converterVendedores(rs);
+
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public Float getValorTotal(String cpf) throws SQLException {
+        String sqlSelect = "SELECT quantidade,Preco FROM item_Carrinho inner join Produto WHERE ID_Carrinho = '"+cpf+"'";
+        PreparedStatement stmt = conn.prepareStatement(sqlSelect);
+        ResultSet rs = stmt.executeQuery();
+        Float vt = 0f;
+        while (rs.next()) {
+
+            Integer quantidade = rs.getInt("quantidade");
+            Float preco = rs.getFloat("Preco");
+            vt+=preco*quantidade;
+        }
+
+        return vt;
+    }
+    public void limparCarrinhoByCpf(String cpf)
+    {
+        try {
+
+
+            String sqlRemove = "DELETE FROM item_carrinho WHERE ID_Carrinho = ?";
+            PreparedStatement removeStmt = conn.prepareStatement(sqlRemove);
+            removeStmt.setString(1, cpf);
+            removeStmt.executeUpdate();
+            removeStmt.close();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
+
 
 
 

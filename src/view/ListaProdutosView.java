@@ -3,7 +3,6 @@ package view;
 import controller.CarrinhoController;
 import controller.Tabela;
 import model.*;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,6 +11,10 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import model.Helper;
+import java.io.*;
+
+import org.w3c.dom.ls.LSOutput;
+
 
 import static java.util.logging.Logger.global;
 
@@ -62,39 +65,7 @@ public class ListaProdutosView extends TemplateView {
         }
 
         // Adicionar produtos ao painel
-        for (Produto produto : produtos) {
-            JPanel produtoLinha = new JPanel(new BorderLayout());
-            produtoLinha.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-
-            JLabel nomeProduto = new JLabel(produto.getNome() + " - R$ " + String.format("%.2f", produto.getPreco()));
-            nomeProduto.setFont(new Font("Arial", Font.PLAIN, 14));
-            produtoLinha.add(nomeProduto, BorderLayout.CENTER);
-
-            if (Global.pessoa instanceof Vendedor) {
-                JButton editarButton = new JButton("Editar");
-                editarButton.setFont(new Font("Arial", Font.PLAIN, 12));
-                editarButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        new EditarProdutoView("Editar Produto", produto).setVisible(true);
-                    }
-                });
-                produtoLinha.add(editarButton, BorderLayout.WEST);
-            }
-
-            JButton adicionarButton = new JButton("Adicionar");
-            adicionarButton.setFont(new Font("Arial", Font.PLAIN, 12));
-            adicionarButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    // Add product to cart
-                }
-            });
-            produtoLinha.add(adicionarButton, BorderLayout.EAST);
-
-            produtosPanel.add(produtoLinha);
-        }
-
+        adicionarProdutoPainel(produtos);
         // ScrollPane para a lista de produtos
         scrollPane = new JScrollPane(produtosPanel);
         scrollPane.setBounds(50, 70, 370, 400);
@@ -104,8 +75,10 @@ public class ListaProdutosView extends TemplateView {
         verCarrinho = null;
         if (Global.pessoa instanceof Cliente) {
             try {
-                verCarrinho = new JButton("Ver Carrinho");
-                verCarrinho.setBounds(50, 500, 150, 30);
+                quantidadeCarrinho = Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF());
+
+                verCarrinho = new JButton("Ver carrinho(" + Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF()) + ")");
+                verCarrinho.setBounds(50, 570, 200, 50);
                 add(verCarrinho);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -125,11 +98,14 @@ public class ListaProdutosView extends TemplateView {
 
         // Ação do botão Ver Carrinho
         if (Global.pessoa instanceof Cliente) {
-            JButton finalVerCarrinho = verCarrinho;
+            //JButton finalVerCarrinho = verCarrinho;
+
             verCarrinho.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // View cart action
+                    TemplateView carrinhoView = new CarrinhoView("Carrinho", userData);
+                    carrinhoView.setVisible(true);
+                    dispose();
                 }
             });
         }
@@ -175,6 +151,31 @@ public class ListaProdutosView extends TemplateView {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        adicionarProdutoPainel(produtos);
+    }
+    private void atualizaPrecoTotal() {
+        if (carrinhoController != null) {
+            double total = carrinhoController.getCarrinho().calcularValorTotal();
+            totalPriceLabel.setText(String.format("Total: R$ %.2f", total));
+            try {
+                quantidadeCarrinho = Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF());
+                verCarrinho.setText("Ver carrinho(" + Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF()) + ")");
+
+
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public static void main(String[] args) {
+        TemplateView tela = new ListaProdutosView("Lista de Produtos");
+        tela.setVisible(true);
+    }
+    void adicionarProdutoPainel(List<Produto> produtos)
+    {
 
         for (Produto produto : produtos) {
             System.out.println(produto.getNome());
@@ -203,7 +204,30 @@ public class ListaProdutosView extends TemplateView {
             adicionarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    // Add product to cart
+                    System.out.println("exibir imagem");
+                    if (Global.pessoa instanceof Cliente) {
+                        System.out.println("é cliente");
+                        try {
+
+
+                            carrinhoController.adicionarProduto(produto, 1);
+                            FileInputStream fis = produto.getImagem();
+                            byte[] bytes = fis.readAllBytes();
+                            ImageIcon imagem = new ImageIcon(bytes);
+                            Image img = imagem.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+                            imagem = new ImageIcon(img);
+                            JLabel label = new JLabel(imagem);
+                            System.out.println("IMAGEM TA SENDO EXIBIDA TEORICAMENTE");
+                            // Exibir no JOptionPane
+                            JOptionPane.showMessageDialog(null, label, "Imagem", JOptionPane.PLAIN_MESSAGE);
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(null, produto.getNome() + " adicionado ao carrinho!", "Produto Adicionado", JOptionPane.INFORMATION_MESSAGE);
+                            ex.printStackTrace();
+                            System.out.println("entrou no catch");
+
+                        }
+                        atualizaPrecoTotal();
+                    }
                 }
             });
             produtoLinha.add(adicionarButton, BorderLayout.EAST);
@@ -213,26 +237,5 @@ public class ListaProdutosView extends TemplateView {
 
         produtosPanel.revalidate();
         produtosPanel.repaint();
-    }
-    private void atualizaPrecoTotal() {
-        if (carrinhoController != null) {
-            double total = carrinhoController.getCarrinho().calcularValorTotal();
-            totalPriceLabel.setText(String.format("Total: R$ %.2f", total));
-            try {
-                quantidadeCarrinho = Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF());
-                verCarrinho.setText("Ver carrinho(" + Global.database.getQuantidadeCarrinho(Global.pessoa.getCPF()) + ")");
-
-
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
-
-    public static void main(String[] args) {
-        TemplateView tela = new ListaProdutosView("Lista de Produtos");
-        tela.setVisible(true);
     }
 }
