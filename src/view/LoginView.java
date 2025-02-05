@@ -37,7 +37,7 @@ public class LoginView extends TemplateView{
         telaCadastroCliente.add(campoEmail, gbc);
 
         JLabel Senha = new JLabel("Senha:");
-        JTextField campoSenha = new JTextField(25);
+        JPasswordField campoSenha = new JPasswordField(25);
         gbc.gridy++;
         gbc.gridx = 0;
         telaCadastroCliente.add(Senha, gbc);
