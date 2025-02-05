@@ -1,4 +1,5 @@
 package model;
+import java.io.FileInputStream;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -75,14 +76,14 @@ public class Administrador extends Pessoa {
      * @param possuiCartao Se o cliente possui cartão.
      * @return 1 se o cliente foi cadastrado com sucesso, 0 caso contrário.
      */
-    public int cadastraCliente(String nome, String CPF, Date nascimento, String login, String senha, boolean possuiCartao) {
+    public int cadastraCliente(String nome, String CPF, Date nascimento, String login, String senha, boolean possuiCartao, FileInputStream fis) {
         for (Cliente cliente : clientes) {
             if (cliente.getCPF().equals(CPF)) {
                 System.out.println("Cliente já cadastrado.");
                 return 0;
             }
         }
-        Cliente novoCliente = new Cliente(nome, CPF, nascimento, login, senha, possuiCartao, new ArrayList<>());
+        Cliente novoCliente = new Cliente(nome, CPF, nascimento, login, senha, possuiCartao, new ArrayList<>(),fis);
         clientes.add(novoCliente);
         System.out.println("Cliente cadastrado.");
         return 1;

@@ -48,6 +48,9 @@ public class PerfilView extends TemplateView {
         profilePanel.setPreferredSize(new Dimension(400, 300));
 
         ImageIcon imagemPerfil = (Helper.fisToImageIcon((Global.getCliente().getImagemPerfil())));
+        if(imagemPerfil == null){
+            imagemPerfil = Helper.fisToImageIcon((Global.database.getDefault().getImagemPerfil()));
+        }
         JLabel labelImagem = new JLabel(imagemPerfil);
         labelImagem.setBounds(320, 80, 100, 100);
         profilePanel.add(labelImagem);

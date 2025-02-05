@@ -29,12 +29,13 @@ public class Cliente extends Pessoa{
      * @param possuiCartao Se o cliente possui cartão.
      * @param carteira A carteira de métodos de pagamento do cliente.
      */
-    public Cliente(String nome, String CPF, Date nascimento, String login, String senha, boolean possuiCartao, ArrayList<String> carteira) {
+    public Cliente(String nome, String CPF, Date nascimento, String login, String senha, boolean possuiCartao, ArrayList<String> carteira, FileInputStream imagem) {
         super(nome, CPF, nascimento);
         this.login = login;
         this.senha = senha;
         this.possuiCartao = possuiCartao;
         this.carteira = carteira;
+        this.imagemPerfil = imagem;
     }
 
     /**

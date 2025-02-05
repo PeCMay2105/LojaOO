@@ -10,6 +10,7 @@ CREATE TABLE Cliente (
     Email VARCHAR(255),
     Senha VARCHAR(255),
     Endereco VARCHAR(255),
+    fotoPerfil BLOB,
     PRIMARY KEY (CPF),
     FOREIGN KEY (CPF) REFERENCES Pessoa(CPF)
 );
@@ -43,7 +44,7 @@ CREATE TABLE Produto (
     Preco DECIMAL(10, 2),
     Estoque INT,
     Descricao TEXT,
-    Imagem VARCHAR(255),
+    Imagem BLOB,
     ID_Vendedor INT,
     ID_Categoria INT,
     FOREIGN KEY (ID_Vendedor) REFERENCES Vendedor(CPF),

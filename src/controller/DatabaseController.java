@@ -384,7 +384,6 @@ public class DatabaseController {
                 // Criar FileInputStream a partir do arquivo
                  fis = new FileInputStream(tempFile);
             }catch (Exception e){
-                e.printStackTrace();
             }
             if (rs.next()) {
                 list.add(new Cliente(
@@ -671,7 +670,51 @@ public class DatabaseController {
             throw new RuntimeException(e);
         }
     }
+    public Cliente getDefault()
+    {
+        String sqlSelectCliente = "SELECT * FROM Pessoa p JOIN Cliente c ON p.CPF = c.CPF WHERE p.CPF = '00000000000';";
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sqlSelectCliente);
+            ResultSet rs = stmt.executeQuery();
+
+            FileInputStream fis = null;
+            try {
+                var getblob = rs.getBytes("fotoPerfil");
+                File tempFile = File.createTempFile("tempfile", ".tmp");
+                tempFile.deleteOnExit(); // Garante que o arquivo será excluído após a execução
+
+                // Escrever os bytes no arquivo
+                try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+                    fos.write(getblob);
+                }
+
+                // Criar FileInputStream a partir do arquivo
+                fis = new FileInputStream(tempFile);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            if (rs.next()) {
+                Cliente cliente = (new Cliente(
+                        rs.getString("Nome"),
+                        rs.getString("CPF"),
+                        rs.getString("Email"),
+                        rs.getString("Senha"),
+                        rs.getDate("Data_Nascimento"),
+                        fis
+                ));
+                return cliente;
+            }
+            rs.close();
+            stmt.close();
+
+            }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
+
 
 
 

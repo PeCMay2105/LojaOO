@@ -148,6 +148,7 @@ public class Helper {
     }
 
     public static ImageIcon fisToImageIcon(FileInputStream fis){
+        if(fis == null) return null;
         try {
             // Criar um FileInputStream a partir de um arquivo de imagem
 
